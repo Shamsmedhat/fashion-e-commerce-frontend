@@ -5,7 +5,7 @@ import { Teko } from "next/font/google";
 import { cn } from "@/lib/utils/tailwind-merge";
 
 const teko = Teko({
-  weight: ["400", "700"],
+  weight: ["300", "400", "700"],
   subsets: ["latin"],
 });
 
@@ -51,7 +51,12 @@ export default function HeroSection() {
             </p>
           </div>
           <div className="absolute bottom-20 right-10 md:right-20 z-20">
-            <p className="text-2xl md:text-3xl font-bold text-gray-900">
+            <p
+              className={cn(
+                teko.className,
+                "text-2xl md:text-3xl font-bold text-gray-900"
+              )}
+            >
               SEFT PAD
             </p>
           </div>
