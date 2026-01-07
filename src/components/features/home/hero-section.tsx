@@ -39,6 +39,7 @@ export default function HeroSection() {
             </div>
           </div>
 
+          <Button>Test</Button>
           {/* Text Overlays */}
           <div className="absolute top-20 left-10 md:left-20 z-20">
             <p
