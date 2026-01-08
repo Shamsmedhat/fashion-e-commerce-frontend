@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-// import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Teko } from "next/font/google";
 import { cn } from "@/lib/utils/tailwind-merge";
@@ -10,33 +9,24 @@ const teko = Teko({
 });
 
 export default function HeroSection() {
-  // const t = useTranslations();
-
   return (
-    <section className="relative w-full h-[600px] md:h-[700px] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-      {/* Background Shoe Image */}
+    <section className="relative w-full h-[600px] md:h-[700px] overflow-hidden">
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative w-full h-full max-w-4xl">
           {/* Large SHOLL Text Behind Shoe */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <h1 className="text-[200px] md:text-[300px] font-black text-gray-300/30 select-none">
-              SHOLL
+            <h1 className="text-[120px] md:text-[160px] font-black text-gray-300/30 select-none">
+              SHOP ALL
             </h1>
           </div>
-          {/* Test */}
-          {/* Test */}
-          {/* Test */}
-          {/* Test */}
 
           {/* Shoe Image - Placeholder, replace with actual image */}
           <div className="absolute inset-0 flex items-center justify-center z-10">
-            <div className="relative w-96 h-96 md:w-[500px] md:h-[500px]">
+            <div className="relative w-96 h-96 md:w-[600px] md:h-[600px]">
               <Image
                 src="/assets/images/landing2.png"
                 alt="Hero Shoe"
-                // fill
-                height={700}
-                width={700}
+                fill
                 className="object-contain"
                 priority
               />

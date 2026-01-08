@@ -1,45 +1,109 @@
 "use client";
 
-import { Headphones, Shield, Truck } from "lucide-react";
-
-const services = [
-  {
-    icon: Truck,
-    title: "Free and Fast Delivery",
-    description: "Free delivery for all orders over ($100)",
-  },
-  {
-    icon: Headphones,
-    title: "24/7 Customer Service",
-    description: "Friendly 24/7 customer support",
-  },
-  {
-    icon: Shield,
-    title: "Money Back Guarantee",
-    description: "Returns/Exchanges within 30 days",
-  },
-];
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function ServiceFeatures() {
   return (
-    <section className="bg-gray-100 py-12">
-      <div className="container">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {services.map((service, index) => {
-            const Icon = service.icon;
-            return (
-              <div key={index} className="flex flex-col items-center text-center">
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mb-4 shadow-md">
-                  <Icon className="w-10 h-10 text-gray-700" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{service.title}</h3>
-                <p className="text-sm text-gray-600">{service.description}</p>
+    <section className="py-12">
+      <div className="container py-12">
+        <div className="grid grid-cols-1 gap-1 h-screen">
+          {/* Special Collection Banner */}
+          <div className="relative h-full overflow-hidden group cursor-pointer">
+            <Image
+              src="/assets/images/22.png"
+              alt="Special Collection"
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 flex flex-col items-start justify-end p-8 md:p-10 z-10">
+              <Button
+                size="lg"
+                variant="outline"
+                className="bg-white text-black rounded-none"
+              >
+                SHOP NOW
+              </Button>
+            </div>
+          </div>
+
+          {/* Famous Muiches Banner - 50/50 Split */}
+          <div className="grid grid-cols-2 gap-1 h-full">
+            <div className="relative overflow-hidden group cursor-pointer">
+              <Image
+                src="/assets/images/23.jpg"
+                alt="Famous Muiches"
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 flex flex-col items-start justify-end p-8 md:p-10 z-10">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="bg-white text-black rounded-none"
+                >
+                  SHOP NOW
+                </Button>
               </div>
-            );
-          })}
+            </div>
+            <div className="relative overflow-hidden group cursor-pointer">
+              <Image
+                src="/assets/images/23.jpg"
+                alt="Famous Muiches"
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 flex flex-col items-start justify-end p-8 md:p-10 z-10">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="bg-white text-black rounded-none"
+                >
+                  SHOP NOW
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Famous Muiches Banner - 33/67 Split */}
+          <div className="grid grid-cols-3 gap-1 h-full">
+            <div className="relative overflow-hidden group cursor-pointer">
+              <Image
+                src="/assets/images/23.jpg"
+                alt="Famous Muiches"
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 flex flex-col items-start justify-end p-8 md:p-10 z-10">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="bg-white text-black rounded-none"
+                >
+                  SHOP NOW
+                </Button>
+              </div>
+            </div>
+            <div className="relative col-span-2 overflow-hidden group cursor-pointer">
+              <Image
+                src="/assets/images/23.jpg"
+                alt="Famous Muiches"
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 flex flex-col items-start justify-end p-8 md:p-10 z-10">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="bg-white text-black rounded-none"
+                >
+                  SHOP NOW
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
-

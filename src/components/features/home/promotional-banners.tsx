@@ -1,26 +1,29 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function PromotionalBanners() {
   return (
-    <section className="container py-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <section className="container py-12 grid grid-cols-1 md:grid-cols-2 gap-5 h-screen">
       {/* Famous Muiches Banner */}
-      <div className="relative h-[500px] rounded-lg overflow-hidden group cursor-pointer">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-orange-400">
-          {/* Placeholder for person image - replace with actual image */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-20">
-            <div className="w-full h-full bg-gray-300" />
-          </div>
+      <div className="relative h-4/5 overflow-hidden group cursor-pointer self-start">
+        <div className="absolute inset-0">
+          <Image
+            src="/assets/images/23.jpg"
+            alt="Famous Muiches"
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
         </div>
-        <div className="absolute inset-0 flex flex-col items-start justify-center p-10 z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+        <div className="absolute inset-0 flex flex-col items-start justify-end p-8 md:p-10 z-10s">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 md:mb-6">
             FAMOUS MUICHES
           </h2>
           <Button
             size="lg"
             variant="outline"
-            className="bg-white/20 hover:bg-white/30 text-white border-white backdrop-blur-sm"
+            className="bg-white/5 hover:bg-white text-white border-white backdrop-blur-sm rounded-none"
           >
             SHOP NOW
           </Button>
@@ -28,21 +31,23 @@ export default function PromotionalBanners() {
       </div>
 
       {/* Special Collection Banner */}
-      <div className="relative h-[500px] rounded-lg overflow-hidden group cursor-pointer bg-gray-900">
-        <div className="absolute inset-0 flex items-center justify-center">
-          {/* Placeholder for Nike products - replace with actual images */}
-          <div className="relative w-full h-full">
-            <div className="absolute inset-0 bg-gray-800" />
-          </div>
+      <div className="relative h-4/5 overflow-hidden group cursor-pointer self-end">
+        <div className="absolute inset-0">
+          <Image
+            src="/assets/images/22.png"
+            alt="Special Collection"
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
         </div>
-        <div className="absolute inset-0 flex flex-col items-start justify-center p-10 z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+        <div className="absolute inset-0 flex flex-col items-start justify-end p-8 md:p-10 z-10">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 md:mb-6">
             SPECIAL COLLECTION
           </h2>
           <Button
             size="lg"
             variant="outline"
-            className="bg-white/20 hover:bg-white/30 text-white border-white backdrop-blur-sm"
+            className="bg-white/5 hover:bg-white text-white border-white backdrop-blur-sm rounded-none"
           >
             SHOP NOW
           </Button>

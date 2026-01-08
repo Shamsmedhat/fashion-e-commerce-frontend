@@ -76,3 +76,17 @@ body {
     @apply bg-background text-foreground;
   }
 }
+/* Custom 3D hover animations for product cards */
+@layer utilities {
+  .group-hover\:scale-up-3d {
+    @apply group-hover:scale-[1.08];
+  }
+
+  .group-hover\:rotate-slight {
+    @apply group-hover:[transform:rotateZ(2deg)];
+  }
+
+  .group-hover\:slide-up {
+    @apply group-hover:translate-y-0;
+  }
+}
