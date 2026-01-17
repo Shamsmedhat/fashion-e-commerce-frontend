@@ -1,49 +1,72 @@
 import { JSON_HEADER } from "../constants/api.constant";
+import { buildQueryString } from "../utils/build-query-string";
 
-export type ProductVariant = {
-  _id: string;
-  sku: string;
-  size: string;
-  color: string;
-  price: number;
-  priceDiscount?: number;
-  soldCount: number;
-  stock: number;
-  images: string[];
-};
+export async function getProductsService(params?: QueryParams): Promise<ProductsResponse> {
+  // 1. Build the query string
+  const queryString = buildQueryString(params);
 
-export type Product = {
-  _id: string;
-  name: string;
-  description: string;
-  categoryId: string;
-  coverImage: string;
-  images: string[];
-  variants: ProductVariant[];
-  ratingsAverage?: number;
-  reviewCount: number;
-  createdAt: string;
-};
+  // Url
+  const url = new URL(`${process.env.API_URL}/products`);
 
-export type ProductsResponse = {
-  total: number;
-  results: number;
-  data: {
-    products: Product[];
-  };
-};
+  if (queryString) {
+    url.search = queryString;
+  }
 
-export async function getProductService() {
-  const response = await fetch(`${process.env.API_URL}/products`, {
+  const response = await fetch(url.toString(), {
     headers: {
       ...JSON_HEADER,
     },
+    cache: "no-store",
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch products: ${response.statusText}`);
+    throw new Error(`Failed to fetch products | ${response.status} - ${response.statusText}`);
   }
 
-  const data = await response.json();
-  return data;
+  return response.json();
+}
+
+export async function getProductByIdService(id: string): Promise<{
+  status: string;
+  data: {
+    product: Product;
+  };
+}> {
+  const url = new URL(`${process.env.API_URL}/products/${id}`);
+
+  const response = await fetch(url.toString(), {
+    headers: {
+      ...JSON_HEADER,
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch product | ${response.status} - ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+export async function getProductVariantsService(productId: string): Promise<{
+  status: string;
+  data: {
+    variants: ProductVariant[];
+  };
+}> {
+  // Url
+  const url = `${process.env.API_URL}/products/${productId}/variants`;
+
+  const response = await fetch(url, {
+    headers: {
+      ...JSON_HEADER,
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch variants | ${response.status} - ${response.statusText}`);
+  }
+
+  return response.json();
 }

@@ -9,14 +9,19 @@ declare module "next-auth" {
    */
   interface User {
     user: {
-      username: string;
-      firstName: string;
-      lastName: string;
+      _id: string;
+      name: string;
       email: string;
       phone: string;
       role: string;
-      isVerified: boolean;
-    } & DatabaseProperies;
+      bag: {
+        items: unknown[];
+      };
+      wishlist: unknown[];
+      addresses: unknown[];
+      createdAt: string;
+      __v: number;
+    };
     token: string;
   }
 

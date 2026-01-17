@@ -13,16 +13,23 @@ export default function useLogin() {
 
   // Mutation
   const { isPending, error, mutate } = useMutation({
-    mutationFn: async ({ email, password }: LoginFields) => {
+    mutationFn: async ({ emailOrPhone, password }: LoginFields) => {
+      let phone;
+      let email;
+      if (emailOrPhone.startsWith("01")) {
+        phone = emailOrPhone;
+      } else {
+        email = emailOrPhone;
+      }
+
       const response = await signIn("credentials", {
-        email,
+        ...(phone !== undefined ? { phone } : { email }),
         password,
         redirect: false,
         callbackUrl: decodeURIComponent(searchParams.get("callbackUrl") || "/"),
       });
 
       if (response?.error) throw new AuthenticationError(response.error);
-
       return response;
     },
     onSuccess: (data) => {

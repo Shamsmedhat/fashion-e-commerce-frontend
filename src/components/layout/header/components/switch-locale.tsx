@@ -1,19 +1,17 @@
 "use client";
 
-import { Check, ChevronDown, Globe } from "lucide-react";
-
+import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Locale, useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils/tailwind-merge";
 
 export function SwitchLocale({ className }: { className?: string }) {
-  // Translation
+  // Translations
   const locale = useLocale();
 
-  // Navigation
+  // Navigations
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -24,39 +22,26 @@ export function SwitchLocale({ className }: { className?: string }) {
     { code: "ar", name: "العربية" },
   ];
 
+  // Get the other language (toggle)
+  const currentLanguage = languages.find((lang) => lang.code === locale);
+  const otherLanguage = languages.find((lang) => lang.code !== locale);
+
   // Functions
-  const switchLocale = (locale: Locale) => {
-    router.push(`${pathname}?${searchParams.toString()}`, { locale });
+  const toggleLocale = () => {
+    if (otherLanguage) {
+      router.push(`${pathname}?${searchParams.toString()}`, {
+        locale: otherLanguage.code as Locale,
+      });
+    }
   };
 
   return (
-    <DropdownMenu>
-      {/* Trigger */}
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className={cn("gap-1 px-2", className)}>
-          {/* Icon */}
-          <Globe className="h-4 w-4" />
+    <Button variant="link" size="sm" className={cn("gap-1 px-2", className)} onClick={toggleLocale}>
+      {/* Icon */}
+      <Globe className="h-4 w-4" />
 
-          {/* Name */}
-          <span className="hidden sm:inline-block">{languages.find((lang) => lang.code === locale)?.name}</span>
-
-          {/* Icon */}
-          <ChevronDown className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-
-      {/* Dropdown */}
-      <DropdownMenuContent align="end">
-        {languages.map((language) => (
-          <DropdownMenuItem
-            key={language.code}
-            onClick={() => switchLocale(language.code as Locale)}
-            className="flex items-center justify-between">
-            {language.name}
-            {locale === language.code && <Check className="h-4 w-4 ml-2" />}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      {/* Name */}
+      <span className="hidden sm:inline-block">{currentLanguage?.name}</span>
+    </Button>
   );
 }

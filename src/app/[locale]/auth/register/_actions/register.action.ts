@@ -6,16 +6,43 @@ import { RegisterResponse } from "@/lib/types/auth";
 
 export const registerAction = async (
   registrationFields: RegistrationFields
-) => {
-  const respones = await fetch(`${process.env.API}/auth/signup`, {
+): Promise<APIResponse<RegisterResponse>> => {
+  const response = await fetch(`${process.env.API_URL}/users/signup`, {
     method: "POST",
-    body: JSON.stringify(registrationFields),
+    body: JSON.stringify({
+      name: registrationFields.name,
+      email: registrationFields.email,
+      phone: registrationFields.phone,
+      password: registrationFields.password,
+      passwordConfirm: registrationFields.passwordConfirm,
+    }),
     headers: {
       ...JSON_HEADER,
     },
   });
 
-  const payload: APIResponse<RegisterResponse> = await respones.json();
+  const payload: RegisterResponse | { message: string; code: number } =
+    await response.json();
 
-  return payload;
+  // If there's an error (has code property), return it in the expected format
+  if ("code" in payload) {
+    return {
+      message: payload.message,
+      code: payload.code,
+    };
+  }
+
+  // If response has status 200, it's a success
+  if ("status" in payload && payload.status === 200) {
+    return {
+      message: "success",
+      ...payload,
+    };
+  }
+
+  // Return the successful response wrapped in APIResponse format
+  return {
+    message: "success",
+    ...payload,
+  };
 };

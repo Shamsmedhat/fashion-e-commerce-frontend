@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { MoveLeft, MoveRight } from "lucide-react";
 import ProductItem from "../product/product-item";
-import type { Product } from "@/lib/services/product.service";
 import { Montserrat } from "next/font/google";
 import { cn } from "@/lib/utils/tailwind-merge";
 
@@ -148,7 +147,6 @@ export default function CategoryBanners() {
           {/* Navigation Controls */}
           <div className="flex items-center gap-4">
             <button
-              // onClick={console.log("")}
               disabled={currentIndex === 0}
               className="flex flex-col items-start gap-2 text-black hover:text-gray-600 transition-colors"
               aria-label="Previous"
@@ -174,7 +172,7 @@ export default function CategoryBanners() {
             <ProductItem
               key={product._id}
               product={product}
-              showAddToCart={index === 3} // Show Add To Cart button on 4th product
+              showAddToBag={index === 3} // Show Add To Cart button on 4th product
               discountOverride={index === 3 ? 35 : undefined} // Override discount to match design
             />
           ))}

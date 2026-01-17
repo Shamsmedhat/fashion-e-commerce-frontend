@@ -7,15 +7,9 @@ export const useRegisterSchema = () => {
 
   return z
     .object({
-      username: z
-        .string({ required_error: t("username-required") })
-        .min(1, t("username-required")),
-      firstName: z
-        .string({ required_error: t("firstname-required") })
-        .min(1, t("firstname-required")),
-      lastName: z
-        .string({ required_error: t("lastname-required") })
-        .min(1, t("lastname-required")),
+      name: z
+        .string({ required_error: t("name-required") || "Name is required" })
+        .min(1, t("name-required") || "Name is required"),
       email: z.string({ required_error: t("email-required") }).email({
         message: t("email-invalid"),
       }),
@@ -25,11 +19,14 @@ export const useRegisterSchema = () => {
       password: z.string({ required_error: t("password-required") }).min(8, {
         message: t("password-min", { min: 8 }),
       }),
-      rePassword: z.string(),
+      passwordConfirm: z.string({
+        required_error:
+          t("confirm-password-required") || "Password confirmation is required",
+      }),
     })
-    .refine((data) => data.password === data.rePassword, {
+    .refine((data) => data.password === data.passwordConfirm, {
       message: t("password-mismatch"),
-      path: ["rePassword"],
+      path: ["passwordConfirm"],
     });
 };
 
@@ -40,9 +37,12 @@ export const useLoginSchema = () => {
   const t = useTranslations();
 
   return z.object({
-    email: z.string({ required_error: t("email-required") }).email({
-      message: t("email-invalid"),
-    }),
+    emailOrPhone: z
+      .string({
+        required_error:
+          t("email-phone-required") || "Email or phone is required",
+      })
+      .min(1, t("email-phone-required") || "Email or phone is required"),
     password: z
       .string({ required_error: t("password-required") })
       .min(1, t("password-required")),

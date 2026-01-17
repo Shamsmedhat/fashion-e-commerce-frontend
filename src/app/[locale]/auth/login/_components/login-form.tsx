@@ -16,6 +16,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,9 +24,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoginFields, useLoginSchema } from "@/lib/schemes/auth.schema";
-import { PasswordInput } from "@/components/common/password-input";
+import { PasswordInput } from "@/components/shared/password-input";
 import useLogin from "../_hooks/use-login";
-import SubmitFeedback from "@/components/common/submit-feedback";
+import SubmitFeedback from "@/components/shared/submit-feedback";
 import { useRouter } from "@/i18n/routing";
 
 export default function LoginForm() {
@@ -43,7 +44,7 @@ export default function LoginForm() {
   const form = useForm<LoginFields>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
+      emailOrPhone: "",
       password: "",
     },
   });
@@ -68,24 +69,35 @@ export default function LoginForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Email */}
+            {/* Email or Phone */}
             <FormField
               control={form.control}
-              name="email"
+              name="emailOrPhone"
               render={({ field }) => (
                 <FormItem>
                   {/* Label */}
-                  <FormLabel>{t("email-label")}</FormLabel>
+                  <FormLabel>
+                    {t("email-phone-label") || "Email or Phone"}
+                  </FormLabel>
 
                   {/* Field */}
                   <FormControl>
                     <Input
-                      type="email"
-                      placeholder={t("email-placeholder")}
-                      autoComplete="email"
+                      type="text"
+                      placeholder={
+                        t("email-phone-placeholder") ||
+                        "Enter your email or phone number"
+                      }
+                      autoComplete="username"
                       {...field}
                     />
                   </FormControl>
+
+                  {/* Description */}
+                  <FormDescription className="text-xs text-muted-foreground">
+                    {t("email-phone-description") ||
+                      "You can use either your email address or phone number"}
+                  </FormDescription>
 
                   {/* Feedback */}
                   <FormMessage />

@@ -1,76 +1,30 @@
 import { JSON_HEADER } from "../constants/api.constant";
-import { APIResponse } from "../types/api";
+import { buildQueryString } from "../utils/build-query-string";
 
-export type Category = {
-  _id: string;
-  name: string;
-  slug: string;
-  parentId?: string | Category;
-  createdAt: string;
-};
+export async function getMainCategoriesService(
+  params?: QueryParams
+): Promise<CategoriesResponse> {
+  // 1. Build the query string
+  const queryString = buildQueryString(params);
 
-export type CategoriesResponse = {
-  total: number;
-  results: number;
-  data: {
-    categories: Category[];
-  };
-};
+  // Url
+  const url = new URL(`${process.env.API_URL}/categories/main`);
 
-export const categoryService = {
-  async getAllCategories(): Promise<any> {
-    const response = await fetch(
-      `${process.env.API_URL || "http://localhost:3000"}/api/v1/categories`,
-      {
-        headers: {
-          ...JSON_HEADER,
-        },
-      }
+  if (queryString) {
+    url.search = queryString;
+  }
+
+  const response = await fetch(url.toString(), {
+    headers: {
+      ...JSON_HEADER,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch main categories | ${response.status} - ${response.statusText}`
     );
+  }
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch categories: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    return data;
-  },
-
-  async getMainCategories(): Promise<any> {
-    const response = await fetch(
-      `${
-        process.env.API_URL || "http://localhost:3000"
-      }/api/v1/categories/main`,
-      {
-        headers: {
-          ...JSON_HEADER,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch main categories: ${response.statusText}`
-      );
-    }
-
-    const data = await response.json();
-    return data;
-  },
-
-  async getCategory(id: string): Promise<APIResponse<{ category: Category }>> {
-    const response = await fetch(
-      `${
-        process.env.API_URL || "http://localhost:3000"
-      }/api/v1/categories/${id}`,
-      {
-        headers: {
-          ...JSON_HEADER,
-        },
-      }
-    );
-
-    const data: APIResponse<{ category: Category }> = await response.json();
-    return data;
-  },
-};
+  return response.json();
+}

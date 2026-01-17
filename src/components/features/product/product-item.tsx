@@ -1,64 +1,79 @@
-import { Heart, Star } from "lucide-react";
 import Link from "next/link";
-import type { Product } from "@/lib/services/product.service";
-import { cn } from "@/lib/utils/tailwind-merge";
 import Image from "next/image";
 
+import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils/tailwind-merge";
+
+import { getTailwindColor } from "@/lib/utils/get-tailwind-color";
+import AddToBagButton from "./add-to-bag-button";
+import { displayProductRating } from "@/lib/utils/product-rating";
+
+// Type
 type ProductItemProps = {
   product: Product;
   className?: string;
-  showAddToCart?: boolean;
+  showAddToBag?: boolean;
   discountOverride?: number;
+  searchParams?: Record<string, string | string[] | undefined>;
 };
 
-export default function ProductItem({
-  product,
-  discountOverride,
-}: ProductItemProps) {
-  const variant = product.variants?.[0];
-  const price = variant?.price || 0;
-  const priceDiscount = variant?.priceDiscount;
-  const displayPrice = priceDiscount || price;
-  const originalPrice = priceDiscount ? price : null;
+export default function ProductItem({ product, discountOverride }: ProductItemProps) {
+  // Translations
+  const t = useTranslations();
+
+  // Variables (unique colors)
+  const allColors = Array.from(
+    new Set(
+      product.variants?.map((v) => v.color?.toLowerCase()).filter((c): c is string => !!c) || [],
+    ),
+  );
+  // Calculate the lowest price across all variants (considering priceDiscount)
+  const allPrices = product.variants?.map((v) => v.priceDiscount || v.price) || [];
+  const lowestPrice = allPrices.length > 0 ? Math.min(...allPrices) : 0;
+  // Find the variant with the lowest price for discount calculation
+  const lowestPriceVariant = product.variants?.find((v) => {
+    const variantPrice = v.priceDiscount || v.price;
+    return variantPrice === lowestPrice;
+  });
+  const priceDiscount = lowestPriceVariant?.priceDiscount;
+  const originalPrice = priceDiscount ? lowestPriceVariant?.price : null;
+  const displayPrice = lowestPrice;
   const discountPercentage =
     discountOverride !== undefined
       ? discountOverride
       : priceDiscount && originalPrice
-      ? Math.round(((price - priceDiscount) / price) * 100)
-      : null;
+        ? Math.round(((originalPrice - priceDiscount) / originalPrice) * 100)
+        : null;
 
+  // Functions
+  function displayProductColors(colorName: string) {
+    const cssColor = getTailwindColor(colorName) || colorName;
+
+    return (
+      <div
+        key={colorName}
+        className="w-5 h-5 rounded-full border border-gray-300 hover:border-gray-600 transition-colors"
+        style={{ backgroundColor: cssColor }}
+        title={colorName.charAt(0).toUpperCase() + colorName.slice(1)}
+        aria-label={`Color: ${colorName}`}
+      />
+    );
+  }
+
+  // UI
   return (
-    <div
-      className={cn(
-        "group relative overflow-hidden transition-all duration-300"
-      )}
-    >
+    <div className="group relative overflow-hidden transition-all duration-300">
       {/* Discount Badge */}
+      {/* TODO: Next init config */}
       {discountPercentage && (
         <div className="absolute top-2 left-2 z-10 bg-red-600 text-white text-xs font-semibold px-2.5 py-1 rounded">
           -{discountPercentage}%
         </div>
       )}
 
-      {/* Wishlist Button */}
-      <button
-        className="absolute top-3 right-3 z-10"
-        aria-label="Add to wishlist"
-      >
-        <Heart
-          className={cn(
-            "w-5 h-5 transition-colors stroke-black",
-            false ? "fill-red-500 text-red-500" : "text-black fill-none"
-          )}
-        />
-      </button>
-
-      {/* Product Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-gray-100 rounded-md">
-        <Link
-          href={`/products/${product._id}`}
-          className="block relative w-full h-full"
-        >
+      {/* Product Image*/}
+      <div className="relative aspect-square overflow-hidden bg-gray-50 ">
+        <Link href={`/products/${product._id}`} className="block relative w-full h-full">
           <div className="relative w-full h-full transform transition-transform duration-500 group-hover:scale-[1.08] group-hover:[transform:rotateZ(2deg)]">
             <Image
               src="/assets/images/product.png"
@@ -70,72 +85,59 @@ export default function ProductItem({
           </div>
         </Link>
 
+        {/* Add to bag BTN */}
         <div className="absolute bottom-0 left-0 right-0 flex items-end overflow-hidden">
-          <button
-            // onClick={(e) => {
-            //   e.preventDefault();
-            //   e.stopPropagation();
-            // }}
-            className={cn(
-              "w-full h-12 bg-black text-white font-semibold transition-transform duration-500 flex items-center justify-center hover:bg-gray-900 group-hover:translate-y-0 translate-y-full"
-            )}
-          >
-            Add to Cart
-          </button>
+          {product.variants && product.variants.length > 0 ? (
+            <AddToBagButton
+              productId={product._id}
+              variantSku={product.variants[0].sku}
+              className="w-full rounded-none h-12 bg-primary-950 text-white font-semibold transition-transform duration-500 flex items-center justify-center hover:bg-gray-900 group-hover:translate-y-0 translate-y-full capitalize"
+            >
+              {t("add-to-bag")}
+            </AddToBagButton>
+          ) : (
+            <button
+              disabled
+              className={cn(
+                "w-full h-12 bg-black text-white font-semibold transition-transform duration-500 flex items-center justify-center hover:bg-gray-900 group-hover:translate-y-0 translate-y-full opacity-50 cursor-not-allowed",
+              )}
+            >
+              {t("add-to-bag")}
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Product Info - Below the image box */}
-      <div className="px-4 py-4 space-y-2  rounded-b-lg">
+      {/* Product info*/}
+      <div className="px-4 py-4 space-y-2">
         <Link href={`/products/${product._id}`}>
+          {/* Product name */}
           <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-primary transition-colors">
             {product.name}
           </h3>
         </Link>
 
-        {/* Price */}
-        <div className="flex items-center gap-2 mb-1">
-          <span
-            className={cn(
-              "text-lg font-bold",
-              discountPercentage ? "text-gray-900" : "text-gray-900"
-            )}
-          >
-            ${displayPrice.toFixed(0)}
-          </span>
+        <div className="flex items-center gap-2 mb-2">
+          {/* Price */}
+          {/* TODO: Next init config */}
+          <span className="text-lg font-bold text-gray-900">${displayPrice.toFixed(0)}</span>
           {originalPrice && (
-            <span className="text-sm text-gray-500 line-through">
-              ${originalPrice.toFixed(0)}
-            </span>
+            <span className="text-sm text-gray-500 line-through">${originalPrice.toFixed(0)}</span>
           )}
         </div>
+
+        {/* Variant Colors */}
+        {allColors.length > 0 && (
+          <div className="flex items-center gap-2 mb-2">
+            {allColors.map((colorName) => displayProductColors(colorName))}
+          </div>
+        )}
 
         {/* Rating */}
         {product.ratingsAverage !== undefined && (
           <div className="flex items-center gap-1.5 mb-3">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => {
-                const rating = product.ratingsAverage || 0;
-                const isFilled = i < Math.floor(rating);
-                const isPartial = !isFilled && i < Math.ceil(rating);
-                return (
-                  <Star
-                    key={i}
-                    className={cn(
-                      "w-4 h-4",
-                      isFilled
-                        ? "fill-yellow-500 text-yellow-500"
-                        : isPartial
-                        ? "fill-none text-yellow-500 stroke-yellow-500 stroke-1"
-                        : "fill-none text-gray-300 stroke-gray-300 stroke-1"
-                    )}
-                  />
-                );
-              })}
-            </div>
-            <span className="text-sm text-gray-600">
-              ({product.reviewCount || 0})
-            </span>
+            <div className="flex items-center">{displayProductRating(product.ratingsAverage)}</div>
+            <span className="text-sm text-gray-600">({product.reviewCount || 0})</span>
           </div>
         )}
       </div>

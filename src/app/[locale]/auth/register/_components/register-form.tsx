@@ -26,9 +26,9 @@ import {
   useRegisterSchema,
 } from "@/lib/schemes/auth.schema";
 import { useTranslations } from "next-intl";
-import { PasswordInput } from "@/components/common/password-input";
+import { PasswordInput } from "@/components/shared/password-input";
 import useRegister from "../_hooks/use-register";
-import SubmitFeedback from "@/components/common/submit-feedback";
+import SubmitFeedback from "@/components/shared/submit-feedback";
 import { useRouter } from "@/i18n/routing";
 
 export default function RegisterForm() {
@@ -46,13 +46,11 @@ export default function RegisterForm() {
   const form = useForm<RegistrationFields>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      username: "",
+      name: "",
       email: "",
       phone: "",
       password: "",
-      rePassword: "",
+      passwordConfirm: "",
     },
   });
 
@@ -76,69 +74,23 @@ export default function RegisterForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Username */}
+            {/* Name */}
             <FormField
               control={form.control}
-              name="username"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   {/* Label */}
-                  <FormLabel>{t("username-label")}</FormLabel>
+                  <FormLabel>{t("name-label") || "Name"}</FormLabel>
 
                   {/* Field */}
                   <FormControl>
                     <Input
-                      placeholder={t("username-placeholder")}
+                      placeholder={
+                        t("name-placeholder") || "Enter your full name"
+                      }
                       {...field}
-                      autoComplete="username"
-                    />
-                  </FormControl>
-
-                  {/* Feedback */}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* First name */}
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  {/* Label */}
-                  <FormLabel>{t("firstname-label")}</FormLabel>
-
-                  {/* Field */}
-                  <FormControl>
-                    <Input
-                      placeholder={t("firstname-placeholder")}
-                      {...field}
-                      autoComplete="given-name"
-                    />
-                  </FormControl>
-
-                  {/* Feedback */}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Last name */}
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  {/* Label */}
-                  <FormLabel>{t("lastname-label")}</FormLabel>
-
-                  {/* Field */}
-                  <FormControl>
-                    <Input
-                      placeholder={t("lastname-placeholder")}
-                      {...field}
-                      autoComplete="family-name"
+                      autoComplete="name"
                     />
                   </FormControl>
 
@@ -228,7 +180,7 @@ export default function RegisterForm() {
             {/* Confirm password */}
             <FormField
               control={form.control}
-              name="rePassword"
+              name="passwordConfirm"
               render={({ field }) => (
                 <FormItem>
                   {/* Label */}

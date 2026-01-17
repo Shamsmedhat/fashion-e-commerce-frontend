@@ -13,31 +13,50 @@ export const authOptions: NextAuthOptions = {
       name: "Credentials",
       credentials: {
         email: {},
+        phone: {},
         password: {},
       },
       authorize: async (credentials) => {
-        const response = await fetch(`${process.env.API}/auth/signin`, {
+        // Determine the request body based on whether phone or email is provided
+        const requestBody: {
+          email?: string;
+          phone?: string;
+          password: string;
+        } = {
+          password: credentials?.password || "",
+        };
+
+        if (credentials?.phone) {
+          requestBody.phone = credentials.phone;
+        } else if (credentials?.email) {
+          requestBody.email = credentials.email;
+        }
+
+        const response = await fetch(`${process.env.API_URL}/users/login`, {
           method: "POST",
-          body: JSON.stringify({
-            email: credentials?.email,
-            password: credentials?.password,
-          }),
+          body: JSON.stringify(requestBody),
           headers: {
             ...JSON_HEADER,
           },
         });
 
-        const payload: APIResponse<LoginResponse> = await response.json();
+        const payload: LoginResponse | APIResponse<never> =
+          await response.json();
 
         // Throw an auth error if the login has failed
         if ("code" in payload) {
           throw new AuthenticationError(payload.message);
         }
 
+        // Check if response has the expected structure
+        if (!payload.data || !payload.data.user || !payload.token) {
+          throw new AuthenticationError("Invalid response from server");
+        }
+
         // Return the user to be encoded using JWT callback
         return {
-          id: payload.user._id,
-          user: payload.user,
+          id: payload.data.user._id,
+          user: payload.data.user,
           token: payload.token,
         };
       },

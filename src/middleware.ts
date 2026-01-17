@@ -5,7 +5,7 @@ import { routing } from "./i18n/routing";
 import { getToken } from "next-auth/jwt";
 
 const authPages = ["/auth/login", "/auth/register"];
-const publicPages = ["/", ...authPages];
+const publicPages = ["/", "/category", "/category/*", ...authPages];
 
 const handleI18nRouting = createMiddleware(routing);
 
@@ -31,10 +31,22 @@ export default async function middleware(req: NextRequest) {
   const token = await getToken({ req });
   const publicPathnameRegex = RegExp(
     `^(/(${routing.locales.join("|")}))?(${publicPages
-      .flatMap((p) => (p === "/" ? ["", "/"] : p))
+      .flatMap((p) => {
+        if (p === "/") {
+          return ["", "/"];
+        }
+        // Handle wildcard patterns
+        if (p.endsWith("/*")) {
+          // Remove /* and match the path and all its children
+          const basePath = p.slice(0, -2);
+          return `${basePath}(/.*)?`;
+        }
+        return p;
+      })
       .join("|")})/?$`,
     "i"
   );
+
   const authPathnameRegex = RegExp(
     `^(/(${routing.locales.join("|")}))?(${authPages
       .flatMap((p) => (p === "/" ? ["", "/"] : p))
