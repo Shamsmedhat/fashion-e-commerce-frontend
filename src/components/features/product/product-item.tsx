@@ -72,11 +72,11 @@ export default function ProductItem({ product, discountOverride }: ProductItemPr
       )}
 
       {/* Product Image*/}
-      <div className="relative aspect-square overflow-hidden bg-gray-50 ">
+      <div className="relative aspect-square overflow-hidden">
         <Link href={`/products/${product._id}`} className="block relative w-full h-full">
-          <div className="relative w-full h-full transform transition-transform duration-500 group-hover:scale-[1.08] group-hover:[transform:rotateZ(2deg)]">
+          <div className="relative w-full h-full transform transition-transform duration-500 group-hover:scale-[1.04]">
             <Image
-              src="/assets/images/product.png"
+              src={product.coverImage || "/assets/images/product.png"}
               alt={product.name}
               fill
               className="object-cover transition-transform duration-500"
@@ -85,7 +85,7 @@ export default function ProductItem({ product, discountOverride }: ProductItemPr
           </div>
         </Link>
 
-        {/* Add to bag BTN */}
+        {/* Add to bag btn */}
         <div className="absolute bottom-0 left-0 right-0 flex items-end overflow-hidden">
           {product.variants && product.variants.length > 0 ? (
             <AddToBagButton
@@ -99,10 +99,10 @@ export default function ProductItem({ product, discountOverride }: ProductItemPr
             <button
               disabled
               className={cn(
-                "w-full h-12 bg-black text-white font-semibold transition-transform duration-500 flex items-center justify-center hover:bg-gray-900 group-hover:translate-y-0 translate-y-full opacity-50 cursor-not-allowed",
+                "w-full h-12 bg-black text-white font-semibold capitalize transition-transform duration-500 flex items-center justify-center hover:bg-gray-900 group-hover:translate-y-0 translate-y-full opacity-50 cursor-not-allowed",
               )}
             >
-              {t("add-to-bag")}
+              {t("product-not-available")}
             </button>
           )}
         </div>

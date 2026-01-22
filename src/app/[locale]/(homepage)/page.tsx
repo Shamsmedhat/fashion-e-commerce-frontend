@@ -6,8 +6,10 @@ import CategoryBanners from "@/components/features/home/category-banners";
 import ServiceFeatures from "@/components/features/home/service-features";
 import Test from "@/components/features/home/test";
 import NewArrivalsSection from "./_components/new-arrivals-section";
+import { getProductsService } from "@/lib/services/product.service";
 
-export default function Home() {
+export default async function Home() {
+  const bestSellingProducts = await getProductsService({ limit: 4 });
   return (
     <main className="container min-h-screen my-4">
       {/* Hero Section */}
@@ -22,7 +24,7 @@ export default function Home() {
       <PromotionalBanners />
 
       {/* Category Banners */}
-      <CategoryBanners />
+      <CategoryBanners bestSellingProducts={bestSellingProducts.data.products} />
 
       {/* Service Features */}
       <ServiceFeatures />

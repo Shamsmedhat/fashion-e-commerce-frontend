@@ -21,7 +21,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     }
 
     return (
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen bg-white my-16">
         <ProductDetail product={product} />
       </main>
     );

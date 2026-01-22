@@ -5,7 +5,7 @@ import { ProductGridSkeleton } from "@/components/skeletons/product/product-item
 import React, { Suspense } from "react";
 
 type MenPage = {
-  params: { id: string; subcategory: string };
+  params: { id: string; subcategory: string; subCategoryId: string };
   searchParams: Record<string, string | string[] | undefined>;
 };
 
@@ -24,6 +24,7 @@ export default function page({ params, searchParams }: MenPage) {
             searchParams={searchParams}
             basePath={`/category/women/${id}`}
             currentSubcategory={subcategory}
+            subCategoryId={subcategory[1]}
           />
         </Suspense>
       </div>

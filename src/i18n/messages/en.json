@@ -97,5 +97,16 @@
   "select-variant": "Select variant",
   "new-collection-soon": "new collection soon",
   "free-shipping": "free shipping",
-  "special-offers": "special offers"
+  "special-offers": "special offers",
+  "collections": "collections",
+  "category-subtitle": "Discover our curated selection of premium products",
+  "all-products": "all products",
+  "product-not-available": "product not available",
+  "email-phone-label": "email or phone",
+  "email-phone-placeholder": "enter your email or phone",
+  "registration-success-msg": "Registration completed successfully!",
+  "login-success-msg": "Login successful!",
+  "egy-cairo": "EGY, Cairo",
+  "facebook": "Facebook",
+  "instagram": "Instagram"
 }

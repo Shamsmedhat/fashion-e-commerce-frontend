@@ -54,15 +54,7 @@ export default function BagItem({ item }: BagItemProps) {
 
   // Variables
   // Get product image
-  const productImage = item.variant?.images?.[0] || item.product?.coverImage || "/product.png";
-
-  // TODO: When fix upload img in backend
-  const imageSrc =
-    productImage.startsWith("/") ||
-    productImage.startsWith("http") ||
-    productImage.startsWith("https")
-      ? productImage
-      : `/assets/images${productImage}`;
+  const productImage = item.product?.coverImage || "/assets/images/placeholder.avif";
 
   // Get current price (use currentPrice if available, otherwise priceAtPurchase)
   const currentPrice = item.currentPrice ?? item.priceAtPurchase;
@@ -82,7 +74,7 @@ export default function BagItem({ item }: BagItemProps) {
       <div className="relative w-full sm:w-32 h-32 bg-gray-50 flex-shrink-0">
         <Link href={`/products/${item.productId}`}>
           <Image
-            src={imageSrc}
+            src={productImage}
             alt={item.productName}
             fill
             className="object-contain"

@@ -16,7 +16,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -54,6 +53,7 @@ export default function LoginForm() {
     login(values);
   };
 
+  console.log("error", error);
   return (
     <Card className="w-full max-w-md">
       {/* Header */}
@@ -76,28 +76,17 @@ export default function LoginForm() {
               render={({ field }) => (
                 <FormItem>
                   {/* Label */}
-                  <FormLabel>
-                    {t("email-phone-label") || "Email or Phone"}
-                  </FormLabel>
+                  <FormLabel>{t("email-phone-label") || "Email or Phone"}</FormLabel>
 
                   {/* Field */}
                   <FormControl>
                     <Input
                       type="text"
-                      placeholder={
-                        t("email-phone-placeholder") ||
-                        "Enter your email or phone number"
-                      }
+                      placeholder={t("email-phone-placeholder")}
                       autoComplete="username"
                       {...field}
                     />
                   </FormControl>
-
-                  {/* Description */}
-                  <FormDescription className="text-xs text-muted-foreground">
-                    {t("email-phone-description") ||
-                      "You can use either your email address or phone number"}
-                  </FormDescription>
 
                   {/* Feedback */}
                   <FormMessage />
@@ -116,7 +105,11 @@ export default function LoginForm() {
 
                   {/* Field */}
                   <FormControl className="relative">
-                    <PasswordInput {...field} autoComplete="current-password" />
+                    <PasswordInput
+                      {...field}
+                      autoComplete="current-password"
+                      placeholder="•••••••••••"
+                    />
                   </FormControl>
 
                   {/* Feedback */}
@@ -132,10 +125,7 @@ export default function LoginForm() {
             <Button
               type="submit"
               className="w-full"
-              disabled={
-                isPending ||
-                (form.formState.isSubmitted && !form.formState.isValid)
-              }
+              disabled={isPending || (form.formState.isSubmitted && !form.formState.isValid)}
             >
               {t("login")}
             </Button>

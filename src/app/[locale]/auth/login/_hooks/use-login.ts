@@ -4,9 +4,14 @@ import { LoginFields } from "@/lib/schemes/auth.schema";
 import { AuthenticationError } from "@/lib/utils/app-errors";
 import { useMutation } from "@tanstack/react-query";
 import { signIn } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function useLogin() {
+  // Translations
+  const t = useTranslations();
+
   // Navigation
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -33,6 +38,8 @@ export default function useLogin() {
       return response;
     },
     onSuccess: (data) => {
+      toast.success(t("login-success-msg"));
+
       // Redirect to the callback URL after a successful login
       window.location.href = data?.url || "/";
     },

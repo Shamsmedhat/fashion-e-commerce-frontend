@@ -4,13 +4,18 @@ import { getMainCategoriesService } from "@/lib/services/category.service";
 import React from "react";
 
 export default async function HeaderWraper() {
-  const [categoryResponse, bagResponse] = await Promise.all([
+  // Use Promise.allSettled to handle failures gracefully
+  const [categoryResult, bagResult] = await Promise.allSettled([
     getMainCategoriesService({ limit: 4 }),
     getBagService(),
   ]);
 
-  const bagLength = bagResponse.data.bag.items.length;
-  const categories = categoryResponse.data.categories || [];
+  // Extract categories (always needed)
+  const categories =
+    categoryResult.status === "fulfilled" ? categoryResult.value.data.categories || [] : [];
+
+  // Extract bag length (default to 0 if user not logged in)
+  const bagLength = bagResult.status === "fulfilled" ? bagResult.value.data.bag.items.length : 0;
 
   return <Header mainCategories={categories} bagLength={bagLength} />;
 }

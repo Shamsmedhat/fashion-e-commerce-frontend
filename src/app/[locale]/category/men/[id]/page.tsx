@@ -1,29 +1,30 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+import ProductsPageCover from "@/components/features/product/products-page-cover";
 import TotalProducts from "@/components/features/product/total-products";
+import { ProductGridSkeleton } from "@/components/skeletons/product/product-item.skeleton";
 import React, { Suspense } from "react";
 
 type MenPage = {
-  params: { id: string };
+  params: { id: string; subcategory: string };
   searchParams: Record<string, string | string[] | undefined>;
 };
 
 export default function page({ params, searchParams }: MenPage) {
   // Params
-  const { id } = params;
+  const { id, subcategory } = params;
 
   return (
-    <main className="min-h-screen">
-      <div className="border-b border-gray-200 px-6 py-8 md:px-12">
-        <h1 className="text-3xl md:text-4xl font-light tracking-tight text-gray-900 text-balance">
-          Collections
-        </h1>
-        <p className="mt-2 text-gray-600">
-          Discover our curated selection of premium products
-        </p>
-      </div>
+    <main className="min-h-screen mt-28">
+      <ProductsPageCover imgSrc="/assets/images/men-cover.png" className="object-[center_25%]" />
 
-      <div className="py-12">
-        <Suspense fallback={<p>loading...</p>}>
-          <TotalProducts categoryId={id} searchParams={searchParams} />
+      <div className="py-5">
+        <Suspense fallback={<ProductGridSkeleton count={8} />}>
+          <TotalProducts
+            categoryId={id}
+            searchParams={searchParams}
+            basePath={`/category/men/${id}`}
+            currentSubcategory={subcategory}
+          />
         </Suspense>
       </div>
     </main>

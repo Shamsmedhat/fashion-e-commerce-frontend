@@ -4,9 +4,13 @@ import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { registerAction } from "../_actions/register.action";
 import catchError from "@/lib/utils/catch-error";
-import { AppError } from "@/lib/utils/app-errors";
+import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function useRegister() {
+  // Translations
+  const t = useTranslations();
+
   // Navigation
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -14,7 +18,7 @@ export default function useRegister() {
   // Mutation
   const { isPending, error, mutate } = useMutation({
     mutationFn: async (fields: RegistrationFields) => {
-      const [data, err] = await catchError(registerAction(fields), [AppError]);
+      const [data, err] = await catchError(registerAction(fields));
 
       if (err) {
         throw err;
@@ -23,7 +27,7 @@ export default function useRegister() {
       return data;
     },
     onSuccess: () => {
-      // Redirect to the login page upon successful registration
+      toast.success(t("registration-success-msg"));
       router.push(`/auth/login?${searchParams.toString()}`);
     },
   });

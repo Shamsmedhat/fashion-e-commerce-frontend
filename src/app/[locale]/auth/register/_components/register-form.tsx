@@ -21,10 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  RegistrationFields,
-  useRegisterSchema,
-} from "@/lib/schemes/auth.schema";
+import { RegistrationFields, useRegisterSchema } from "@/lib/schemes/auth.schema";
 import { useTranslations } from "next-intl";
 import { PasswordInput } from "@/components/shared/password-input";
 import useRegister from "../_hooks/use-register";
@@ -86,9 +83,7 @@ export default function RegisterForm() {
                   {/* Field */}
                   <FormControl>
                     <Input
-                      placeholder={
-                        t("name-placeholder") || "Enter your full name"
-                      }
+                      placeholder={t("name-placeholder") || "Enter your full name"}
                       {...field}
                       autoComplete="name"
                     />
@@ -167,9 +162,7 @@ export default function RegisterForm() {
                   </FormControl>
 
                   {/* Description */}
-                  <FormDescription>
-                    {t("password-min", { min: 8 })}
-                  </FormDescription>
+                  <FormDescription>{t("password-min", { min: 8 })}</FormDescription>
 
                   {/* Feedback */}
                   <FormMessage />
@@ -204,10 +197,7 @@ export default function RegisterForm() {
             <Button
               type="submit"
               className="w-full"
-              disabled={
-                isPending ||
-                (form.formState.isSubmitted && !form.formState.isValid)
-              }
+              disabled={isPending || (form.formState.isSubmitted && !form.formState.isValid)}
             >
               {t("register")}
             </Button>

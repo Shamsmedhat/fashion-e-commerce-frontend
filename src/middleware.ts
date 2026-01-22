@@ -5,7 +5,7 @@ import { routing } from "./i18n/routing";
 import { getToken } from "next-auth/jwt";
 
 const authPages = ["/auth/login", "/auth/register"];
-const publicPages = ["/", "/category", "/category/*", ...authPages];
+const publicPages = ["/", "/category", "/category/*", "/products", "/products/*", ...authPages];
 
 const handleI18nRouting = createMiddleware(routing);
 
@@ -23,7 +23,7 @@ const authMiddleware = withAuth(
     pages: {
       signIn: "/auth/login",
     },
-  }
+  },
 );
 
 export default async function middleware(req: NextRequest) {
@@ -44,14 +44,14 @@ export default async function middleware(req: NextRequest) {
         return p;
       })
       .join("|")})/?$`,
-    "i"
+    "i",
   );
 
   const authPathnameRegex = RegExp(
     `^(/(${routing.locales.join("|")}))?(${authPages
       .flatMap((p) => (p === "/" ? ["", "/"] : p))
       .join("|")})/?$`,
-    "i"
+    "i",
   );
   const isPublicPage = publicPathnameRegex.test(req.nextUrl.pathname);
   const isAuthPage = authPathnameRegex.test(req.nextUrl.pathname);
@@ -63,7 +63,7 @@ export default async function middleware(req: NextRequest) {
 
       // Include current search params
       Object.entries(req.nextUrl.searchParams).map(([key, value]) =>
-        redirectUrl.searchParams.set(key, value)
+        redirectUrl.searchParams.set(key, value),
       );
 
       return NextResponse.redirect(redirectUrl);

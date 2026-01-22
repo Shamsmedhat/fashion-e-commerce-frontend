@@ -11,121 +11,24 @@ const montserrat = Montserrat({
   subsets: ["cyrillic"],
 });
 
-// Zalando Sans Expanded
-// Mock data for best-selling products
-const bestSellingProducts: Product[] = [
-  {
-    _id: "1",
-    name: "HAVIT HV-G92 Gamepad",
-    description: "Premium gamepad controller",
-    categoryId: "1",
-    coverImage: "product.png",
-    images: ["product.png"],
-    variants: [
-      {
-        _id: "v1",
-        sku: "SKU-001",
-        size: "M",
-        color: "White",
-        price: 160,
-        soldCount: 88,
-        stock: 50,
-        images: ["product.png"],
-      },
-    ],
-    ratingsAverage: 5,
-    reviewCount: 88,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    _id: "2",
-    name: "HAVIT HV-G92 Gamepad",
-    description: "Premium gamepad controller",
-    categoryId: "1",
-    coverImage: "product.png",
-    images: ["product.png"],
-    variants: [
-      {
-        _id: "v2",
-        sku: "SKU-002",
-        size: "M",
-        color: "Red",
-        price: 160,
-        soldCount: 88,
-        stock: 50,
-        images: ["product.png"],
-      },
-    ],
-    ratingsAverage: 5,
-    reviewCount: 88,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    _id: "3",
-    name: "HAVIT HV-G92 Gamepad",
-    description: "Premium gamepad controller",
-    categoryId: "1",
-    coverImage: "product.png",
-    images: ["product.png"],
-    variants: [
-      {
-        _id: "v3",
-        sku: "SKU-003",
-        size: "M",
-        color: "Blue",
-        price: 160,
-        soldCount: 88,
-        stock: 50,
-        images: ["product.png"],
-      },
-    ],
-    ratingsAverage: 5,
-    reviewCount: 88,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    _id: "4",
-    name: "HAVIT HV-G92 Gamepad",
-    description: "Premium gamepad controller",
-    categoryId: "1",
-    coverImage: "product.png",
-    images: ["product.png"],
-    variants: [
-      {
-        _id: "v4",
-        sku: "SKU-004",
-        size: "M",
-        color: "Multi",
-        price: 1160,
-        priceDiscount: 960,
-        soldCount: 75,
-        stock: 30,
-        images: ["product.png"],
-      },
-    ],
-    ratingsAverage: 4.5,
-    reviewCount: 75,
-    createdAt: new Date().toISOString(),
-  },
-];
-
-export default function CategoryBanners() {
+export default function CategoryBanners({
+  bestSellingProducts,
+}: {
+  bestSellingProducts: Product[];
+}) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : 0));
-  };
+  // TODO: Complete this section
+  // const handlePrev = () => {
+  //   setCurrentIndex((prev) => (prev > 0 ? prev - 1 : 0));
+  // };
 
-  const handleNext = () => {
-    setCurrentIndex((prev) =>
-      prev < bestSellingProducts.length - 4 ? prev + 1 : prev
-    );
-  };
+  // const handleNext = () => {
+  //   setCurrentIndex((prev) => (prev < bestSellingProducts.length - 4 ? prev + 1 : prev));
+  // };
 
-  const displayedProducts = bestSellingProducts.slice(
-    currentIndex,
-    currentIndex + 4
-  );
+  const displayedProducts = bestSellingProducts.slice(currentIndex, currentIndex + 4);
 
   return (
     <section className="py-12">
@@ -136,9 +39,7 @@ export default function CategoryBanners() {
             <span className="text-3xl md:text-4xl font-bold text-transparent [-webkit-text-stroke:1.5px_black] [-webkit-text-fill-color:transparent]">
               BEST
             </span>
-            <span className="text-3xl md:text-4xl font-bold text-black">
-              SELL
-            </span>
+            <span className="text-3xl md:text-4xl font-bold text-black">SELL</span>
             <span className="text-3xl md:text-4xl font-bold text-transparent [-webkit-text-stroke:1.5px_black] [-webkit-text-fill-color:transparent]">
               ING
             </span>

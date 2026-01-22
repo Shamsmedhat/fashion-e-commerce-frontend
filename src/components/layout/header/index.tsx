@@ -67,7 +67,6 @@ export function Header({
     { text: t("special-offers"), emoji: "💥" },
   ];
 
-  console.log("bagLength", bagLength);
   return (
     <header
       className={cn(

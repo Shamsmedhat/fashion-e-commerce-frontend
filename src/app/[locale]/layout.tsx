@@ -10,6 +10,7 @@ import { getTranslations } from "next-intl/server";
 import { Montserrat, Almarai } from "next/font/google";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { HeaderSkeleton } from "@/components/skeletons/layout/header-skeleton";
 
 export async function generateMetadata(): Promise<Metadata> {
   // Translation
@@ -45,7 +46,7 @@ export default function LocaleLayout({ children, params: { locale } }: LayoutPro
       <body className={cn(locale === "ar" ? almarai.className : montserrat.className)}>
         <Providers>
           {/* Header */}
-          <Suspense fallback={<p>loading...</p>}>
+          <Suspense fallback={<HeaderSkeleton />}>
             <HeaderWraper />
           </Suspense>
 

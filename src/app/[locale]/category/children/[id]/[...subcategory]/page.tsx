@@ -5,7 +5,7 @@ import { ProductGridSkeleton } from "@/components/skeletons/product/product-item
 import React, { Suspense } from "react";
 
 type MenPage = {
-  params: { id: string; subcategory: string };
+  params: { id: string; subcategory: string; subCategoryId: string };
   searchParams: Record<string, string | string[] | undefined>;
 };
 
@@ -15,15 +15,19 @@ export default function page({ params, searchParams }: MenPage) {
 
   return (
     <main className="min-h-screen mt-28">
-      <ProductsPageCover imgSrc="/assets/images/women-cover.png" className="object-[center_80%]" />
+      <ProductsPageCover
+        imgSrc="/assets/images/children-cover.webp"
+        className="object-[center_80%]"
+      />
 
       <div className="py-5">
         <Suspense fallback={<ProductGridSkeleton count={8} />}>
           <TotalProducts
             categoryId={id}
             searchParams={searchParams}
-            basePath={`/category/women/${id}`}
+            basePath={`/category/children/${id}`}
             currentSubcategory={subcategory}
+            subCategoryId={subcategory[1]}
           />
         </Suspense>
       </div>

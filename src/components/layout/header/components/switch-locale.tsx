@@ -23,7 +23,6 @@ export function SwitchLocale({ className }: { className?: string }) {
   ];
 
   // Get the other language (toggle)
-  const currentLanguage = languages.find((lang) => lang.code === locale);
   const otherLanguage = languages.find((lang) => lang.code !== locale);
 
   // Functions
@@ -37,11 +36,11 @@ export function SwitchLocale({ className }: { className?: string }) {
 
   return (
     <Button variant="link" size="sm" className={cn("gap-1 px-2", className)} onClick={toggleLocale}>
+      {/* Name */}
+      <span className="hidden sm:inline-block">{otherLanguage?.name}</span>
+
       {/* Icon */}
       <Globe className="h-4 w-4" />
-
-      {/* Name */}
-      <span className="hidden sm:inline-block">{currentLanguage?.name}</span>
     </Button>
   );
 }

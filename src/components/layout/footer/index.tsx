@@ -1,31 +1,10 @@
-import Link from "next/link";
-import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+import { Facebook, Instagram } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils/tailwind-merge";
 import { useTranslations } from "next-intl";
-
-const footerLinks = {
-  column1: [
-    { label: "Link One", href: "#" },
-    { label: "Link Two", href: "#" },
-    { label: "Link Three", href: "#" },
-    { label: "Link Four", href: "#" },
-  ],
-  column2: [
-    { label: "Link One", href: "#" },
-    { label: "Link Two", href: "#" },
-    { label: "Link Three", href: "#" },
-    { label: "Link Four", href: "#" },
-  ],
-  column3: [
-    { label: "Link One", href: "#" },
-    { label: "Link Two", href: "#" },
-    { label: "Link Three", href: "#" },
-    { label: "Link Four", href: "#" },
-    { label: "Link Five", href: "#" },
-  ],
-};
+import Image from "next/image";
+import { Link } from "@/i18n/routing";
 
 export function Footer() {
   // Translation
@@ -37,11 +16,13 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Left Column - Logo and Contact */}
           <div className="space-y-4">
-            <h2 className="text-3xl font-bold">Logo</h2>
-            <div className="space-y-2 text-sm text-gray-300">
-              <p>USA, California</p>
-              <p>8800 023 4567</p>
-              <p>email@example.com</p>
+            <Link href="/" className="flex items-center space-x-2">
+              <Image src={"/assets/images/logo.svg"} alt="soliel store" width={140} height={140} />
+            </Link>
+            <div className="space-y-2 text-gray-300">
+              <p>{t("egy-cairo")}</p>
+              <p>01111803604</p>
+              <p>shamsmedhat1@gmail.com</p>
             </div>
             {/* Social Media Icons */}
             <div className="flex items-center gap-4 pt-4">
@@ -49,75 +30,28 @@ export function Footer() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noreferrer"
-                className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "text-white hover:text-gray-300")}>
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "icon" }),
+                  "text-white hover:text-gray-300",
+                )}
+              >
                 <Facebook className="h-5 w-5" />
-                <span className="sr-only">Facebook</span>
+                <span className="sr-only">{t("facebook")}</span>
               </Link>
-              <Link
-                href="https://twitter.com"
-                target="_blank"
-                rel="noreferrer"
-                className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "text-white hover:text-gray-300")}>
-                <Twitter className="h-5 w-5" />
-                <span className="sr-only">Twitter</span>
-              </Link>
+
               <Link
                 href="https://instagram.com"
                 target="_blank"
                 rel="noreferrer"
-                className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "text-white hover:text-gray-300")}>
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "icon" }),
+                  "text-white hover:text-gray-300",
+                )}
+              >
                 <Instagram className="h-5 w-5" />
-                <span className="sr-only">Instagram</span>
-              </Link>
-              <Link
-                href="https://youtube.com"
-                target="_blank"
-                rel="noreferrer"
-                className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "text-white hover:text-gray-300")}>
-                <Youtube className="h-5 w-5" />
-                <span className="sr-only">YouTube</span>
+                <span className="sr-only">{t("instagram")}</span>
               </Link>
             </div>
-          </div>
-
-          {/* Right Columns - Navigation Links */}
-          <div>
-            <h3 className="font-semibold mb-4">Links</h3>
-            <ul className="space-y-2 text-sm text-gray-300">
-              {footerLinks.column1.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="hover:text-white transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-semibold mb-4">Links</h3>
-            <ul className="space-y-2 text-sm text-gray-300">
-              {footerLinks.column2.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="hover:text-white transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-semibold mb-4">Links</h3>
-            <ul className="space-y-2 text-sm text-gray-300">
-              {footerLinks.column3.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="hover:text-white transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
 

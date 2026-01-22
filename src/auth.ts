@@ -40,8 +40,7 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
-        const payload: LoginResponse | APIResponse<never> =
-          await response.json();
+        const payload: LoginResponse | APIResponse<never> = await response.json();
 
         // Throw an auth error if the login has failed
         if ("code" in payload) {

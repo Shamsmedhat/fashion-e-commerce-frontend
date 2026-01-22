@@ -1,9 +1,8 @@
 import { JSON_HEADER } from "../constants/api.constant";
 import { buildQueryString } from "../utils/build-query-string";
 
-export async function getMainCategoriesService(
-  params?: QueryParams
-): Promise<CategoriesResponse> {
+// Get main categories
+export async function getMainCategoriesService(params?: QueryParams): Promise<CategoriesResponse> {
   // 1. Build the query string
   const queryString = buildQueryString(params);
 
@@ -22,8 +21,26 @@ export async function getMainCategoriesService(
 
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch main categories | ${response.status} - ${response.statusText}`
+      `Failed to fetch main categories | ${response.status} - ${response.statusText}`,
     );
+  }
+
+  return response.json();
+}
+
+// Get sub categories
+export async function getSubCategoriesService(id: string): Promise<CategoriesResponse> {
+  // Url
+  const url = `${process.env.API_URL}/categories/children/${id}`;
+
+  const response = await fetch(url, {
+    headers: {
+      ...JSON_HEADER,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch sub categories | ${response.status} - ${response.statusText}`);
   }
 
   return response.json();

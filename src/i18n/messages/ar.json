@@ -97,5 +97,17 @@
   "select-variant": "حدد البديل",
   "saving": "جاري الحفظ",
   "new-collection-soon": "مجموعة جديدة قريبا",
-  "special-offers": "عروض خاصة"
+  "special-offers": "عروض خاصة",
+  "collections": "المنتجات",
+  "category-subtitle": "اكتشف مجموعتنا المختارة من المنتجات المتميزة",
+  "all-products": "جميع المنتجات",
+  "free-shipping": "ًالشحن مجانا",
+  "product-not-available": "المنتج غير متوفر",
+  "email-phone-label": "البريد الالكتروني او رقم الهاتف",
+  "email-phone-placeholder": "ادخل البريد الالكتروني او رقم الهاتف",
+  "registration-success-msg": "تم التسجيل بنجاح!",
+  "login-success-msg": "تم تسجيل الدخول بنجاح!",
+  "egy-cairo": "مصر، القاهرة",
+  "facebook": "فيسبوك",
+  "instagram": "انستغرام"
 }

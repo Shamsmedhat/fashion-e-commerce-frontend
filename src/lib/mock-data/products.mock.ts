@@ -3,8 +3,7 @@ export const mockProducts = [
   {
     _id: "64f000000000000000000101",
     name: "Men Classic Leather Sneakers",
-    description:
-      "Comfortable leather sneakers suitable for everyday casual wear.",
+    description: "Comfortable leather sneakers suitable for everyday casual wear.",
     categoryId: "64f000000000000000000004",
     coverImage: "men-sneakers.jpg",
     images: ["men-sneakers-1.jpg", "men-sneakers-2.jpg"],
@@ -429,30 +428,3 @@ export const mockProducts = [
     createdAt: "2024-01-01T00:00:00.000Z",
   },
 ];
-
-// Helper functions to get filtered/sorted products
-export const getNewArrivals = () => {
-  return [...mockProducts]
-    .sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
-    .slice(0, 8);
-};
-
-export const getBestSelling = () => {
-  return [...mockProducts]
-    .sort((a, b) => {
-      const aSold = a.variants.reduce((sum, v) => sum + (v.soldCount || 0), 0);
-      const bSold = b.variants.reduce((sum, v) => sum + (v.soldCount || 0), 0);
-      return bSold - aSold;
-    })
-    .slice(0, 6);
-};
-
-export const getTopRating = () => {
-  return [...mockProducts]
-    .filter((p) => p.ratingsAverage)
-    .sort((a, b) => (b.ratingsAverage || 0) - (a.ratingsAverage || 0))
-    .slice(0, 6);
-};

@@ -7,9 +7,8 @@ export default function BagHeader() {
 
   return (
     <div className="relative w-full h-[40vh] min-h-[300px] bg-gray-900 overflow-hidden">
-      {/* Background Image - You can replace this with an actual image */}
+      {/* Background Image*/}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900">
-        {/* Placeholder for background image */}
         <div className="absolute inset-0 opacity-30">
           <Image
             src="/assets/images/bag/cover.svg"
