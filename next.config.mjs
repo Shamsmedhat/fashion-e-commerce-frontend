@@ -20,7 +20,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "fashion-e-commerce-production.up.railway.app",
+        hostname: "res.cloudinary.com",
         port: "",
         pathname: "/**",
       },
