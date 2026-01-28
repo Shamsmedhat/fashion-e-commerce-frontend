@@ -1,21 +1,25 @@
 import { Truck, Headphones, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-export default function Test() {
+export default function Features() {
+  // Translations
+  const t = useTranslations();
+
   const features = [
     {
       icon: Truck,
-      title: "FREE AND FAST DELIVERY",
-      subtitle: "Free delivery for all orders over $140",
+      title: t("free-and-fast-delivery"),
+      subtitle: t("free-delivery-for-all-orders-over-140"),
     },
     {
       icon: Headphones,
-      title: "24/7 CUSTOMER SERVICE",
-      subtitle: "Friendly 24/7 customer support",
+      title: t("24-7-customer-service"),
+      subtitle: t("friendly-24-7-customer-support"),
     },
     {
       icon: ShieldCheck,
-      title: "MONEY BACK GUARANTEE",
-      subtitle: "We return money within 30 days",
+      title: t("money-back-guarantee"),
+      subtitle: t("we-return-money-within-30-days"),
     },
   ];
 
@@ -26,10 +30,7 @@ export default function Test() {
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div
-                key={index}
-                className="flex flex-col items-center text-center"
-              >
+              <div key={index} className="flex flex-col items-center text-center">
                 {/* Icon Circle */}
                 <div className="relative mb-6">
                   <div className="w-20 h-20 rounded-full bg-black border border-gray-300 flex items-center justify-center">
@@ -38,9 +39,7 @@ export default function Test() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-lg font-bold uppercase mb-2 text-black">
-                  {feature.title}
-                </h3>
+                <h3 className="text-lg font-bold uppercase mb-2 text-black">{feature.title}</h3>
 
                 {/* Subtitle */}
                 <p className="text-sm text-black">{feature.subtitle}</p>
