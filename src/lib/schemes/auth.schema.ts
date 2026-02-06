@@ -13,15 +13,12 @@ export const useRegisterSchema = () => {
       email: z.string({ required_error: t("email-required") }).email({
         message: t("email-invalid"),
       }),
-      phone: z
-        .string({ required_error: t("phone-required") })
-        .min(1, t("phone-required")),
+      phone: z.string({ required_error: t("phone-required") }).min(1, t("phone-required")),
       password: z.string({ required_error: t("password-required") }).min(8, {
         message: t("password-min", { min: 8 }),
       }),
       passwordConfirm: z.string({
-        required_error:
-          t("confirm-password-required") || "Password confirmation is required",
+        required_error: t("confirm-password-required") || "Password confirmation is required",
       }),
     })
     .refine((data) => data.password === data.passwordConfirm, {
@@ -39,13 +36,10 @@ export const useLoginSchema = () => {
   return z.object({
     emailOrPhone: z
       .string({
-        required_error:
-          t("email-phone-required") || "Email or phone is required",
+        required_error: t("email-phone-required") || "Email or phone is required",
       })
       .min(1, t("email-phone-required") || "Email or phone is required"),
-    password: z
-      .string({ required_error: t("password-required") })
-      .min(1, t("password-required")),
+    password: z.string({ required_error: t("password-required") }).min(1, t("password-required")),
   });
 };
 
