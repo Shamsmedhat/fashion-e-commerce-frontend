@@ -4,11 +4,13 @@ import PromotionalBanners from "@/components/features/home/promotional-banners";
 import CategoryBanners from "@/components/features/home/category-banners";
 import ServiceFeatures from "@/components/features/home/service-features";
 import NewArrivalsSection from "./_components/new-arrivals-section";
-import { getProductsService } from "@/lib/services/product.service";
+import { getBestSellingProductsService } from "@/lib/services/product.service";
 import Features from "@/components/features/home/features";
 
 export default async function Home() {
-  const bestSellingProducts = await getProductsService({ limit: 4 });
+  // Fetch
+  const bestSellingProducts = await getBestSellingProductsService();
+
   return (
     <main className="container min-h-screen mb-4 mt-12">
       {/* Hero Section */}

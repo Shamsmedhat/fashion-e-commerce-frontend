@@ -1,6 +1,7 @@
 import { JSON_HEADER } from "../constants/api.constant";
 import { buildQueryString } from "../utils/build-query-string";
 
+// Get products
 export async function getProductsService(params?: QueryParams): Promise<ProductsResponse> {
   // 1. Build the query string
   const queryString = buildQueryString(params);
@@ -26,6 +27,7 @@ export async function getProductsService(params?: QueryParams): Promise<Products
   return response.json();
 }
 
+// Get product
 export async function getProductByIdService(id: string): Promise<{
   status: string;
   data: {
@@ -48,6 +50,7 @@ export async function getProductByIdService(id: string): Promise<{
   return response.json();
 }
 
+// Get product variants
 export async function getProductVariantsService(productId: string): Promise<{
   status: string;
   data: {
@@ -66,6 +69,25 @@ export async function getProductVariantsService(productId: string): Promise<{
 
   if (!response.ok) {
     throw new Error(`Failed to fetch variants | ${response.status} - ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+// Get best selling
+export async function getBestSellingProductsService(): Promise<ProductsResponse> {
+  // Url
+  const url = new URL(`${process.env.API_URL}/products/best-selling`);
+
+  const response = await fetch(url.toString(), {
+    headers: {
+      ...JSON_HEADER,
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch products | ${response.status} - ${response.statusText}`);
   }
 
   return response.json();

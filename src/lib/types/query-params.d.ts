@@ -3,4 +3,5 @@ type QueryParams = {
   limit?: number;
   page?: number;
   mainCategory?: string;
+  slug?: string | string[];
 };

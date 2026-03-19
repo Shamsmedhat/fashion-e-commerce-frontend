@@ -7,7 +7,7 @@ export async function getBagItemsService(): Promise<BagItemsResponse> {
   const token = await getAuthToken();
 
   const headers: HeadersInit = {
-    ...JSON_HEADER,
+    ...JSON_HEADER,  
     Authorization: `Bearer ${token}`,
   };
 

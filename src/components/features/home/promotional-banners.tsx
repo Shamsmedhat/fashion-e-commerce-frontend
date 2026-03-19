@@ -1,13 +1,26 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
+import { getCategoriesService } from "@/lib/services/category.service";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
-export default function PromotionalBanners() {
+export default async function PromotionalBanners() {
+  // Translations
+  const t = await getTranslations();
+
+  // Fetch
+  const { data } = await getCategoriesService({
+    slug: ["men-upperbody", "men-shoes"],
+  });
+
+  // Variables
+  const upperbody = data.categories.filter((c) => c.slug === "men-upperbody")[0];
+  const shoes = data.categories.filter((c) => c.slug === "men-shoes")[0];
+
   return (
-    <section className="container py-12 grid grid-cols-1 md:grid-cols-2 gap-5 h-screen">
+    <section className="container py-12 grid grid-cols-1 md:grid-cols-2 gap-5 h-screen uppercase">
       {/* Famous Muiches Banner */}
-      <div className="relative h-4/5 overflow-hidden group cursor-pointer self-start">
+      <div className="relative h-4/5 overflow-hidden group cursor-pointer self-start ">
         <div className="absolute inset-0">
           <Image
             src="/assets/images/23.jpg"
@@ -18,15 +31,17 @@ export default function PromotionalBanners() {
         </div>
         <div className="absolute inset-0 flex flex-col items-start justify-end p-8 md:p-10 z-10s">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 md:mb-6">
-            FAMOUS MUICHES
+            {t("famous-artists")}
           </h2>
-          <Button
-            size="lg"
-            variant="outline"
-            className="bg-white/5 hover:bg-white text-white border-white backdrop-blur-sm rounded-none"
-          >
-            SHOP NOW
-          </Button>
+          <Link href={`/category/men/${upperbody.parentId}/${upperbody.slug}/${upperbody._id}`}>
+            <Button
+              size="lg"
+              variant="outline"
+              className="bg-white/5 hover:bg-white text-white border-white backdrop-blur-sm rounded-none"
+            >
+              {t("shop-now")}
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -42,15 +57,17 @@ export default function PromotionalBanners() {
         </div>
         <div className="absolute inset-0 flex flex-col items-start justify-end p-8 md:p-10 z-10">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 md:mb-6">
-            SPECIAL COLLECTION
+            {t("special-collection")}
           </h2>
-          <Button
-            size="lg"
-            variant="outline"
-            className="bg-white/5 hover:bg-white text-white border-white backdrop-blur-sm rounded-none"
-          >
-            SHOP NOW
-          </Button>
+          <Link href={`/category/men/${shoes.parentId}/${shoes.slug}/${shoes._id}`}>
+            <Button
+              size="lg"
+              variant="outline"
+              className="bg-white/5 hover:bg-white text-white border-white backdrop-blur-sm rounded-none"
+            >
+              {t("shop-now")}
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
