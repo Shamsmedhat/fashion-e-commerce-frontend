@@ -6,8 +6,7 @@ function getProductDiscountPercentage(product: Product): number {
 
   product.variants.forEach((variant) => {
     if (variant.priceDiscount && variant.price > 0) {
-      const discount =
-        ((variant.price - variant.priceDiscount) / variant.price) * 100;
+      const discount = ((variant.price - variant.priceDiscount) / variant.price) * 100;
       maxDiscount = Math.max(maxDiscount, discount);
     }
   });
@@ -31,10 +30,7 @@ function getProductHighestPrice(product: Product): number {
 /**
  * Sorts products based on the sort option
  */
-export function sortProducts(
-  products: Product[],
-  sortOption: string
-): Product[] {
+export function sortProducts(products: Product[], sortOption: string): Product[] {
   if (!sortOption) {
     return products;
   }
@@ -42,25 +38,28 @@ export function sortProducts(
   const sortedProducts = [...products];
 
   switch (sortOption) {
+    // Highest discount first
     case "discount":
       return sortedProducts.sort((a, b) => {
         const discountA = getProductDiscountPercentage(a);
         const discountB = getProductDiscountPercentage(b);
-        return discountB - discountA; // Highest discount first
+        return discountB - discountA;
       });
 
+    // Lowest price first
     case "price-low-to-high":
       return sortedProducts.sort((a, b) => {
         const priceA = getProductLowestPrice(a);
         const priceB = getProductLowestPrice(b);
-        return priceA - priceB; // Lowest price first
+        return priceA - priceB;
       });
 
+    // highest price first
     case "price-high-to-low":
       return sortedProducts.sort((b, a) => {
         const priceA = getProductHighestPrice(a);
         const priceB = getProductHighestPrice(b);
-        return priceA - priceB; // highest price first
+        return priceA - priceB;
       });
 
     default:

@@ -124,5 +124,11 @@
   "bag": "الحقيبة",
   "email-phone-required": "البريد الإلكتروني أو الهاتف مطلوب",
   "famous-artists": "الفنانين المشهورين",
-  "special-collection": "مجموعة خاصة"
+  "special-collection": "مجموعة خاصة",
+  "new-arrivals-title": "وصل حديثا",
+  "new-arrivals-cover-alt": "",
+  "new-arrivals-empty-title": "وصل حديثا",
+  "new-arrivals-empty-description": "",
+  "new-arrivals-error-message": "",
+  "new-arrivals-retry": ""
 }

@@ -9,6 +9,9 @@ import {
   CarouselNextBestSelling,
   CarouselPreviousBestSelling,
 } from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 const montserrat = Montserrat({
   weight: ["200", "300", "400"],
@@ -20,14 +23,8 @@ export default function CategoryBanners({
 }: {
   bestSellingProducts: Product[];
 }) {
-  // TODO: Complete this section
-  // const handlePrev = () => {
-  //   setCurrentIndex((prev) => (prev > 0 ? prev - 1 : 0));
-  // };
-
-  // const handleNext = () => {
-  //   setCurrentIndex((prev) => (prev < bestSellingProducts.length - 4 ? prev + 1 : prev));
-  // };
+  // Translations
+  const t = useTranslations();
 
   return (
     <section className="py-12">
@@ -69,9 +66,12 @@ export default function CategoryBanners({
         </Carousel>
         {/* SHOP NOW Button */}
         <div className="flex justify-center mt-8">
-          <button className="bg-black text-white font-semibold px-12 py-3 rounded hover:bg-gray-900 transition-colors">
-            SHOP NOW
-          </button>
+          <Button
+            className="bg-black text-white font-semibold px-12 py-3 rounded hover:bg-gray-900 transition-colors"
+            asChild
+          >
+            <Link href="/new">{t("shop-now")}</Link>
+          </Button>
         </div>
       </div>
     </section>

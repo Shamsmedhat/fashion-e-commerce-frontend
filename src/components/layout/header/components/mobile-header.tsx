@@ -27,6 +27,13 @@ export default function MobileHeader({ mainCategories, closeMenu, bagLength }: M
       <nav className="container py-4 flex flex-col space-y-4">
         {/* Categories */}
         <div className="flex flex-col space-y-3">
+          <Link
+            href="/new"
+            className="text-base capitalize font-medium text-gray-700 hover:text-gray-900 transition-colors py-2"
+            onClick={closeMenu}
+          >
+            {t("new-arrivals")}
+          </Link>
           {mainCategories.map((c) => (
             <Link
               key={c.slug}

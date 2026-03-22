@@ -4,4 +4,5 @@ type QueryParams = {
   page?: number;
   mainCategory?: string;
   slug?: string | string[];
+  createdAt?: string;
 };

@@ -61,6 +61,15 @@ export default function MainHeader({
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
+            <Link
+              href="/new"
+              className={cn(
+                locale === "ar" ? "text-md font-bold" : "text-sm font-semibold",
+                "capitalize text-gray-700 hover:text-gray-900 transition-all bg-[linear-gradient(to_right,currentColor_0%,currentColor_100%)] bg-[length:0%_1px] bg-no-repeat bg-bottom hover:bg-[length:100%_1px] duration-300",
+              )}
+            >
+              {t("new-arrivals")}
+            </Link>
             {mainCategories.map((c) => (
               <Link
                 key={c.slug}

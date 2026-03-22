@@ -33,15 +33,16 @@ export default async function PromotionalBanners() {
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 md:mb-6">
             {t("famous-artists")}
           </h2>
-          <Link href={`/category/men/${upperbody.parentId}/${upperbody.slug}/${upperbody._id}`}>
-            <Button
-              size="lg"
-              variant="outline"
-              className="bg-white/5 hover:bg-white text-white border-white backdrop-blur-sm rounded-none"
-            >
+          <Button
+            size="lg"
+            variant="outline"
+            className="bg-white/5 hover:bg-white text-white border-white backdrop-blur-sm rounded-none"
+            asChild
+          >
+            <Link href={`/category/men/${upperbody.parentId}/${upperbody.slug}/${upperbody._id}`}>
               {t("shop-now")}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </div>
 
@@ -59,15 +60,16 @@ export default async function PromotionalBanners() {
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 md:mb-6">
             {t("special-collection")}
           </h2>
-          <Link href={`/category/men/${shoes.parentId}/${shoes.slug}/${shoes._id}`}>
-            <Button
-              size="lg"
-              variant="outline"
-              className="bg-white/5 hover:bg-white text-white border-white backdrop-blur-sm rounded-none"
-            >
+          <Button
+            size="lg"
+            variant="outline"
+            className="bg-white/5 hover:bg-white text-white border-white backdrop-blur-sm rounded-none"
+            asChild
+          >
+            <Link href={`/category/men/${shoes.parentId}/${shoes.slug}/${shoes._id}`}>
               {t("shop-now")}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </div>
     </section>

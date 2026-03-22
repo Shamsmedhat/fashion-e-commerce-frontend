@@ -123,5 +123,11 @@
   "bag": "bag",
   "email-phone-required": "email or phone required",
   "famous-artists": "famous artists",
-  "special-collection": "special collection"
+  "special-collection": "special collection",
+  "new-arrivals-title": "new arrival",
+  "new-arrivals-cover-alt": "",
+  "new-arrivals-empty-title": "new arrival",
+  "new-arrivals-empty-description": "",
+  "new-arrivals-error-message": "",
+  "new-arrivals-retry": ""
 }
