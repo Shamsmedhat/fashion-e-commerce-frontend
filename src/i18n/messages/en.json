@@ -117,7 +117,7 @@
   "friendly-24-7-customer-support": "Friendly 24/7 customer support",
   "money-back-guarantee": "MONEY BACK GUARANTEE",
   "we-return-money-within-30-days": "We return money within 30 days",
-  "shop-now": "SHOP NOW",
+  "shop-now": "shop now",
   "adjustable": "adjustable",
   "elegant": "elegant",
   "bag": "bag",
@@ -129,5 +129,8 @@
   "new-arrivals-empty-title": "new arrival",
   "new-arrivals-empty-description": "",
   "new-arrivals-error-message": "",
-  "new-arrivals-retry": ""
+  "new-arrivals-retry": "",
+  "best-selling-title": "<outlined>best</outlined><solid>sell</solid><outlined>ing</outlined>",
+  "prev": "prev",
+  "next": "next"
 }

@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils/tailwind-merge";
 
 import ProductSection from "@/components/features/home/product-section";
 import { ProductGridSkeleton } from "@/components/skeletons/product/product-item.skeleton";
+import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
 
 // Fonts
 // (en)
@@ -31,7 +33,7 @@ export default function NewArrivalsSection() {
         className={cn(
           teko.className,
           almarai.className,
-          "flex my-10 gap-2 justify-center tracking-wide text-5xl uppercase"
+          "flex my-10 gap-2 justify-center tracking-wide text-5xl uppercase",
         )}
       >
         {t("new-arrivals")}
@@ -39,6 +41,16 @@ export default function NewArrivalsSection() {
       <Suspense fallback={<ProductGridSkeleton />}>
         <ProductSection />
       </Suspense>
+
+      {/* SHOP NOW Button */}
+      <div className="flex justify-center mt-8">
+        <Button
+          className="bg-black text-white font-semibold px-12 py-3 rounded hover:bg-gray-900 transition-colors"
+          asChild
+        >
+          <Link href="/new">{t("shop-now")}</Link>
+        </Button>
+      </div>
     </section>
   );
 }

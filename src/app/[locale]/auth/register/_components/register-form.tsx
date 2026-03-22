@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RegistrationFields, useRegisterSchema } from "@/lib/schemes/auth.schema";
+import { RegistrationFields, registerSchema as createRegisterSchema } from "@/lib/schemes/auth.schema";
 import { useTranslations } from "next-intl";
 import { PasswordInput } from "@/components/shared/password-input";
 import useRegister from "../_hooks/use-register";
@@ -36,7 +36,7 @@ export default function RegisterForm() {
   const router = useRouter();
 
   // Hooks
-  const registerSchema = useRegisterSchema();
+  const registerSchema = createRegisterSchema(t);
   const { isPending, error, register } = useRegister();
 
   // Form

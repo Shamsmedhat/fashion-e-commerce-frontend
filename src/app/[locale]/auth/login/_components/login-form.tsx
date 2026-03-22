@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { LoginFields, useLoginSchema } from "@/lib/schemes/auth.schema";
+import { LoginFields, loginSchema as createLoginSchema } from "@/lib/schemes/auth.schema";
 import { PasswordInput } from "@/components/shared/password-input";
 import useLogin from "../_hooks/use-login";
 import SubmitFeedback from "@/components/shared/submit-feedback";
@@ -36,7 +36,7 @@ export default function LoginForm() {
   const router = useRouter();
 
   // Hooks
-  const loginSchema = useLoginSchema();
+  const loginSchema = createLoginSchema(t);
   const { isPending, error, login } = useLogin();
 
   // Form
@@ -53,7 +53,6 @@ export default function LoginForm() {
     login(values);
   };
 
-  console.log("error", error);
   return (
     <Card className="w-full max-w-md">
       {/* Header */}

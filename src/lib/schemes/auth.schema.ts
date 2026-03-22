@@ -1,10 +1,9 @@
-import { useTranslations } from "next-intl";
+import type * as NextIntl from "next-intl";
 import { z } from "zod";
 
-export const useRegisterSchema = () => {
-  // Translation
-  const t = useTranslations();
+type AuthTranslator = ReturnType<typeof NextIntl.useTranslations>;
 
+export const registerSchema = (t: AuthTranslator) => {
   return z
     .object({
       name: z
@@ -27,12 +26,9 @@ export const useRegisterSchema = () => {
     });
 };
 
-export type RegistrationFields = z.infer<ReturnType<typeof useRegisterSchema>>;
+export type RegistrationFields = z.infer<ReturnType<typeof registerSchema>>;
 
-export const useLoginSchema = () => {
-  // Translation
-  const t = useTranslations();
-
+export const loginSchema = (t: AuthTranslator) => {
   return z.object({
     emailOrPhone: z
       .string({
@@ -43,4 +39,4 @@ export const useLoginSchema = () => {
   });
 };
 
-export type LoginFields = z.infer<ReturnType<typeof useLoginSchema>>;
+export type LoginFields = z.infer<ReturnType<typeof loginSchema>>;

@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, MoveLeft, MoveRight } from "lucide-react";
 import { cn } from "@/lib/utils/tailwind-merge";
 import { Button } from "@/components/ui/button";
 import { NextFont } from "next/dist/compiled/@next/font";
+import { useTranslations } from "next-intl";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -239,6 +240,9 @@ const CarouselNextBestSelling = React.forwardRef<
 >(({ className, variant = "ghost", size = "default", ...props }, ref) => {
   const { orientation, scrollNext, canScrollNext } = useCarousel();
 
+  // Translation
+  const t = useTranslations();
+
   return (
     <Button
       ref={ref}
@@ -261,9 +265,9 @@ const CarouselNextBestSelling = React.forwardRef<
           "text-lg bg-[linear-gradient(to_right,currentColor_0%,currentColor_100%)] bg-[length:0%_1px] bg-no-repeat bg-bottom group-hover:bg-[length:100%_1px] duration-300",
         )}
       >
-        NEXT
+        {t("next")}
       </span>
-      <MoveRight size={40} strokeWidth={0.5} absoluteStrokeWidth />
+      <MoveRight size={40} strokeWidth={0.5} absoluteStrokeWidth className="rtl:rotate-180" />
     </Button>
   );
 });
@@ -274,6 +278,9 @@ const CarouselPreviousBestSelling = React.forwardRef<
   React.ComponentProps<typeof Button> & { font: NextFont }
 >(({ className, variant = "ghost", size = "default", ...props }, ref) => {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
+
+  // Translation
+  const t = useTranslations();
 
   return (
     <Button
@@ -294,12 +301,12 @@ const CarouselPreviousBestSelling = React.forwardRef<
       <span
         className={cn(
           props.font.className,
-          "text-lg bg-[linear-gradient(to_right,currentColor_0%,currentColor_100%)] bg-[length:0%_1px] bg-no-repeat bg-bottom group-hover:bg-[length:100%_1px] duration-300",
+          "text-lg bg-[linear-gradient(to_right,currentColor_0%,currentColor_100%)] bg-[length:0%_1px] bg-no-repeat bg-bottom group-hover:bg-[length:100%_1px] duration-300 capitalize",
         )}
       >
-        PREV
+        {t("prev")}
       </span>
-      <MoveLeft size={40} strokeWidth={0.5} absoluteStrokeWidth />
+      <MoveLeft size={40} strokeWidth={0.5} absoluteStrokeWidth className="rtl:rotate-180" />
     </Button>
   );
 });

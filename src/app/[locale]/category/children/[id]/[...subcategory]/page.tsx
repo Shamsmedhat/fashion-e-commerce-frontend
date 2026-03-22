@@ -17,7 +17,7 @@ export default function page({ params, searchParams }: MenPage) {
     <main className="min-h-screen mt-28">
       <ProductsPageCover
         imgSrc="/assets/images/children-cover.webp"
-        className="object-[center_80%]"
+        className="object-[center_30%]"
       />
 
       <div className="py-5">

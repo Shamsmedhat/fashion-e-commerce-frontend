@@ -1,16 +1,12 @@
-import { Separator } from "@/components/ui/separator";
+import Features from "@/components/features/home/features";
 import HeroSection from "@/components/features/home/hero-section";
 import PromotionalBanners from "@/components/features/home/promotional-banners";
-import CategoryBanners from "@/components/features/home/category-banners";
-import ServiceFeatures from "@/components/features/home/service-features";
-import NewArrivalsSection from "./_components/new-arrivals-section";
-import { getBestSellingProductsService } from "@/lib/services/product.service";
-import Features from "@/components/features/home/features";
+import { Separator } from "@/components/ui/separator";
+import NewArrivalsSection from "../../../components/features/home/new-arrivals-section";
+import BestSellingMain from "@/components/features/home/best-selling/best-selling-main";
+import CategoriesMain from "@/components/features/home/categories/categories-main";
 
 export default async function Home() {
-  // Fetch
-  const bestSellingProducts = await getBestSellingProductsService();
-
   return (
     <main className="container min-h-screen mb-4 mt-12">
       {/* Hero Section */}
@@ -25,10 +21,10 @@ export default async function Home() {
       <PromotionalBanners />
 
       {/* Category Banners */}
-      <CategoryBanners bestSellingProducts={bestSellingProducts.data.products} />
+      <BestSellingMain />
 
-      {/* Service Features */}
-      <ServiceFeatures />
+      {/* Categories */}
+      <CategoriesMain />
 
       <Features />
     </main>

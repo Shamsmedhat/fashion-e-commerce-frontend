@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 
 import NewArrivalsCover from "./_components/new-arrivals-cover";
 import NewArrivalsList from "./_components/new-arrivals-list";
-import { NewArrivalsListSkeleton } from "@/components/skeletons/products/new-arrivals-list.skeleton";
+import { NewArrivalsListSkeleton } from "@/components/skeletons/sections/new-arrivals-list.skeleton";
 
 type NewArrivalsPageProps = {
   searchParams: Record<string, string | string[] | undefined>;
@@ -17,9 +17,7 @@ export async function generateMetadata(): Promise<{ title: string }> {
   };
 }
 
-export default function NewArrivalsPage({
-  searchParams = {},
-}: NewArrivalsPageProps): JSX.Element {
+export default function NewArrivalsPage({ searchParams = {} }: NewArrivalsPageProps): JSX.Element {
   return (
     <main className="min-h-screen mt-28">
       <NewArrivalsCover />

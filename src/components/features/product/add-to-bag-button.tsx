@@ -63,8 +63,7 @@ export default function AddToBagButton({
           const productName = data.data.bag.items.at(-1)?.productName;
           toast.success(`${productName} ${t("added-to-bag")}!`);
         },
-        onError: (err) => {
-          console.error(err.message);
+        onError: () => {
           toast.error(t("some-thing-went-wrong"));
         },
       },

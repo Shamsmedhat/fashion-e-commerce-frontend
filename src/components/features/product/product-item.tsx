@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 
@@ -7,6 +9,7 @@ import { cn } from "@/lib/utils/tailwind-merge";
 import { getTailwindColor } from "@/lib/utils/get-tailwind-color";
 import AddToBagButton from "./add-to-bag-button";
 import { displayProductRating } from "@/lib/utils/product-rating";
+import { Button } from "@/components/ui/button";
 
 // Type
 type ProductItemProps = {
@@ -14,7 +17,6 @@ type ProductItemProps = {
   className?: string;
   showAddToBag?: boolean;
   discountOverride?: number;
-  searchParams?: Record<string, string | string[] | undefined>;
 };
 
 export default function ProductItem({ product, discountOverride }: ProductItemProps) {
@@ -96,14 +98,14 @@ export default function ProductItem({ product, discountOverride }: ProductItemPr
               {t("add-to-bag")}
             </AddToBagButton>
           ) : (
-            <button
+            <Button
               disabled
               className={cn(
                 "w-full h-12 bg-black text-white font-semibold capitalize transition-transform duration-500 flex items-center justify-center hover:bg-gray-900 group-hover:translate-y-0 translate-y-full opacity-50 cursor-not-allowed",
               )}
             >
               {t("product-not-available")}
-            </button>
+            </Button>
           )}
         </div>
       </div>

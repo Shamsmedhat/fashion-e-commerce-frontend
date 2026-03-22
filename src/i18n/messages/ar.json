@@ -130,5 +130,8 @@
   "new-arrivals-empty-title": "وصل حديثا",
   "new-arrivals-empty-description": "",
   "new-arrivals-error-message": "",
-  "new-arrivals-retry": ""
+  "new-arrivals-retry": "",
+  "best-selling-title": "<outlined>افضل</outlined><solid>المبيـ</solid><outlined>عات</outlined>",
+  "prev": "السابق",
+  "next": "التالي"
 }

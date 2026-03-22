@@ -25,8 +25,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <ProductDetail product={product} />
       </main>
     );
-  } catch (error) {
-    console.error("Failed to fetch product:", error);
-    notFound();
+  } catch (err) {
+    throw err;
   }
 }
