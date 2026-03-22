@@ -64,7 +64,7 @@ export default async function NewArrivalsList({
       <div className="m-4 pb-8">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {sortedProducts.map((product) => (
-            <ProductItem key={product._id} product={product} searchParams={searchParams} />
+            <ProductItem key={product._id} product={product} />
           ))}
         </div>
       </div>
