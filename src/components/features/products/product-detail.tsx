@@ -418,7 +418,7 @@ import {
 } from "@/components/ui/accordion";
 import { Star, ShoppingBag, Truck, Phone, MapPin, Plus } from "lucide-react";
 import { cn } from "@/lib/utils/tailwind-merge";
-import AddToBagButton from "@/components/features/products/add-to-bag-button";
+import AddToBagButton from "../bag/add-to-bag-button";
 
 type ProductDetailProps = {
   product: Product;
