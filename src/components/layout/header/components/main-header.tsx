@@ -5,7 +5,7 @@ import Image from "next/image";
 
 import { cn } from "@/lib/utils/tailwind-merge";
 import { ShoppingBag, Menu, X, LogOut } from "lucide-react";
-import { Link } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { signOut, useSession } from "next-auth/react";
 
@@ -89,19 +89,20 @@ export default function MainHeader({
         <div className="flex items-center gap-4">
           {/* Desktop Icons */}
           <div className="hidden md:flex items-center justify-center gap-4">
-            <Button variant="ghost" size="icon">
-              <Link href="/bag" className="flex relative">
-                <ShoppingBag className="w-5 h-5 hover:text-gray-800 transition-all" />
+            <Button variant="ghost" size="icon" asChild>
+              <Link href="/bag" className="flex relative" aria-label={t("bag")}>
+                <ShoppingBag className="w-5 h-5 hover:text-gray-800 transition-all" aria-hidden="true" />
                 {bagLength > 0 && (
                   <span className="absolute bottom-3 left-3 flex h-4 w-4 items-center justify-center">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75"></span>
-                    <span className="relative flex h-4 w-4 items-center justify-center rounded-full bg-primary-500 text-[10px] leading-none font-medium text-white">
+                    <span
+                      className="relative flex h-4 w-4 items-center justify-center rounded-full bg-primary-500 text-[10px] leading-none font-medium text-white"
+                      aria-live="polite"
+                    >
                       {bagLength}
                     </span>
                   </span>
                 )}
-
-                <span className="sr-only">bag</span>
               </Link>
             </Button>
           </div>
@@ -115,8 +116,8 @@ export default function MainHeader({
             {session ? (
               <>
                 <div className="text-sm py-2">{t("hello-user", { user: session.user.name })}</div>
-                <Button variant="ghost" className="justify-start" onClick={() => signOut()}>
-                  <LogOut className="w-4 h-4 mr-2" />
+                <Button variant="ghost" className="justify-start" onClick={() => signOut()} type="button">
+                  <LogOut className="w-4 h-4 mr-2" aria-hidden="true" />
                   {t("logout")}
                 </Button>
               </>
@@ -137,8 +138,13 @@ export default function MainHeader({
             onClick={toggleMenu}
             className="md:hidden"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            type="button"
           >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMenuOpen ? (
+              <X className="h-5 w-5" aria-hidden="true" />
+            ) : (
+              <Menu className="h-5 w-5" aria-hidden="true" />
+            )}
           </Button>
         </div>
       </div>

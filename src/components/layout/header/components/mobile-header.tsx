@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 import { LogOut, ShoppingBag } from "lucide-react";
 import React from "react";
 import { SwitchLocale } from "./switch-locale";
@@ -56,9 +56,12 @@ export default function MobileHeader({ mainCategories, closeMenu, bagLength }: M
           onClick={closeMenu}
         >
           <div className="relative">
-            <ShoppingBag className="w-5 h-5" />
+            <ShoppingBag className="w-5 h-5" aria-hidden="true" />
             {bagLength > 0 && (
-              <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary-500 text-[10px] font-medium text-white">
+              <span
+                className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary-500 text-[10px] font-medium text-white"
+                aria-live="polite"
+              >
                 {bagLength}
               </span>
             )}
@@ -83,12 +86,13 @@ export default function MobileHeader({ mainCategories, closeMenu, bagLength }: M
             <Button
               variant="ghost"
               className="justify-start w-full"
+              type="button"
               onClick={() => {
                 signOut();
                 closeMenu();
               }}
             >
-              <LogOut className="w-4 h-4 mr-2" />
+              <LogOut className="w-4 h-4 mr-2" aria-hidden="true" />
               {t("logout")}
             </Button>
           </div>

@@ -1,5 +1,5 @@
 import { getProductsService } from "@/lib/services/product.service";
-import ProductItem from "../product/product-item";
+import ProductItem from "../products/product-item";
 import { getTranslations } from "next-intl/server";
 
 export default async function ProductSection() {

@@ -5,9 +5,9 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/tailwind-merge";
 
 import ProductSection from "@/components/features/home/product-section";
-import { ProductGridSkeleton } from "@/components/skeletons/product/product-item.skeleton";
+import { ProductGridSkeleton } from "@/components/skeletons/products/product-item.skeleton";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 
 // Fonts
 // (en)
@@ -38,7 +38,13 @@ export default function NewArrivalsSection() {
       >
         {t("new-arrivals")}
       </h2>
-      <Suspense fallback={<ProductGridSkeleton />}>
+      <Suspense
+        fallback={
+          <div role="status" aria-live="polite" aria-label="Loading new arrivals">
+            <ProductGridSkeleton />
+          </div>
+        }
+      >
         <ProductSection />
       </Suspense>
 

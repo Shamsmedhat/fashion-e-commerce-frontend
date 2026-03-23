@@ -3,7 +3,7 @@
 import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Locale, useLocale } from "next-intl";
-import { usePathname, useRouter } from "@/i18n/routing";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils/tailwind-merge";
 
@@ -35,12 +35,19 @@ export function SwitchLocale({ className }: { className?: string }) {
   };
 
   return (
-    <Button variant="link" size="sm" className={cn("gap-1 px-2", className)} onClick={toggleLocale}>
+    <Button
+      variant="link"
+      size="sm"
+      className={cn("gap-1 px-2", className)}
+      onClick={toggleLocale}
+      type="button"
+      aria-label={`Switch language to ${otherLanguage?.name ?? "other language"}`}
+    >
       {/* Name */}
       <span className="hidden sm:inline-block">{otherLanguage?.name}</span>
 
       {/* Icon */}
-      <Globe className="h-4 w-4" />
+      <Globe className="h-4 w-4" aria-hidden="true" />
     </Button>
   );
 }

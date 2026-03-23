@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import { JSON_HEADER } from "./lib/constants/api.constant";
 import { LoginResponse } from "./lib/types/auth";
 import { AuthenticationError } from "./lib/utils/app-errors";
+import { handleRateLimitError } from "./lib/utils/rate-limit-error";
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -39,6 +40,8 @@ export const authOptions: NextAuthOptions = {
             ...JSON_HEADER,
           },
         });
+
+        handleRateLimitError(response);
 
         const payload: LoginResponse | APIResponse<never> = await response.json();
 

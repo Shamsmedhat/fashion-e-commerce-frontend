@@ -21,7 +21,10 @@ export default function HeroSection() {
         <div className="relative w-full h-full max-w-4xl">
           {/* Behind image style */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <h1 className="text-[120px] md:text-[140px] font-black text-gray-300/30 select-none uppercase">
+            <h1
+              className="text-[120px] md:text-[140px] font-black text-gray-300/30 select-none uppercase"
+              aria-hidden="true"
+            >
               {t("shop-now")}
             </h1>
           </div>

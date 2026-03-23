@@ -21,7 +21,7 @@ export default function Error({
           <h1 className="text-red-500 font-bold text-5xl">{t("something-went-wrong")}</h1>
 
           {/* Description */}
-          <p>{error.message}</p>
+          <p role="alert">{error.message}</p>
 
           {/* Action */}
           <Button variant="secondary" onClick={reset}>

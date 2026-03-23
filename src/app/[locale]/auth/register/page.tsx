@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import RegisterForm from "./_components/register-form";
+import RegisterForm from "../../../../components/features/auth/register-form";
 
 export default function Page() {
   // Translation

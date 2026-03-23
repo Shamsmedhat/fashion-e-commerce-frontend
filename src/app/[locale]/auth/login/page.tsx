@@ -1,5 +1,5 @@
+import LoginForm from "@/components/features/auth/login-form";
 import { useTranslations } from "next-intl";
-import LoginForm from "./_components/login-form";
 
 export default function Page() {
   // Translation

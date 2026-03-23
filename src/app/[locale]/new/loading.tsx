@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { NewArrivalsListSkeleton } from "@/components/skeletons/sections/new-arrivals-list.skeleton";
+import { NewArrivalsListSkeleton } from "@/components/skeletons/products/new-arrivals-list.skeleton";
 
 export default function NewArrivalsLoading(): JSX.Element {
   return (

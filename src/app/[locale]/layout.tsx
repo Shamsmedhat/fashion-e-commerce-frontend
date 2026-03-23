@@ -1,4 +1,4 @@
-import HeaderWraper from "@/components/layout/header/components/header-wraper";
+import HeaderWrapper from "@/components/layout/header/components/header-wrapper";
 import { Footer } from "@/components/layout/footer";
 import Providers from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -10,7 +10,7 @@ import { getTranslations } from "next-intl/server";
 import { Montserrat, Almarai } from "next/font/google";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { HeaderSkeleton } from "@/components/skeletons/layout/header-skeleton";
+import { HeaderFallback } from "@/components/layout/header/components/header-fallback";
 
 export async function generateMetadata(): Promise<Metadata> {
   // Translation
@@ -46,8 +46,8 @@ export default function LocaleLayout({ children, params: { locale } }: LayoutPro
       <body className={cn(locale === "ar" ? almarai.className : montserrat.className)}>
         <Providers>
           {/* Header */}
-          <Suspense fallback={<HeaderSkeleton />}>
-            <HeaderWraper />
+          <Suspense fallback={<HeaderFallback />}>
+            <HeaderWrapper />
           </Suspense>
 
           {/* Toast */}

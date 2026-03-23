@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import ProductsPageCover from "@/components/features/product/products-page-cover";
-import TotalProducts from "@/components/features/product/total-products";
-import { ProductGridSkeleton } from "@/components/skeletons/product/product-item.skeleton";
+import ProductsPageCover from "@/components/features/products/products-page-cover";
+import TotalProducts from "@/components/features/products/total-products";
+import { ProductGridSkeleton } from "@/components/skeletons/products/product-item.skeleton";
 import React, { Suspense } from "react";
 
 type MenPage = {
@@ -18,7 +18,13 @@ export default function page({ params, searchParams }: MenPage) {
       <ProductsPageCover imgSrc="/assets/images/men-cover.png" className="object-[center_25%]" />
 
       <div className="py-5">
-        <Suspense fallback={<ProductGridSkeleton count={8} />}>
+        <Suspense
+          fallback={
+            <div role="status" aria-live="polite" aria-label="Loading products">
+              <ProductGridSkeleton count={8} />
+            </div>
+          }
+        >
           <TotalProducts
             categoryId={id}
             searchParams={searchParams}

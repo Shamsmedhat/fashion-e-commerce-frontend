@@ -1,5 +1,5 @@
-import BagSection from "./_components/bag-section";
-import BagHeader from "./_components/bag-header";
+import BagSection from "@/components/features/bag/bag-section";
+import BagHeader from "@/components/features/bag/bag-header";
 
 export default async function Page() {
   return (

@@ -12,12 +12,14 @@ export default function SubmitFeedback({
   return (
     <p
       {...props}
+      role="alert"
+      aria-live="assertive"
       className={cn(
         "flex items-center text-sm gap-2 my-2 text-red-500 font-semibold justify-center",
         className
       )}
     >
-      <Info size={18} /> {children}
+      <Info size={18} aria-hidden="true" /> {children}
     </p>
   );
 }

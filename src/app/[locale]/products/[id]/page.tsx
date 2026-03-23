@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getProductByIdService } from "@/lib/services/product.service";
-import ProductDetail from "./_components/product-detail";
+import ProductDetail from "../../../../components/features/products/product-detail";
 
 type ProductPageProps = {
   params: {

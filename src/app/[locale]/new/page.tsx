@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 
-import NewArrivalsCover from "./_components/new-arrivals-cover";
-import NewArrivalsList from "./_components/new-arrivals-list";
-import { NewArrivalsListSkeleton } from "@/components/skeletons/sections/new-arrivals-list.skeleton";
+import NewArrivalsCover from "@/components/features/products/new-arrivals-cover";
+import NewArrivalsList from "@/components/features/products/new-arrivals-list";
+import { NewArrivalsListSkeleton } from "@/components/skeletons/products/new-arrivals-list.skeleton";
 
 type NewArrivalsPageProps = {
   searchParams: Record<string, string | string[] | undefined>;
@@ -23,7 +23,13 @@ export default function NewArrivalsPage({ searchParams = {} }: NewArrivalsPagePr
       <NewArrivalsCover />
 
       <div className="py-5">
-        <Suspense fallback={<NewArrivalsListSkeleton />}>
+        <Suspense
+          fallback={
+            <div role="status" aria-live="polite" aria-label="Loading new arrivals">
+              <NewArrivalsListSkeleton />
+            </div>
+          }
+        >
           <NewArrivalsList searchParams={searchParams} />
         </Suspense>
       </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { usePathname } from "@/i18n/routing";
+import { usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils/tailwind-merge";
 
 import TopBar from "./components/top-bar";

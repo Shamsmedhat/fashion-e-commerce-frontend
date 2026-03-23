@@ -2,9 +2,9 @@ import Features from "@/components/features/home/features";
 import HeroSection from "@/components/features/home/hero-section";
 import PromotionalBanners from "@/components/features/home/promotional-banners";
 import { Separator } from "@/components/ui/separator";
-import NewArrivalsSection from "../../../components/features/home/new-arrivals-section";
-import BestSellingMain from "@/components/features/home/best-selling/best-selling-main";
-import CategoriesMain from "@/components/features/home/categories/categories-main";
+import NewArrivalsSection from "@/components/features/home/new-arrivals-section";
+import BestSellingSection from "@/components/features/home/best-selling-section";
+import CategoriesSection from "@/components/features/home/categories-section";
 
 export default async function Home() {
   return (
@@ -21,10 +21,10 @@ export default async function Home() {
       <PromotionalBanners />
 
       {/* Category Banners */}
-      <BestSellingMain />
+      <BestSellingSection />
 
       {/* Categories */}
-      <CategoriesMain />
+      <CategoriesSection />
 
       <Features />
     </main>

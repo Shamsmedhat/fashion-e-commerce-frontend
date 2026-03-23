@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 import { getCategoriesService } from "@/lib/services/category.service";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";

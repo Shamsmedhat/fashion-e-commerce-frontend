@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import ProductsPageCover from "@/components/features/product/products-page-cover";
-import TotalProducts from "@/components/features/product/total-products";
-import { ProductGridSkeleton } from "@/components/skeletons/product/product-item.skeleton";
+import ProductsPageCover from "@/components/features/products/products-page-cover";
+import TotalProducts from "@/components/features/products/total-products";
+import { ProductGridSkeleton } from "@/components/skeletons/products/product-item.skeleton";
 import React, { Suspense } from "react";
 
 type MenPage = {
