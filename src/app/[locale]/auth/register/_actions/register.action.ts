@@ -5,7 +5,7 @@ import { RegistrationFields } from "@/lib/schemes/auth.schema";
 import { RegisterResponse } from "@/lib/types/auth";
 
 export const registerAction = async (
-  registrationFields: RegistrationFields,
+  registrationFields: RegistrationFields
 ): Promise<APIResponse<RegisterResponse>> => {
   const response = await fetch(`${process.env.API_URL}/users/signup`, {
     method: "POST",
@@ -21,25 +21,15 @@ export const registerAction = async (
     },
   });
 
-  const payload: RegisterResponse | { message: string; code: number } = await response.json();
+  const payload: RegisterResponse | ErrorResponse = await response.json();
 
-  // If there's an error (has code property), return it in the expected format
-  if ("code" in payload) {
+  if ("status" in payload && (payload.status === "fail" || payload.status === "error")) {
     return {
+      status: payload.status,
       message: payload.message,
-      code: payload.code,
     };
   }
 
-  // If response has status 200, it's a success
-  if ("status" in payload && payload.status === 200) {
-    return {
-      message: "success",
-      ...payload,
-    };
-  }
-
-  // Return the successful response wrapped in APIResponse format
   return {
     message: "success",
     ...payload,

@@ -1,5 +1,5 @@
 import { LoginFields } from "@/lib/schemes/auth.schema";
-import { AuthenticationError } from "@/lib/utils/app-errors";
+import { AppError } from "@/lib/utils/app-errors";
 import { useMutation } from "@tanstack/react-query";
 import { signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
@@ -31,13 +31,19 @@ export default function useLogin() {
         callbackUrl: decodeURIComponent(searchParams.get("callbackUrl") || "/"),
       });
 
-      if (response?.error) throw new AuthenticationError(response.error);
+      if (!response?.ok || response.error) {
+        throw new AppError(
+          response?.error ?? "Authentication failed",
+          response?.status ?? 401,
+          "authentication",
+        );
+      }
+
       return response;
     },
     onSuccess: (data) => {
       toast.success(t("login-success-msg"));
 
-      // Redirect to the callback URL after a successful login
       window.location.href = data?.url || "/";
     },
   });

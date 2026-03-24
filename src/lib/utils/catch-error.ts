@@ -1,32 +1,23 @@
-import { AppError, AuthenticationError, AuthorizationError } from "./app-errors";
+import { AppError } from "./app-errors";
 
-export default async function catchError<T, E extends new (message?: string) => AuthenticationError | AuthorizationError | AppError>(
-  promise: Promise<APIResponse<T>>,
-  errorsToCatch?: E[] | null
-): Promise<[SuccessfulResponse<T>, null] | [null, InstanceType<E>]> {
+export default async function catchError<T>(
+  promise: Promise<APIResponse<T>>
+): Promise<[T & { message: "success" }, null] | [null, AppError]> {
   try {
     const data = await promise;
 
-    if ("code" in data) {
-      if (data.code === 401) throw new AuthenticationError(data.message, data.code);
-
-      if (data.code === 403) throw new AuthorizationError(data.message, data.code);
-
-      throw new AppError(data.message, data.code);
+    if ("status" in data && (data.status === "fail" || data.status === "error")) {
+      const statusCode = data.status === "fail" ? 400 : 500;
+      throw new AppError(data.message, statusCode);
     }
 
-    return [data, null];
+    return [data as T & { message: "success" }, null];
   } catch (err) {
-    const error = err as InstanceType<E>;
-
-    if (!errorsToCatch) {
-      return [null, error];
+    if (err instanceof AppError) {
+      return [null, err];
     }
 
-    if (errorsToCatch.some((e) => error instanceof e)) {
-      return [null, error];
-    }
-
-    throw error;
+    const message = err instanceof Error ? err.message : "An unexpected error occurred";
+    return [null, new AppError(message, 500)];
   }
 }

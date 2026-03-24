@@ -1,4 +1,4 @@
-declare type DatabaseProperies = {
+declare type DatabaseProperties = {
   _id: string;
   createdAt: string;
 };
@@ -8,8 +8,8 @@ declare type SuccessfulResponse<T> = {
 } & T;
 
 declare type ErrorResponse = {
+  status: "fail" | "error";
   message: string;
-  code: number;
 };
 
 declare type APIResponse<T> = SuccessfulResponse<T> | ErrorResponse;

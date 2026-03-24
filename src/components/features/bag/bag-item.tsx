@@ -10,11 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import {
-  useUpdateBagItem,
-  useRemoveBagItem,
-  useProductsVariants,
-} from "../../../hooks/bag/use-bag";
+import { useUpdateBagItem, useRemoveBagItem, useProductVariants } from "@/hooks/bag/use-bag";
 import { ChevronDown } from "lucide-react";
 import EditBagItemDialog from "./edit-bag-item-dialog";
 import { useTranslations } from "next-intl";
@@ -34,7 +30,7 @@ export default function BagItem({ item }: BagItemProps) {
   // Hooks
   const { mutate: updateBagItem, isPending: isPendingUpdate } = useUpdateBagItem();
   const { mutate: removeBagItem, isPending: isPendingDelete } = useRemoveBagItem();
-  const { data: productData, isLoading: isLoadingProduct } = useProductsVariants({
+  const { data: productData, isLoading: isLoadingProduct } = useProductVariants({
     productId: item.productId,
     // Only fetch when dialog is open
     enabled: isEditDialogOpen,

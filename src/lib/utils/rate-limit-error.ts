@@ -19,9 +19,5 @@ export function handleRateLimitError(response: Response) {
     throw new Error(message);
   }
 
-  if (!response.ok) {
-    throw new Error("Something went wrong");
-  }
-
   return response;
 }

@@ -90,19 +90,21 @@ export default function MainHeader({
           {/* Desktop Icons */}
           <div className="hidden md:flex items-center justify-center gap-4">
             <Button variant="ghost" size="icon" asChild>
-              <Link href="/bag" className="flex relative" aria-label={t("bag")}>
-                <ShoppingBag className="w-5 h-5 hover:text-gray-800 transition-all" aria-hidden="true" />
-                {bagLength > 0 && (
-                  <span className="absolute bottom-3 left-3 flex h-4 w-4 items-center justify-center">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75"></span>
-                    <span
-                      className="relative flex h-4 w-4 items-center justify-center rounded-full bg-primary-500 text-[10px] leading-none font-medium text-white"
-                      aria-live="polite"
-                    >
-                      {bagLength}
-                    </span>
-                  </span>
+              <Link
+                href="/bag"
+                className={cn(
+                  "flex relative",
+                  bagLength > 0 &&
+                    "before:pointer-events-none before:absolute before:bottom-3 before:left-3 before:inline-flex before:h-4 before:w-4 before:animate-ping before:rounded-full before:bg-primary-400 before:opacity-75 after:pointer-events-none after:absolute after:top-0 after:left-6 after:z-[1] after:flex after:h-4 after:w-4 after:items-center after:justify-center after:rounded-full after:bg-primary-500 after:text-[10px] after:font-medium after:leading-none after:text-white after:content-[attr(data-bag-count)]",
                 )}
+                aria-label={bagLength > 0 ? `${t("bag")}, ${bagLength}` : t("bag")}
+                aria-live={bagLength > 0 ? "polite" : undefined}
+                data-bag-count={bagLength > 0 ? bagLength : undefined}
+              >
+                <ShoppingBag
+                  className="w-5 h-5 hover:text-gray-800 transition-all"
+                  aria-hidden="true"
+                />
               </Link>
             </Button>
           </div>
@@ -116,7 +118,12 @@ export default function MainHeader({
             {session ? (
               <>
                 <div className="text-sm py-2">{t("hello-user", { user: session.user.name })}</div>
-                <Button variant="ghost" className="justify-start" onClick={() => signOut()} type="button">
+                <Button
+                  variant="ghost"
+                  className="justify-start"
+                  onClick={() => signOut()}
+                  type="button"
+                >
                   <LogOut className="w-4 h-4 mr-2" aria-hidden="true" />
                   {t("logout")}
                 </Button>

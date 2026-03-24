@@ -1,3 +1,4 @@
+import { AppError } from "../utils/app-errors";
 import { JSON_HEADER } from "../constants/api.constant";
 import { getAuthToken } from "../utils/get-token";
 
@@ -7,11 +8,9 @@ export async function getBagItemsService(): Promise<BagItemsResponse> {
   const token = await getAuthToken();
 
   const headers: HeadersInit = {
-    ...JSON_HEADER,  
+    ...JSON_HEADER,
     Authorization: `Bearer ${token}`,
   };
-
-  // Pass cookies from the request if provided
 
   const response = await fetch(url, {
     headers,
@@ -22,7 +21,11 @@ export async function getBagItemsService(): Promise<BagItemsResponse> {
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch bag items | ${response.status} - ${response.statusText}`);
+    const errorData: ErrorResponse = await response.json().catch(() => ({
+      status: "error" as const,
+      message: `Request failed with status ${response.status}`,
+    }));
+    throw new AppError(errorData.message, response.status);
   }
 
   const data = await response.json();
@@ -39,8 +42,6 @@ export async function getBagService(): Promise<BagResponse> {
     Authorization: `Bearer ${token}`,
   };
 
-  // Pass cookies from the request if provided
-
   const response = await fetch(url, {
     headers,
     cache: "no-store",
@@ -50,7 +51,11 @@ export async function getBagService(): Promise<BagResponse> {
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch bag items | ${response.status} - ${response.statusText}`);
+    const errorData: ErrorResponse = await response.json().catch(() => ({
+      status: "error" as const,
+      message: `Request failed with status ${response.status}`,
+    }));
+    throw new AppError(errorData.message, response.status);
   }
 
   const data = await response.json();

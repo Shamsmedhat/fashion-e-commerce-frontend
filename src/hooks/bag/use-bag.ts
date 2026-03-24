@@ -6,13 +6,13 @@ import {
 } from "@/lib/actions/bag.action";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-// Get item variants
 interface UseProductOptions {
   productId: string | undefined;
   enabled?: boolean;
 }
 
-export function useProductsVariants({ productId, enabled = true }: UseProductOptions) {
+// Get product variants
+export function useProductVariants({ productId, enabled = true }: UseProductOptions) {
   return useQuery({
     queryKey: ["product", productId],
     queryFn: async () => {
@@ -29,22 +29,15 @@ export function useProductsVariants({ productId, enabled = true }: UseProductOpt
       return response.json();
     },
     enabled: enabled && !!productId,
-    // 5 min cache
     staleTime: 5 * 60 * 1000,
   });
 }
 
-// Add item to bag
+// Add bag item
 export function useAddToBag() {
   return useMutation({
     mutationFn: async (data: AddToBagRequest): Promise<BagResponse> => {
-      const result = await addToBagAction(data);
-
-      if ("code" in result) {
-        throw new Error(result.message || "Failed to add item to bag");
-      }
-
-      return result;
+      return addToBagAction(data);
     },
   });
 }
@@ -53,43 +46,25 @@ export function useAddToBag() {
 export function useUpdateBagItem() {
   return useMutation({
     mutationFn: async ({ itemId, data }: { itemId: string; data: UpdateBagItemRequest }) => {
-      const result = await updateBagItemAction(itemId, data);
-
-      if ("code" in result) {
-        throw new Error(result.message || "Failed to update bag item");
-      }
-
-      return result;
+      return updateBagItemAction(itemId, data);
     },
   });
 }
 
-// Remove item from bag
+// Remove bag item
 export function useRemoveBagItem() {
   return useMutation({
     mutationFn: async (itemId: string): Promise<BagResponse> => {
-      const result = await removeBagItemAction(itemId);
-
-      if ("code" in result) {
-        throw new Error(result.message || "Failed to remove bag item");
-      }
-
-      return result;
+      return removeBagItemAction(itemId);
     },
   });
 }
 
-// Clear all bag items
+// Clear bag
 export function useClearBag() {
   return useMutation({
     mutationFn: async (): Promise<BagResponse> => {
-      const result = await clearBagAction();
-
-      if ("code" in result) {
-        throw new Error(result.message || "Failed to clear bag");
-      }
-
-      return result;
+      return clearBagAction();
     },
   });
 }

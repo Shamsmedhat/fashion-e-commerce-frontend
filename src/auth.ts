@@ -1,8 +1,9 @@
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
 import { JSON_HEADER } from "./lib/constants/api.constant";
 import { LoginResponse } from "./lib/types/auth";
-import { AuthenticationError } from "./lib/utils/app-errors";
+import { AppError } from "./lib/utils/app-errors";
 import { handleRateLimitError } from "./lib/utils/rate-limit-error";
 
 export const authOptions: NextAuthOptions = {
@@ -18,7 +19,7 @@ export const authOptions: NextAuthOptions = {
         password: {},
       },
       authorize: async (credentials) => {
-        // Determine the request body based on whether phone or email is provided
+        // Request body
         const requestBody: {
           email?: string;
           phone?: string;
@@ -33,6 +34,7 @@ export const authOptions: NextAuthOptions = {
           requestBody.email = credentials.email;
         }
 
+        // Fetch
         const response = await fetch(`${process.env.API_URL}/users/login`, {
           method: "POST",
           body: JSON.stringify(requestBody),
@@ -43,19 +45,24 @@ export const authOptions: NextAuthOptions = {
 
         handleRateLimitError(response);
 
-        const payload: LoginResponse | APIResponse<never> = await response.json();
+        const data: LoginResponse | ErrorResponse = await response.json().catch(() => ({
+          status: "error" as const,
+          message: "Authentication failed",
+        }));
 
-        // Throw an auth error if the login has failed
-        if ("code" in payload) {
-          throw new AuthenticationError(payload.message);
+        // Error handling
+        if (!response.ok) {
+          const message = typeof data.status === "string" ? data.message : "Authentication failed";
+          throw new AppError(message, 401, "authentication");
         }
 
-        // Check if response has the expected structure
+        const payload = data as LoginResponse;
+
         if (!payload.data || !payload.data.user || !payload.token) {
-          throw new AuthenticationError("Invalid response from server");
+          throw new AppError("Invalid response from server", 401, "authentication");
         }
 
-        // Return the user to be encoded using JWT callback
+        // Return user
         return {
           id: payload.data.user._id,
           user: payload.data.user,
@@ -65,8 +72,8 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    jwt: ({ token, user }) => {
-      // If the user exists it was a successful login attempt, so save the new user data in the cookies
+    jwt: ({ token, user }): JWT => {
+      // Persist user data into token on first login
       if (user) {
         token.user = user.user;
         token.token = user.token;
@@ -74,8 +81,8 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
-    session: ({ session, token }) => {
-      // Decode the user data from the token cookie and store it in the session object
+    session: ({ session, token }): Session => {
+      // Expose user from token to session
       session.user = token.user;
 
       return session;
