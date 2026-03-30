@@ -69,11 +69,11 @@ export default function ProductsFilter({ products }: { products: Product[] }) {
     const newParams = new URLSearchParams();
     setTempParams(newParams);
     // Apply cleared filters immediately
-    router.push(pathname + "?" + newParams.toString());
+    router.push(pathname + "?" + newParams.toString(), { scroll: false });
   };
 
   const applyFilters = () => {
-    router.push(pathname + "?" + tempParams.toString());
+    router.push(pathname + "?" + tempParams.toString(), { scroll: false });
     setIsOpen(false);
   };
 

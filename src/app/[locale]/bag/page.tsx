@@ -7,7 +7,7 @@ export default async function Page() {
       {/* Header Section */}
       <BagHeader />
 
-      {/* Main Content - Client Component for real-time updates */}
+      {/* Main Content */}
       <BagSection />
     </main>
   );

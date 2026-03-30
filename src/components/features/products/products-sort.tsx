@@ -55,7 +55,7 @@ export default function ProductsSort() {
     // Apply cleared sort immediately
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.delete("sort");
-    router.push(pathname + "?" + newParams.toString());
+    router.push(pathname + "?" + newParams.toString(), { scroll: false });
   };
 
   const applySort = () => {
@@ -65,7 +65,7 @@ export default function ProductsSort() {
     } else {
       newParams.delete("sort");
     }
-    router.push(pathname + "?" + newParams.toString());
+    router.push(pathname + "?" + newParams.toString(), { scroll: false });
     setIsOpen(false);
   };
 
