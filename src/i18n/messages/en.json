@@ -1,6 +1,6 @@
 {
   "hello": "Hello World!",
-  "application-title": "Next.js application",
+  "application-title": "SH | Fashion",
   "name-required": "Name is required",
   "name-min": "Name must be at least {min, number, digit} characters.",
   "email-required": "Email is required",
