@@ -2,19 +2,21 @@
 
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
+
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useUpdateBagItem } from "../../../hooks/bag/use-bag";
-import { ChevronDown } from "lucide-react";
+import { useUpdateBagItem } from "@/hooks/bag/use-bag";
+import { useFormatCurrency } from "@/hooks/shared/use-format-currency";
 import { getTailwindColor } from "@/lib/utils/get-tailwind-color";
 import { cn } from "@/lib/utils/tailwind-merge";
-import { useTranslations } from "next-intl";
 
 type EditBagItemDialogProps = {
   item: BagItem;
@@ -35,7 +37,9 @@ export default function EditBagItemDialog({
   const t = useTranslations();
 
   // Hooks
+  const { formatCurrency } = useFormatCurrency();
   const { mutate: updateBagItem, isPending } = useUpdateBagItem();
+
   // Wrap variants in useMemo to maintain stable reference
   const variants: ProductVariant[] = useMemo(() => {
     return productData?.data.variants || item.product?.variants || [];
@@ -191,7 +195,7 @@ export default function EditBagItemDialog({
             </div>
             <div>
               <h3 className="text-sm font-medium text-gray-900 mb-1">{item.productName}</h3>
-              <p className="text-lg font-semibold text-gray-900">${displayPrice.toFixed(0)}</p>
+              <p className="text-lg font-semibold text-gray-900">{formatCurrency(displayPrice)}</p>
             </div>
           </div>
 

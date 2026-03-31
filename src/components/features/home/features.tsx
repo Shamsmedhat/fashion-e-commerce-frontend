@@ -1,15 +1,23 @@
 import { Truck, Headphones, ShieldCheck } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
+
+import { FREE_DELIVERY_MINIMUM_EGP } from "@/lib/constants/currency.constant";
 
 export default function Features() {
   // Translations
   const t = useTranslations();
 
+  // Hooks
+  const format = useFormatter();
+
+  // Variables
+  const freeDeliveryThreshold = format.number(FREE_DELIVERY_MINIMUM_EGP, "currencyInteger");
+
   const features = [
     {
       icon: Truck,
       title: t("free-and-fast-delivery"),
-      subtitle: t("free-delivery-for-all-orders-over-140"),
+      subtitle: t("free-delivery-for-all-orders-over-140", { threshold: freeDeliveryThreshold }),
     },
     {
       icon: Headphones,
@@ -27,10 +35,10 @@ export default function Features() {
     <section className="py-12">
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12">
-          {features.map((feature, index) => {
+          {features.map((feature) => {
             const Icon = feature.icon;
             return (
-              <div key={index} className="flex flex-col items-center text-center">
+              <div key={feature.title} className="flex flex-col items-center text-center">
                 {/* Icon Circle */}
                 <div className="relative mb-6">
                   <div className="w-20 h-20 rounded-full bg-black border border-gray-300 flex items-center justify-center">

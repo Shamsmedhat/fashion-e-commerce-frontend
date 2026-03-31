@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import Image from "next/image";
-
 import { useTranslations } from "next-intl";
+
+import { displayProductRating } from "@/components/shared/product-rating";
+import { Button } from "@/components/ui/button";
+import { useFormatCurrency } from "@/hooks/shared/use-format-currency";
+import { getTailwindColor } from "@/lib/utils/get-tailwind-color";
 import { cn } from "@/lib/utils/tailwind-merge";
 
-import { getTailwindColor } from "@/lib/utils/get-tailwind-color";
 import AddToBagButton from "../bag/add-to-bag-button";
-import { Button } from "@/components/ui/button";
-import { displayProductRating } from "@/components/shared/product-rating";
 
 // Type
 type ProductItemProps = {
@@ -22,6 +23,9 @@ type ProductItemProps = {
 export default function ProductItem({ product, discountOverride }: ProductItemProps) {
   // Translations
   const t = useTranslations();
+
+  // Hooks
+  const { formatCurrency } = useFormatCurrency();
 
   // Variables (unique colors)
   const allColors = Array.from(
@@ -66,7 +70,6 @@ export default function ProductItem({ product, discountOverride }: ProductItemPr
   return (
     <div className="group relative overflow-hidden transition-all duration-300">
       {/* Discount Badge */}
-      {/* TODO: Next init config */}
       {discountPercentage && (
         <div className="absolute top-2 left-2 z-10 bg-red-600 text-white text-xs font-semibold px-2.5 py-1 rounded">
           -{discountPercentage}%
@@ -121,10 +124,11 @@ export default function ProductItem({ product, discountOverride }: ProductItemPr
 
         <div className="flex items-center gap-2 mb-2">
           {/* Price */}
-          {/* TODO: Next init config */}
-          <span className="text-lg font-bold text-gray-900">${displayPrice.toFixed(0)}</span>
+          <span className="text-lg font-bold text-gray-900">{formatCurrency(displayPrice)}</span>
           {originalPrice && (
-            <span className="text-sm text-gray-500 line-through">${originalPrice.toFixed(0)}</span>
+            <span className="text-sm text-gray-500 line-through">
+              {formatCurrency(originalPrice)}
+            </span>
           )}
         </div>
 

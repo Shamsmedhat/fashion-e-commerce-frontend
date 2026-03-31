@@ -1,12 +1,18 @@
-import { Button } from "@/components/ui/button";
+import { Plus, Minus } from "lucide-react";
+import { useTranslations } from "next-intl";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Plus, Minus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { useFormatCurrency } from "@/hooks/shared/use-format-currency";
+import {
+  ORDER_SUMMARY_ESTIMATED_TAX_EGP,
+  ORDER_SUMMARY_NEXT_DAY_SHIPPING_EGP,
+} from "@/lib/constants/currency.constant";
 
 type OrderSummaryProps = {
   items: BagItem[];
@@ -18,6 +24,9 @@ export default function OrderSummary({ items, totalAmount }: OrderSummaryProps) 
   // Translations
   const t = useTranslations();
 
+  // Hooks
+  const { formatCurrency } = useFormatCurrency();
+
   // Calculate subtotal from items
   const subtotal = items.reduce((sum, item) => {
     const price = item.currentPrice ?? item.priceAtPurchase;
@@ -28,8 +37,8 @@ export default function OrderSummary({ items, totalAmount }: OrderSummaryProps) 
   const shipping = 0;
   const shippingMethod = "Premium Express";
 
-  // Estimated tax (placeholder)
-  const estimatedTax = 0;
+  // Estimated tax (placeholder — display line uses configured EGP estimate when non-zero UI is needed)
+  const estimatedTax = ORDER_SUMMARY_ESTIMATED_TAX_EGP;
 
   const estimatedTotal = parseFloat(totalAmount);
 
@@ -47,7 +56,7 @@ export default function OrderSummary({ items, totalAmount }: OrderSummaryProps) 
         {/* Subtotal */}
         <div className="flex justify-between items-center">
           <span className="text-gray-600 capitalize">{t("subtotal")}</span>
-          <span className="text-gray-900 font-medium">${subtotal.toFixed(0)}</span>
+          <span className="text-gray-900 font-medium">{formatCurrency(subtotal)}</span>
         </div>
 
         {/* Shipping */}
@@ -56,20 +65,22 @@ export default function OrderSummary({ items, totalAmount }: OrderSummaryProps) 
             {t("shipping")}: <span>{shippingMethod}</span>
           </span>
           <span className="text-gray-900 font-medium">
-            {shipping === 0 ? t("free") : `$${Number(shipping).toFixed(0)}`}
+            {shipping === 0 ? t("free") : formatCurrency(Number(shipping))}
           </span>
         </div>
 
         {/* Estimated Tax */}
         <div className="flex justify-between items-center capitalize">
           <span className="text-gray-600">{t("estimated-tax")}</span>
-          <span className="text-gray-900 font-medium">$ 25</span>
+          <span className="text-gray-900 font-medium">
+            {formatCurrency(ORDER_SUMMARY_ESTIMATED_TAX_EGP)}
+          </span>
         </div>
 
         {/* Estimated Total */}
         <div className="flex justify-between items-center pt-3 border-t border-gray-200">
           <span className="text-sm font-bold text-gray-900">{t("estimated-total")}</span>
-          <span className="text-lg font-bold text-gray-900">${estimatedTotal.toFixed(0)}</span>
+          <span className="text-lg font-bold text-gray-900">{formatCurrency(estimatedTotal)}</span>
         </div>
       </div>
 
@@ -86,18 +97,18 @@ export default function OrderSummary({ items, totalAmount }: OrderSummaryProps) 
           <AccordionContent className="text-xs text-gray-600 space-y-2 pt-2">
             <div className="space-y-1">
               <p>
-                <span className="font-medium">{t("subtotal")}:</span> ${subtotal.toFixed(0)}
+                <span className="font-medium">{t("subtotal")}:</span> {formatCurrency(subtotal)}
               </p>
               <p>
                 <span className="font-medium">{t("shipping")}:</span>
-                {shipping === 0 ? t("free") : `$${Number(shipping).toFixed(0)}`} ({shippingMethod})
+                {shipping === 0 ? t("free") : formatCurrency(Number(shipping))} ({shippingMethod})
               </p>
               <p>
-                <span className="font-medium">{t("tax")}:</span> ${estimatedTax.toFixed(0)} (
+                <span className="font-medium">{t("tax")}:</span> {formatCurrency(estimatedTax)} (
                 {t("estimated")})
               </p>
               <p>
-                <span className="font-medium">{t("total")}:</span> ${estimatedTotal.toFixed(0)}
+                <span className="font-medium">{t("total")}:</span> {formatCurrency(estimatedTotal)}
               </p>
             </div>
           </AccordionContent>
@@ -186,7 +197,9 @@ export default function OrderSummary({ items, totalAmount }: OrderSummaryProps) 
               </div>
               <div className="flex justify-between items-center">
                 <span>{t("next-business-day")}</span>
-                <span className="font-medium">$ 25</span>
+                <span className="font-medium">
+                  {formatCurrency(ORDER_SUMMARY_NEXT_DAY_SHIPPING_EGP)}
+                </span>
               </div>
             </div>
           </AccordionContent>
