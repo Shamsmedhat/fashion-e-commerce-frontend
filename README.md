@@ -245,18 +245,6 @@ Every component and custom hook must follow this internal order:
 
 ## 📦 Backend
 
-This frontend connects to a separate backend API (configured via `API_URL`).
+This frontend connects to a separate backend API (configured via `https://fashion-e-commerce-production-v2.up.railway.app/api/v1`).
 
-> 🔗 Backend repo: *(not linked in this repository yet)*
-
----
-
-## 📄 License
-
-MIT — feel free to use this project for learning or inspiration.
-
----
-
-<div align="center">
-  Built with ❤️ by <a href="https://github.com/Shamsmedhat">Shams Medhat</a>
-</div>
+> 🔗 Backend repo: https://github.com/Shamsmedhat/fashion-e-commerce-backend
