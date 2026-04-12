@@ -33,19 +33,19 @@
 
 ## 🛠 Tech Stack
 
-| Category | Technology | Purpose |
-|---|---|---|
-| Framework | Next.js 14 (App Router) | Routing, Server Components, API route handlers |
-| Language | TypeScript (strict) | Type safety across UI + API layer |
-| Styling | Tailwind CSS | Utility-first styling |
-| UI Components | shadcn/ui + Radix UI | Accessible primitives and composable UI |
-| Data Fetching | TanStack React Query v5 | Client-side caching, mutations, and request state |
-| Forms | React Hook Form | Form state management |
-| Validation | Zod + `@hookform/resolvers` | Schema validation and typed form fields |
-| Auth | NextAuth.js v4 | Credentials auth + session handling |
-| i18n | next-intl v4 | Locale routing, messages, formatting |
-| Notifications | Sonner | Toast notifications |
-| Tooling | ESLint + Prettier | Linting/formatting consistency |
+| Category      | Technology                  | Purpose                                           |
+| ------------- | --------------------------- | ------------------------------------------------- |
+| Framework     | Next.js 14 (App Router)     | Routing, Server Components, API route handlers    |
+| Language      | TypeScript (strict)         | Type safety across UI + API layer                 |
+| Styling       | Tailwind CSS                | Utility-first styling                             |
+| UI Components | shadcn/ui + Radix UI        | Accessible primitives and composable UI           |
+| Data Fetching | TanStack React Query v5     | Client-side caching, mutations, and request state |
+| Forms         | React Hook Form             | Form state management                             |
+| Validation    | Zod + `@hookform/resolvers` | Schema validation and typed form fields           |
+| Auth          | NextAuth.js v4              | Credentials auth + session handling               |
+| i18n          | next-intl v4                | Locale routing, messages, formatting              |
+| Notifications | Sonner                      | Toast notifications                               |
+| Tooling       | ESLint + Prettier           | Linting/formatting consistency                    |
 
 ---
 
@@ -133,22 +133,22 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The project reads environment variables (server-side) for API and auth.
 
-| Variable | Description |
-|---|---|
-| `API_URL` | Backend API base URL (e.g. `http://localhost:3000/api/v1`) |
+| Variable          | Description                                                              |
+| ----------------- | ------------------------------------------------------------------------ |
+| `API_URL`         | Backend API base URL (e.g. `http://localhost:3000/api/v1`)               |
 | `NEXTAUTH_SECRET` | Secret used by NextAuth to sign/encrypt session data (`your_value_here`) |
-| `NEXTAUTH_URL` | Canonical app URL used by NextAuth (e.g. `http://localhost:3001`) |
+| `NEXTAUTH_URL`    | Canonical app URL used by NextAuth (e.g. `http://localhost:3001`)        |
 
 ---
 
 ## 📜 Available Scripts
 
-| Command | Description |
-|---|---|
-| `yarn dev` | Start development server |
-| `yarn build` | Build for production |
-| `yarn start` | Start production server |
-| `yarn lint` | Run ESLint |
+| Command      | Description              |
+| ------------ | ------------------------ |
+| `yarn dev`   | Start development server |
+| `yarn build` | Build for production     |
+| `yarn start` | Start production server  |
+| `yarn lint`  | Run ESLint               |
 
 ---
 
