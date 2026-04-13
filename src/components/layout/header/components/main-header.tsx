@@ -11,6 +11,7 @@ import { signOut, useSession } from "next-auth/react";
 
 import { SwitchLocale } from "./switch-locale";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Type
 type MainHeaderProps = {
@@ -35,7 +36,7 @@ export default function MainHeader({
   const locale = useLocale();
 
   // Hooks
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   function translateCategoryName(category: string) {
     switch (category) {
@@ -115,7 +116,12 @@ export default function MainHeader({
           </div>
 
           <div className="hidden md:flex items-center gap-2">
-            {session ? (
+            {status === "loading" ? (
+              <>
+                <Skeleton className="h-5 w-32 rounded-md" />
+                <Skeleton className="h-9 w-20 rounded-md" />
+              </>
+            ) : session ? (
               <>
                 <div className="text-sm py-2">{t("hello-user", { user: session.user.name })}</div>
                 <Button

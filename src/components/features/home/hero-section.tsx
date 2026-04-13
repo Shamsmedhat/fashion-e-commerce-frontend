@@ -1,8 +1,8 @@
-import Image from "next/image";
 import { Teko } from "next/font/google";
 
 import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/tailwind-merge";
+import { HeroImageMotion } from "@/components/features/home/hero-image-motion";
 
 // Fonts
 const teko = Teko({
@@ -31,15 +31,7 @@ export default function HeroSection() {
 
           {/* Hero Image */}
           <div className="absolute inset-0 flex items-center justify-center z-10">
-            <div className="relative w-96 h-96 md:w-[600px] md:h-[600px]">
-              <Image
-                src="/assets/images/landing-black.png"
-                alt="Soleil store"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
+            <HeroImageMotion />
           </div>
 
           {/* Text Overlays */}

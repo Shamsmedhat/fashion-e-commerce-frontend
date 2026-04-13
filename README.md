@@ -245,6 +245,6 @@ Every component and custom hook must follow this internal order:
 
 ## 📦 Backend
 
-This frontend connects to a separate backend API (configured via `https://fashion-e-commerce-production-v2.up.railway.app/api/v1`).
+This frontend connects to a separate backend API (configured via `https://fashion-e-commerce-production.up.railway.app/api/v1`).
 
 > 🔗 Backend repo: https://github.com/Shamsmedhat/fashion-e-commerce-backend

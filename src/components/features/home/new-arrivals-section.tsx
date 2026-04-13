@@ -4,10 +4,9 @@ import { Teko, Almarai } from "next/font/google";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/tailwind-merge";
 
+import { NewArrivalsMotion } from "@/components/features/home/new-arrivals-motion";
 import ProductSection from "@/components/features/home/product-section";
 import { ProductGridSkeleton } from "@/components/skeletons/products/product-item.skeleton";
-import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/navigation";
 
 // Fonts
 // (en)
@@ -27,17 +26,15 @@ export default function NewArrivalsSection() {
   const t = useTranslations();
 
   return (
-    <section className="container py-12">
-      {/* Action Buttons */}
-      <h2
-        className={cn(
-          teko.className,
-          almarai.className,
-          "flex my-10 gap-2 justify-center tracking-wide text-5xl uppercase",
-        )}
-      >
-        {t("new-arrivals")}
-      </h2>
+    <NewArrivalsMotion
+      title={t("new-arrivals")}
+      titleClassName={cn(
+        teko.className,
+        almarai.className,
+        "flex my-10 gap-2 justify-center tracking-wide text-5xl uppercase",
+      )}
+      ctaLabel={t("shop-now")}
+    >
       <Suspense
         fallback={
           <div role="status" aria-live="polite" aria-label="Loading new arrivals">
@@ -47,16 +44,6 @@ export default function NewArrivalsSection() {
       >
         <ProductSection />
       </Suspense>
-
-      {/* SHOP NOW Button */}
-      <div className="flex justify-center mt-8">
-        <Button
-          className="bg-black text-white font-semibold px-12 py-3 rounded hover:bg-gray-900 transition-colors"
-          asChild
-        >
-          <Link href="/new">{t("shop-now")}</Link>
-        </Button>
-      </div>
-    </section>
+    </NewArrivalsMotion>
   );
 }
