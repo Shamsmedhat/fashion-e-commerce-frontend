@@ -1,13 +1,15 @@
 "use client";
 
+import { Suspense } from "react";
+
 import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Locale, useLocale } from "next-intl";
+import { Locale, useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils/tailwind-merge";
 
-export function SwitchLocale({ className }: { className?: string }) {
+function SwitchLocaleContent({ className }: { className?: string }) {
   // Translations
   const locale = useLocale();
 
@@ -49,5 +51,30 @@ export function SwitchLocale({ className }: { className?: string }) {
       {/* Icon */}
       <Globe className="h-4 w-4" aria-hidden="true" />
     </Button>
+  );
+}
+
+export function SwitchLocale({ className }: { className?: string }) {
+  // Translation
+  const t = useTranslations();
+
+  return (
+    <Suspense
+      fallback={
+        <Button
+          variant="link"
+          size="sm"
+          className={cn("gap-1 px-2", className)}
+          disabled
+          type="button"
+          aria-busy="true"
+          aria-label={t("language-switcher-loading")}
+        >
+          <Globe className="h-4 w-4 opacity-50" aria-hidden="true" />
+        </Button>
+      }
+    >
+      <SwitchLocaleContent className={className} />
+    </Suspense>
   );
 }

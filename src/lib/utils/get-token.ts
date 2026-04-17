@@ -11,7 +11,7 @@ export async function getAuthToken(): Promise<string | null> {
   }
 
   // Get the JWT token from cookies
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   const tokenCookie =
     cookieStore.get("next-auth.session-token") ||
     cookieStore.get("__Secure-next-auth.session-token");

@@ -3,6 +3,9 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +14,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useUpdateBagItem, useRemoveBagItem, useProductVariants } from "@/hooks/bag/use-bag";
-import { ChevronDown } from "lucide-react";
+
 import EditBagItemDialog from "./edit-bag-item-dialog";
-import { useTranslations } from "next-intl";
+import { useFormatCurrency } from "@/lib/utils/format-currency";
 
 // Type
 type BagItemProps = {
@@ -23,6 +26,9 @@ type BagItemProps = {
 export default function BagItem({ item }: BagItemProps) {
   // Translations
   const t = useTranslations();
+
+  // Hooks
+  const { formatCurrency } = useFormatCurrency();
 
   // State
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -149,10 +155,10 @@ export default function BagItem({ item }: BagItemProps) {
 
             {/* Price */}
             <div className="text-right">
-              <p className="font-semibold text-gray-900">${itemTotal.toFixed(0)}</p>
+              <p className="font-semibold text-gray-900">{formatCurrency(itemTotal)}</p>
               {item.quantity > 1 && (
                 <p className="text-sm text-gray-500">
-                  ${currentPrice.toFixed(0)} {t("each")}
+                  {formatCurrency(currentPrice)} {t("each")}
                 </p>
               )}
             </div>
