@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
@@ -27,8 +28,23 @@ import { PasswordInput } from "@/components/shared/password-input";
 import SubmitFeedback from "@/components/shared/submit-feedback";
 import { Link } from "@/i18n/navigation";
 import useLogin from "@/hooks/auth/use-login";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function LoginForm() {
+function FormSkeleton() {
+  return (
+    <div className="space-y-6">
+      {Array.from({ length: 2 }).map((_, i) => (
+        <div key={i} className="space-y-2">
+          <Skeleton className="h-4 w-20" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+      ))}
+      <Skeleton className="h-10 w-full" />
+    </div>
+  );
+}
+
+function LoginFormContent() {
   // Translation
   const t = useTranslations();
 
@@ -144,5 +160,13 @@ export default function LoginForm() {
         </p>
       </CardFooter>
     </Card>
+  );
+}
+
+export default function LoginForm() {
+  return (
+    <Suspense fallback={<FormSkeleton />}>
+      <LoginFormContent />
+    </Suspense>
   );
 }

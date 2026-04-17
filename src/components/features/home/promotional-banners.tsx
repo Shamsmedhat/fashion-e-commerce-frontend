@@ -11,9 +11,12 @@ export default async function PromotionalBanners() {
   const t = await getTranslations();
 
   // Fetch
-  const { data } = await getCategoriesService({
-    slug: ["men-upperbody", "men-shoes"],
-  });
+  const { data } = await getCategoriesService(
+    {
+      slug: ["men-upperbody", "men-shoes"],
+    },
+    { extraTags: ["promotional-banners"] },
+  );
 
   // Variables
   const upperbody = data.categories.filter((c) => c.slug === "men-upperbody")[0];

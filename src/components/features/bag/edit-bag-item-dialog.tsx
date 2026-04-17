@@ -14,9 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useUpdateBagItem } from "@/hooks/bag/use-bag";
-import { useFormatCurrency } from "@/hooks/shared/use-format-currency";
 import { getTailwindColor } from "@/lib/utils/get-tailwind-color";
 import { cn } from "@/lib/utils/tailwind-merge";
+import { useFormatCurrency } from "@/lib/utils/format-currency";
 
 type EditBagItemDialogProps = {
   item: BagItem;
@@ -236,7 +236,11 @@ export default function EditBagItemDialog({
                 <DropdownMenuContent className="w-full min-w-[var(--radix-dropdown-menu-trigger-width)] max-h-[300px] overflow-y-auto">
                   {isLoadingProduct ? (
                     <DropdownMenuItem disabled>
-                      <span className="text-sm text-gray-500 capitalize" role="status" aria-live="polite">
+                      <span
+                        className="text-sm text-gray-500 capitalize"
+                        role="status"
+                        aria-live="polite"
+                      >
                         {t("loading-color-size")}
                       </span>
                     </DropdownMenuItem>

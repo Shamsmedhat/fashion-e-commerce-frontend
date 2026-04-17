@@ -14,9 +14,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useUpdateBagItem, useRemoveBagItem, useProductVariants } from "@/hooks/bag/use-bag";
-import { useFormatCurrency } from "@/hooks/shared/use-format-currency";
 
 import EditBagItemDialog from "./edit-bag-item-dialog";
+import { useFormatCurrency } from "@/lib/utils/format-currency";
 
 // Type
 type BagItemProps = {

@@ -6,26 +6,29 @@ import NewArrivalsSection from "@/components/features/home/new-arrivals-section"
 import BestSellingSection from "@/components/features/home/best-selling-section";
 import CategoriesSection from "@/components/features/home/categories-section";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   return (
     <main className="container min-h-screen mb-4 mt-12">
       {/* Hero Section */}
       <HeroSection />
 
-      {/* New Arrivals Section */}
+      {/* New Arrivals Section (60d)*/}
       <NewArrivalsSection />
 
       <Separator className="my-6 w-full" />
 
-      {/* Promotional Banners */}
+      {/* Promotional Banners (cached)*/}
       <PromotionalBanners />
 
-      {/* Category Banners */}
+      {/* Best Selling Section (24h)*/}
       <BestSellingSection />
 
-      {/* Categories */}
+      {/* Categories (cached)*/}
       <CategoriesSection />
 
+      {/* Features */}
       <Features />
     </main>
   );

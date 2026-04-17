@@ -10,8 +10,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import type { ProductVariantSelectionState } from "@/hooks/features/products/use-product-variant-selection";
-import { useFormatCurrency } from "@/hooks/shared/use-format-currency";
 import { cn } from "@/lib/utils/tailwind-merge";
+import { useFormatCurrency } from "@/lib/utils/format-currency";
 
 export type ProductDetailsInfoProps = {
   product: Product;

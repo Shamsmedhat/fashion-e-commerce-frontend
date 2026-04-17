@@ -6,11 +6,11 @@ import { useTranslations } from "next-intl";
 
 import { displayProductRating } from "@/components/shared/product-rating";
 import { Button } from "@/components/ui/button";
-import { useFormatCurrency } from "@/hooks/shared/use-format-currency";
 import { getTailwindColor } from "@/lib/utils/get-tailwind-color";
 import { cn } from "@/lib/utils/tailwind-merge";
 
 import AddToBagButton from "../bag/add-to-bag-button";
+import { useFormatCurrency } from "@/lib/utils/format-currency";
 
 // Type
 type ProductItemProps = {
@@ -66,7 +66,6 @@ export default function ProductItem({ product, discountOverride }: ProductItemPr
     );
   }
 
-  // UI
   return (
     <div className="group relative overflow-hidden transition-all duration-300">
       {/* Discount Badge */}

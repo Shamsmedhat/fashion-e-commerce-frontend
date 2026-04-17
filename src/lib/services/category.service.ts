@@ -1,8 +1,16 @@
-import { AppError } from "../utils/app-errors";
 import { JSON_HEADER } from "../constants/api.constant";
+import { REVALIDATE_CATEGORY_STABLE_SECONDS } from "../constants/data-cache.constant";
+import { AppError } from "../utils/app-errors";
 import { buildQueryString } from "../utils/build-query-string";
 
-export async function getCategoriesService(params?: QueryParams): Promise<CategoriesResponse> {
+type CategoriesFetchOptions = {
+  extraTags?: string[];
+};
+
+export async function getCategoriesService(
+  params?: QueryParams,
+  options?: CategoriesFetchOptions,
+): Promise<CategoriesResponse> {
   const queryString = buildQueryString(params);
 
   const url = new URL(`${process.env.API_URL}/categories`);
@@ -11,11 +19,16 @@ export async function getCategoriesService(params?: QueryParams): Promise<Catego
     url.search = queryString;
   }
 
+  const tags =
+    options?.extraTags && options.extraTags.length > 0
+      ? ["categories", ...options.extraTags]
+      : ["categories"];
+
   const response = await fetch(url.toString(), {
     headers: {
       ...JSON_HEADER,
     },
-    cache: "no-store",
+    next: { revalidate: REVALIDATE_CATEGORY_STABLE_SECONDS, tags },
   });
 
   if (!response.ok) {
@@ -29,18 +42,14 @@ export async function getCategoriesService(params?: QueryParams): Promise<Catego
   return response.json();
 }
 
-export async function getMainCategoriesService(params?: QueryParams): Promise<CategoriesResponse> {
-  const queryString = buildQueryString(params);
-
-  const url = new URL(`${process.env.API_URL}/categories/main`);
-
-  if (queryString) {
-    url.search = queryString;
-  }
-
-  const response = await fetch(url.toString(), {
+export async function getMainCategoriesService(): Promise<CategoriesResponse> {
+  const response = await fetch(`${process.env.API_URL}/categories/main`, {
     headers: {
       ...JSON_HEADER,
+    },
+    next: {
+      revalidate: REVALIDATE_CATEGORY_STABLE_SECONDS,
+      tags: ["main-categories", "categories"],
     },
   });
 
@@ -62,6 +71,7 @@ export async function getSubCategoriesService(id: string): Promise<CategoriesRes
     headers: {
       ...JSON_HEADER,
     },
+    next: { revalidate: REVALIDATE_CATEGORY_STABLE_SECONDS, tags: ["categories"] },
   });
 
   if (!response.ok) {

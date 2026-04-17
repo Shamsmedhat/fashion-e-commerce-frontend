@@ -6,7 +6,7 @@ import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils/tailwind-merge";
 import { Metadata } from "next";
 import { hasLocale } from "next-intl";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Montserrat, Almarai } from "next/font/google";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -35,11 +35,17 @@ const almarai = Almarai({
   subsets: ["arabic"],
 });
 
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default function LocaleLayout({ children, params: { locale } }: LayoutProps) {
   // Ensure that the incoming `locale` is valid
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+
+  setRequestLocale(locale);
 
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>

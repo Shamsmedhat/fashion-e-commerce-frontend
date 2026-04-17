@@ -1,18 +1,18 @@
 import { ShoppingBag } from "lucide-react";
 import BagItem from "./bag-item";
-import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { getBagItemsService } from "@/lib/services/bag.service";
+import { getTranslations } from "next-intl/server";
 
-// Type
-type BagItemsListProps = {
-  items: BagItem[];
-};
-
-export default function BagItemsList({ items }: BagItemsListProps) {
+export default async function BagItemsList() {
   // Translations
-  const t = useTranslations();
+  const t = await getTranslations();
 
-  if (items.length === 0) {
+  // Fetch
+  const bagData = await getBagItemsService();
+  const items = bagData.data.items;
+
+  if (!items || items.length === 0) {
     return (
       <div className="text-center py-12 flex flex-col items-center">
         <ShoppingBag strokeWidth={0.5} size={180} aria-hidden="true" />
@@ -26,14 +26,9 @@ export default function BagItemsList({ items }: BagItemsListProps) {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-sm font-bold uppercase tracking-wide text-gray-900 underline">
-        {t("your-selections")}
-      </h2>
-      <div className="space-y-6">
-        {items.map((item) => (
-          <BagItem key={item._id} item={item} />
-        ))}
-      </div>
+      {items.map((item) => (
+        <BagItem key={item._id} item={item} />
+      ))}
     </div>
   );
 }
