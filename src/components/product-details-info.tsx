@@ -16,9 +16,16 @@ import { useFormatCurrency } from "@/lib/utils/format-currency";
 export type ProductDetailsInfoProps = {
   product: Product;
   variantSelection: ProductVariantSelectionState;
+  setSelectedImageCover: (image: string) => void;
+  setSelectedImageName: (name: string) => void;
 };
 
-export function ProductDetailsInfo({ product, variantSelection }: ProductDetailsInfoProps) {
+export function ProductDetailsInfo({
+  product,
+  variantSelection,
+  setSelectedImageCover,
+  setSelectedImageName,
+}: ProductDetailsInfoProps) {
   // Translation
   const t = useTranslations();
 
@@ -39,6 +46,12 @@ export function ProductDetailsInfo({ product, variantSelection }: ProductDetails
     styleNumber,
     selectedVariant,
   } = variantSelection;
+
+  // Functions
+  function onImageChange(image: string): void {
+    setSelectedImageCover(image);
+    setSelectedImageName(product.name);
+  }
 
   return (
     <div className="space-y-6">
@@ -75,7 +88,10 @@ export function ProductDetailsInfo({ product, variantSelection }: ProductDetails
                 <button
                   key={variant._id}
                   type="button"
-                  onClick={() => onColorChange(colorName)}
+                  onClick={() => {
+                    onColorChange(colorName);
+                    onImageChange(variantImage);
+                  }}
                   className={cn(
                     "relative w-16 h-16 border-2 rounded transition-all overflow-hidden",
                     isSelected

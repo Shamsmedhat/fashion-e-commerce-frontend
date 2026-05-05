@@ -10,7 +10,7 @@ export default async function BestSellingData() {
   return (
     <CarouselContent>
       {products.map((product) => (
-        <CarouselItem className="basis-1/3" key={product._id}>
+        <CarouselItem className="basis-1/2 md:basis-1/3" key={product._id}>
           <ProductItem product={product} />
         </CarouselItem>
       ))}

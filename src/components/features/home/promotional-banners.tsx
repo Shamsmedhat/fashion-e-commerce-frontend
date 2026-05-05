@@ -27,7 +27,7 @@ export default async function PromotionalBanners() {
       firstBanner={
         <>
           {/* Famous Muiches Banner */}
-          <div className="relative h-4/5 overflow-hidden group cursor-pointer">
+          <div className="group relative h-full min-h-[260px] cursor-pointer overflow-hidden sm:min-h-[320px]">
             <div className="absolute inset-0">
               <Image
                 src="/assets/images/23.jpg"
@@ -36,8 +36,8 @@ export default async function PromotionalBanners() {
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <div className="absolute inset-0 flex flex-col items-start justify-end p-8 md:p-10 z-10">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 md:mb-6">
+            <div className="absolute inset-0 z-10 flex flex-col items-start justify-end p-5 sm:p-8 md:p-10">
+              <h2 className="mb-3 text-2xl font-bold text-white sm:mb-4 sm:text-4xl md:mb-6 md:text-5xl">
                 {t("famous-artists")}
               </h2>
               <Button
@@ -59,7 +59,7 @@ export default async function PromotionalBanners() {
       secondBanner={
         <>
           {/* Special Collection Banner */}
-          <div className="relative h-4/5 overflow-hidden group cursor-pointer">
+          <div className="group relative h-full min-h-[260px] cursor-pointer overflow-hidden sm:min-h-[320px]">
             <div className="absolute inset-0">
               <Image
                 src="/assets/images/22.png"
@@ -68,8 +68,8 @@ export default async function PromotionalBanners() {
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
-            <div className="absolute inset-0 flex flex-col items-start justify-end p-8 md:p-10 z-10">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 md:mb-6">
+            <div className="absolute inset-0 z-10 flex flex-col items-start justify-end p-5 sm:p-8 md:p-10">
+              <h2 className="mb-3 text-2xl font-bold text-white sm:mb-4 sm:text-4xl md:mb-6 md:text-5xl">
                 {t("special-collection")}
               </h2>
               <Button

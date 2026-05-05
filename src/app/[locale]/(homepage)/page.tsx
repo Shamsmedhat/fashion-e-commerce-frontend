@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   return (
-    <main className="container min-h-screen mb-4 mt-12">
+    <main className="container mb-4 mt-28 min-h-screen sm:mt-8 md:mt-12">
       {/* Hero Section */}
       <HeroSection />
 

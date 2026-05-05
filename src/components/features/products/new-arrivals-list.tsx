@@ -51,7 +51,6 @@ export default async function NewArrivalsList({
     );
   }
 
-  // UI
   return (
     <>
       {/* Filter and Sort */}

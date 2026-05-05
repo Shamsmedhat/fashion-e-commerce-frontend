@@ -31,7 +31,7 @@ export default function NewArrivalsSection() {
       titleClassName={cn(
         teko.className,
         almarai.className,
-        "flex my-10 gap-2 justify-center tracking-wide text-5xl uppercase",
+        "my-6 flex justify-center gap-2 text-center text-3xl tracking-wide uppercase sm:my-8 sm:text-4xl md:my-10 md:text-5xl",
       )}
       ctaLabel={t("shop-now")}
     >

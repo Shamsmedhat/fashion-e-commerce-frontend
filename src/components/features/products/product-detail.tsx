@@ -6,12 +6,17 @@ import { useProductVariantSelection } from "@/hooks/features/products/use-produc
 
 import { ProductDetailsInfo } from "./product-details-info";
 import { ProductDetailsPurchase } from "./product-details-purchase";
+import { useState } from "react";
 
 type ProductDetailProps = {
   product: Product;
 };
 
 export default function ProductDetail({ product }: ProductDetailProps) {
+  // State
+  const [selectedImageCover, setSelectedImageCover] = useState<string>(product.coverImage);
+  const [selectedImageName, setSelectedImageName] = useState<string>(product.name);
+
   // Queries
   const variantSelection = useProductVariantSelection(product);
 
@@ -23,8 +28,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       {/* Hero image */}
       <div className="relative w-full h-[80vh] min-h-[60vh] overflow-hidden">
         <Image
-          src={product.coverImage}
-          alt={product.name}
+          src={selectedImageCover}
+          alt={selectedImageName}
           fill
           className="object-contain"
           sizes="100vw"
@@ -40,7 +45,12 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       {/* Content grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-[65%_35%] gap-8 lg:gap-16">
-          <ProductDetailsInfo product={product} variantSelection={variantSelection} />
+          <ProductDetailsInfo
+            product={product}
+            variantSelection={variantSelection}
+            setSelectedImageCover={setSelectedImageCover}
+            setSelectedImageName={setSelectedImageName}
+          />
           <ProductDetailsPurchase product={product} variantSelection={variantSelection} />
         </div>
       </div>

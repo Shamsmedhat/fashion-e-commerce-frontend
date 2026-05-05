@@ -9,7 +9,7 @@ export function HeroImageMotion() {
 
   return (
     <motion.div
-      className="relative w-96 h-96 md:w-[600px] md:h-[600px]"
+      className="relative h-[300px] w-[300px] sm:h-[360px] sm:w-[360px] md:h-[600px] md:w-[600px]"
       initial={shouldReduceMotion ? false : { opacity: 0, y: 24, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={

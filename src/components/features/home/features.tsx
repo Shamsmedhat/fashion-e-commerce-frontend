@@ -1,4 +1,7 @@
+"use client";
+
 import { Truck, Headphones, ShieldCheck } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useFormatter, useTranslations } from "next-intl";
 
 import { FREE_DELIVERY_MINIMUM_EGP } from "@/lib/constants/currency.constant";
@@ -9,6 +12,7 @@ export default function Features() {
 
   // Hooks
   const format = useFormatter();
+  const shouldReduceMotion = useReducedMotion();
 
   // Variables
   const freeDeliveryThreshold = format.number(FREE_DELIVERY_MINIMUM_EGP, "currencyInteger");
@@ -32,14 +36,38 @@ export default function Features() {
   ];
 
   return (
-    <section className="py-12">
+    <motion.section
+      className="py-8 sm:py-10 md:py-12"
+      initial={shouldReduceMotion ? false : "hidden"}
+      whileInView={shouldReduceMotion ? undefined : "visible"}
+      viewport={{ once: true, amount: 0.1 }}
+      variants={{
+        hidden: {},
+        visible: {
+          transition: {
+            staggerChildren: 0.15,
+          },
+        },
+      }}
+    >
       <div className="container">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12">
+        <div className="grid grid-cols-1 gap-6 py-8 sm:gap-8 sm:py-10 md:grid-cols-3 md:py-12">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
-              <div key={feature.title} className="flex flex-col items-center text-center">
-                {/* Icon Circle */}
+              <motion.div
+                key={feature.title}
+                className="flex flex-col items-center text-center"
+                variants={{
+                  hidden: { opacity: 0, y: 18 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.6, ease: "easeOut" },
+                  },
+                }}
+              >
+                {/* Icon */}
                 <div className="relative mb-6">
                   <div className="w-20 h-20 rounded-full bg-black border border-gray-300 flex items-center justify-center">
                     <Icon className="w-10 h-10 text-white" />
@@ -51,11 +79,11 @@ export default function Features() {
 
                 {/* Subtitle */}
                 <p className="text-sm text-black">{feature.subtitle}</p>
-              </div>
+              </motion.div>
             );
           })}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

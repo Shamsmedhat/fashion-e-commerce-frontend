@@ -1,0 +1,88 @@
+  ✦ Here's a hierarchical diagram of your project pages with component types:
+
+      1 ┌─ app/
+      2 │
+      3 ├─ layout.tsx                          [Server]
+      4 ├─ error.tsx                           [Client]  ← global error boundary
+      5 ├─ not-found.tsx                       [Server]  ← global 404
+      6 │
+      7 ├─ [locale]/
+      8 │   ├─ layout.tsx                      [Server]  ← RTL/LTR, HeaderWrapper(async) + Suspense
+      9 │   │                                imports: HeaderWrapper(async) → HeaderFallback, Providers, Toaster, Footer
+     10 │   │
+     11 │   ├─ (homepage)/
+     12 │   │   └─ page.tsx                    [Server]  ← async
+     13 │   │       imports: HeroSection(async), NewArrivalsSection(async), PromotionalBanners(async),
+     14 │   │                BestSellingSection(async), CategoriesSection(async), Features(async), Separator
+     15 │   │
+     16 │   ├─ auth/
+     17 │   │   ├─ login/
+     18 │   │   │   └─ page.tsx                [Server]
+     19 │   │   │       imports: LoginForm (client component)
+     20 │   │   │
+     21 │   │   └─ register/
+     22 │   │       └─ page.tsx                [Server]
+     23 │   │           imports: RegisterForm (client component)
+     24 │   │
+     25 │   ├─ bag/
+     26 │   │   └─ page.tsx                    [Server]  ← async
+     27 │   │       imports: BagHeader, BagSection
+     28 │   │
+     29 │   ├─ new/
+     30 │   │   ├─ page.tsx                    [Server]
+     31 │   │   │   imports: NewArrivalsCover, Suspense → NewArrivalsList(async) / NewArrivalsListSkeleton
+     32 │   │   │
+     33 │   │   ├─ loading.tsx                 [Server]
+     34 │   │   │       imports: NewArrivalsListSkeleton
+     35 │   │   │
+     36 │   │   └─ error.tsx                   [Client]  ← route-level error boundary
+     37 │   │
+     38 │   ├─ products/
+     39 │   │   └─ [id]/
+     40 │   │       └─ page.tsx                [Server]  ← async, fetches getProductByIdService
+     41 │   │           imports: ProductDetail, notFound() on miss
+     42 │   │
+     43 │   ├─ category/
+     44 │   │   ├─ men/
+     45 │   │   │   ├─ [id]/
+     46 │   │   │   │   └─ page.tsx            [Server]
+     47 │   │   │   │       imports: ProductsPageCover, Suspense → TotalProducts(async) / ProductGridSkeleton
+     48 │   │   │   │
+     49 │   │   │   └─ [id]/[...subcategory]/
+     50 │   │   │       └─ page.tsx            [Server]
+     51 │   │   │           imports: ProductsPageCover, Suspense → TotalProducts(async, subCategoryId) / ProductGridSkeleton
+     52 │   │   │
+     53 │   │   ├─ women/                      [same pattern as men]
+     54 │   │   │   ├─ [id]/                   [Server]
+     55 │   │   │   └─ [id]/[...subcategory]/  [Server]
+     56 │   │   │
+     57 │   │   └─ children/                   [same pattern as men]
+     58 │   │       ├─ [id]/                   [Server]
+     59 │   │       └─ [id]/[...subcategory]/  [Server]
+     60 │   │
+     61 │   └─ [...rest]/
+     62 │       └─ page.tsx                    [Server]  ← catch-all → notFound()
+     63 │
+     64 └─ api/
+     65     ├─ auth/[...nextauth]/
+     66     │   └─ route.ts                    Route Handler (GET/POST)
+     67     │
+     68     └─ products/[productId]/
+     69         └─ route.ts                    Route Handler (GET)
+
+    Summary:
+
+
+    ┌────────────────┬───────┬────────────────────────────────────────────────────────────────────┐
+    │ Type           │ Count │ Files                                                              │
+    ├────────────────┼───────┼────────────────────────────────────────────────────────────────────┤
+    │ Client         │ 2     │ error.tsx (global), [locale]/new/error.tsx                         │
+    ├────────────────┼───────┼────────────────────────────────────────────────────────────────────┤
+    │ Server         │ 16    │ all page.tsx, layout.tsx, loading.tsx, not-found.tsx               │
+    ├────────────────┼───────┼────────────────────────────────────────────────────────────────────┤
+    │ Route Handlers │ 2     │ api/auth/[...nextauth]/route.ts, api/products/[productId]/route.ts │
+    └────────────────┴───────┴────────────────────────────────────────────────────────────────────┘
+
+
+    All pages follow the Server Component → Suspense → async child component pattern, with Client Components only used for error boundaries and likely the form components (LoginForm,
+    RegisterForm, ProductDetail) living in components/features/.

@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { Montserrat } from "next/font/google";
+import { motion, useReducedMotion } from "framer-motion";
 import { useLocale, useTranslations } from "use-intl";
 
 import {
@@ -23,14 +24,23 @@ export default function BestSellingUi({ children }: { children: ReactNode }) {
   const locale = useLocale();
   const isAr = locale === "ar";
 
+  // Accessibility
+  const shouldReduceMotion = useReducedMotion();
+
   return (
-    <section className="py-12">
+    <motion.section
+      className="py-8 sm:py-10 md:py-12"
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+      whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+    >
       <div className="container">
         {/* Product Grid */}
         <Carousel opts={{ align: "start", direction: isAr ? "rtl" : "ltr" }}>
           {/* Header Section */}
           <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-2">
+            <div className="flex w-full justify-between items-center gap-2 px-4">
               {/* Outlined words: stroke + opaque fill + paint-order hides overlapping-contour artifacts (see -webkit-text-stroke + variable fonts) */}
               <span
                 className={cn(
@@ -52,17 +62,19 @@ export default function BestSellingUi({ children }: { children: ReactNode }) {
                 })}
               </span>
 
-              {/* Action buttons */}
-              <CarouselNextBestSelling
-                className="flex flex-col items-end gap-2 text-black hover:text-gray-600 transition-colors rtl:left-0 rtl:right-auto"
-                aria-label="Next"
-                font={montserrat}
-              />
-              <CarouselPreviousBestSelling
-                className="flex flex-col items-start gap-2 text-black hover:text-gray-600 transition-colors rtl:left-16 rtl:right-auto"
-                aria-label="Previous"
-                font={montserrat}
-              />
+              <div className="relative flex">
+                {/* Action buttons */}
+                <CarouselPreviousBestSelling
+                  className="flex flex-col items-start gap-2 text-black hover:text-gray-600 transition-colors rtl:left-16 rtl:right-auto"
+                  aria-label="Previous"
+                  font={montserrat}
+                />
+                <CarouselNextBestSelling
+                  className="flex flex-col items-end gap-2 text-black hover:text-gray-600 transition-colors rtl:left-0 rtl:right-auto"
+                  aria-label="Next"
+                  font={montserrat}
+                />
+              </div>
             </div>
           </div>
 
@@ -70,6 +82,6 @@ export default function BestSellingUi({ children }: { children: ReactNode }) {
           {children}
         </Carousel>
       </div>
-    </section>
+    </motion.section>
   );
 }

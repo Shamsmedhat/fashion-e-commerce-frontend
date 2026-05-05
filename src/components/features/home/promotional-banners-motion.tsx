@@ -17,10 +17,10 @@ export function PromotionalBannersMotion({
 
   return (
     <motion.section
-      className="container py-12 grid grid-cols-1 md:grid-cols-2 gap-5 h-screen uppercase"
+      className="container grid min-h-[520px] grid-cols-1 gap-5 py-8 uppercase sm:min-h-[640px] md:min-h-[720px] md:grid-cols-2 md:py-12"
       initial={shouldReduceMotion ? false : "hidden"}
       whileInView={shouldReduceMotion ? undefined : "visible"}
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.1 }}
       variants={{
         hidden: {},
         visible: {

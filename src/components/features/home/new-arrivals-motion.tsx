@@ -24,10 +24,10 @@ export function NewArrivalsMotion({
 
   return (
     <motion.section
-      className="container py-12"
+      className="container py-8 sm:py-10 md:py-12"
       initial={shouldReduceMotion ? false : "hidden"}
       whileInView={shouldReduceMotion ? undefined : "visible"}
-      viewport={{ once: true, amount: 0.25 }}
+      viewport={{ once: true, amount: 0.1 }}
       variants={{
         hidden: {},
         visible: {
@@ -56,6 +56,7 @@ export function NewArrivalsMotion({
 
       {/* Products block */}
       <motion.div
+        className="min-h-[320px]"
         variants={{
           hidden: { opacity: 0, y: 24 },
           visible: {
@@ -70,7 +71,7 @@ export function NewArrivalsMotion({
 
       {/* CTA */}
       <motion.div
-        className="flex justify-center mt-8"
+        className="mt-6 flex justify-center sm:mt-8"
         variants={{
           hidden: { opacity: 0, y: 14, scale: 0.96 },
           visible: {
@@ -82,7 +83,7 @@ export function NewArrivalsMotion({
         }}
       >
         <Button
-          className="bg-black text-white font-semibold px-12 py-3 rounded hover:bg-gray-900 transition-colors"
+          className="rounded bg-black px-8 py-3 font-semibold text-white transition-colors hover:bg-gray-900 sm:px-12"
           asChild
         >
           <Link href="/new">{ctaLabel}</Link>
