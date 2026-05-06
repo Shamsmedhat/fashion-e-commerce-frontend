@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -47,6 +48,10 @@ function FormSkeleton() {
 function LoginFormContent() {
   // Translation
   const t = useTranslations();
+
+  // Navigation
+  const searchParams = useSearchParams();
+  const redirectQuery = searchParams.toString();
 
   // Hooks
   const loginSchema = createLoginSchema(t);
@@ -153,7 +158,9 @@ function LoginFormContent() {
           {t.rich("dont-have-account", {
             button: (v) => (
               <Button variant="link" className="p-0 h-auto" asChild>
-                <Link href="/auth/register">{v}</Link>
+                <Link href={redirectQuery ? `/auth/register?${redirectQuery}` : "/auth/register"}>
+                  {v}
+                </Link>
               </Button>
             ),
           })}

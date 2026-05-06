@@ -49,7 +49,7 @@ export default function LocaleLayout({ children, params: { locale } }: LayoutPro
 
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
-      <body className={cn(locale === "ar" ? almarai.className : montserrat.className)}>
+      <body className={cn(locale === "ar" ? almarai.className : montserrat.className, "mt-24")}>
         <Providers>
           {/* Header */}
           <Suspense fallback={<HeaderFallback />}>

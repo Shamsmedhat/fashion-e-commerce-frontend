@@ -17,6 +17,7 @@ import { ORDER_SUMMARY_NEXT_DAY_SHIPPING_EGP } from "@/lib/constants/currency.co
 import BagListSkeleton from "@/components/skeletons/bag/bag-list.skeleton";
 import BagSummary from "@/components/skeletons/bag/bag-summary.skeleton";
 import { getFormatCurrency } from "@/lib/utils/format-currency";
+import { Link } from "@/i18n/navigation";
 
 export default async function BagSection() {
   // Translations
@@ -77,8 +78,11 @@ export default async function BagSection() {
             </p>
 
             {/* Checkout Button */}
-            <Button className="w-full bg-black text-white hover:bg-gray-900 rounded-none h-12 text-sm font-bold uppercase tracking-wide">
-              {t("checkout")}
+            <Button
+              asChild
+              className="w-full bg-black text-white hover:bg-gray-900 rounded-none h-12 text-sm font-bold uppercase tracking-wide"
+            >
+              <Link href="/checkout">{t("checkout")}</Link>
             </Button>
 
             {/* May We Help Accordion */}

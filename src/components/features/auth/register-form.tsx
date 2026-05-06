@@ -1,7 +1,11 @@
 "use client";
 
+import { Suspense } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,22 +25,46 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { PasswordInput } from "@/components/shared/password-input";
+import SubmitFeedback from "@/components/shared/submit-feedback";
+import useRegister from "@/hooks/auth/use-register";
+import { Link } from "@/i18n/navigation";
 import {
   RegistrationFields,
   registerSchema as createRegisterSchema,
 } from "@/lib/schemes/auth.schema";
-import { useTranslations } from "next-intl";
-import { PasswordInput } from "@/components/shared/password-input";
-import useRegister from "../../../hooks/auth/use-register";
-import SubmitFeedback from "@/components/shared/submit-feedback";
-import { Link } from "@/i18n/navigation";
+import { callbackUrlIncludesCheckout } from "@/lib/utils/checkout-callback.util";
 
-export default function RegisterForm() {
+function FormSkeleton() {
+  return (
+    <div className="space-y-6">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="space-y-2">
+          <Skeleton className="h-4 w-20" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+      ))}
+      <Skeleton className="h-10 w-full" />
+    </div>
+  );
+}
+
+function RegisterFormContent() {
   // Translation
   const t = useTranslations();
 
+  // Navigation
+  const searchParams = useSearchParams();
+  const redirectQuery = searchParams.toString();
+
+  // Variables
+  const requireCheckoutAddress = callbackUrlIncludesCheckout(searchParams.get("callbackUrl"));
+
   // Hooks
-  const registerSchema = createRegisterSchema(t);
+  const registerSchema = createRegisterSchema(t, {
+    requireCheckoutAddress,
+  });
   const { isPending, error, register } = useRegister();
 
   // Form
@@ -48,6 +76,9 @@ export default function RegisterForm() {
       phone: "",
       password: "",
       passwordConfirm: "",
+      deliveryLabel: "",
+      deliveryCity: "",
+      deliveryStreet: "",
     },
   });
 
@@ -190,6 +221,88 @@ export default function RegisterForm() {
               )}
             />
 
+            {/* Delivery address */}
+            <div className="space-y-4 border-t border-border pt-6">
+              <p className="text-sm font-medium text-foreground">{t("delivery-address-heading")}</p>
+              <p className="text-xs text-muted-foreground">
+                {requireCheckoutAddress
+                  ? t("checkout-delivery-description")
+                  : t("delivery-address-optional-hint")}
+              </p>
+
+              {/* Delivery label */}
+              <FormField
+                control={form.control}
+                name="deliveryLabel"
+                render={({ field }) => (
+                  <FormItem>
+                    {/* Label */}
+                    <FormLabel>{t("address-label-field")}</FormLabel>
+
+                    {/* Field */}
+                    <FormControl>
+                      <Input
+                        placeholder={t("address-label-placeholder")}
+                        autoComplete="shipping address-line2"
+                        {...field}
+                      />
+                    </FormControl>
+
+                    {/* Feedback */}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* City */}
+              <FormField
+                control={form.control}
+                name="deliveryCity"
+                render={({ field }) => (
+                  <FormItem>
+                    {/* Label */}
+                    <FormLabel>{t("city-label")}</FormLabel>
+
+                    {/* Field */}
+                    <FormControl>
+                      <Input
+                        placeholder={t("city-placeholder")}
+                        autoComplete="address-level2"
+                        {...field}
+                      />
+                    </FormControl>
+
+                    {/* Feedback */}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Street */}
+              <FormField
+                control={form.control}
+                name="deliveryStreet"
+                render={({ field }) => (
+                  <FormItem>
+                    {/* Label */}
+                    <FormLabel>{t("street-label")}</FormLabel>
+
+                    {/* Field */}
+                    <FormControl>
+                      <Input
+                        placeholder={t("street-placeholder")}
+                        autoComplete="street-address"
+                        {...field}
+                      />
+                    </FormControl>
+
+                    {/* Feedback */}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             {/* Feedback */}
             <div role="alert" aria-live="assertive">
               <SubmitFeedback>{error?.message}</SubmitFeedback>
@@ -213,12 +326,20 @@ export default function RegisterForm() {
           {t.rich("already-have-account", {
             button: (v) => (
               <Button variant="link" className="p-0 h-auto" asChild>
-                <Link href="/auth/login">{v}</Link>
+                <Link href={redirectQuery ? `/auth/login?${redirectQuery}` : "/auth/login"}>{v}</Link>
               </Button>
             ),
           })}
         </p>
       </CardFooter>
     </Card>
+  );
+}
+
+export default function RegisterForm() {
+  return (
+    <Suspense fallback={<FormSkeleton />}>
+      <RegisterFormContent />
+    </Suspense>
   );
 }

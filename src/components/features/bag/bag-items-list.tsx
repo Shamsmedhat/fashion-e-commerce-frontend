@@ -17,7 +17,7 @@ export default async function BagItemsList() {
       <div className="text-center py-12 flex flex-col items-center">
         <ShoppingBag strokeWidth={0.5} size={180} aria-hidden="true" />
         <p className="text-gray-600 text-2xl mb-4 first-letter:uppercase">{t("empty-bag")}</p>
-        <Link href="/" className="text-lg text-gray-900 underline hover:no-underline capitalize">
+        <Link href="/new" className="text-lg text-gray-900 underline hover:no-underline capitalize">
           {t("continue-shopping")}
         </Link>
       </div>
