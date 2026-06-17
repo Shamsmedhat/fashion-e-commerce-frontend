@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
 import { JSON_HEADER } from "../constants/api.constant";
 import { AppError } from "../utils/app-errors";
 import { getAuthToken } from "../utils/get-token";
@@ -29,13 +28,12 @@ export async function addToBagAction(data: AddToBagRequest): Promise<BagResponse
     throw new AppError(errorData.message, response.status);
   }
 
-  revalidateTag("bag");
   return response.json();
 }
 
 export async function updateBagItemAction(
   itemId: string,
-  data: UpdateBagItemRequest
+  data: UpdateBagItemRequest,
 ): Promise<{
   status: string;
   message: string;
@@ -66,7 +64,6 @@ export async function updateBagItemAction(
     throw new AppError(errorData.message, response.status);
   }
 
-  revalidateTag("bag");
   return response.json();
 }
 
@@ -93,7 +90,6 @@ export async function removeBagItemAction(itemId: string): Promise<BagResponse> 
     throw new AppError(errorData.message, response.status);
   }
 
-  revalidateTag("bag");
   return response.json();
 }
 
@@ -120,6 +116,5 @@ export async function clearBagAction(): Promise<BagResponse> {
     throw new AppError(errorData.message, response.status);
   }
 
-  revalidateTag("bag");
   return response.json();
 }

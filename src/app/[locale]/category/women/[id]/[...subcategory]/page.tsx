@@ -2,12 +2,15 @@
 import ProductsPageCover from "@/components/features/products/products-page-cover";
 import TotalProducts from "@/components/features/products/total-products";
 import { ProductGridSkeleton } from "@/components/skeletons/products/product-item.skeleton";
+import { REVALIDATE_PRODUCT_LIST_SECONDS } from "@/lib/constants/data-cache.constant";
 import React, { Suspense } from "react";
 
 type MenPage = {
   params: { id: string; subcategory: string; subCategoryId: string };
   searchParams: Record<string, string | string[] | undefined>;
 };
+
+export const revalidate = REVALIDATE_PRODUCT_LIST_SECONDS;
 
 export default function page({ params, searchParams }: MenPage) {
   // Params

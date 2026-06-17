@@ -1,5 +1,11 @@
-import { AppError } from "../utils/app-errors";
 import { JSON_HEADER } from "../constants/api.constant";
+import {
+  REVALIDATE_BEST_SELLING_SECONDS,
+  REVALIDATE_PRODUCT_DETAIL_SECONDS,
+  REVALIDATE_PRODUCT_LIST_SECONDS,
+  REVALIDATE_PRODUCT_VARIANTS_SECONDS,
+} from "../constants/data-cache.constant";
+import { AppError } from "../utils/app-errors";
 import { buildQueryString } from "../utils/build-query-string";
 
 export async function getProductsService(params?: QueryParams): Promise<ProductsResponse> {
@@ -15,7 +21,7 @@ export async function getProductsService(params?: QueryParams): Promise<Products
     headers: {
       ...JSON_HEADER,
     },
-    cache: "no-store",
+    next: { revalidate: REVALIDATE_PRODUCT_LIST_SECONDS, tags: ["products"] },
   });
 
   if (!response.ok) {
@@ -41,7 +47,7 @@ export async function getProductByIdService(id: string): Promise<{
     headers: {
       ...JSON_HEADER,
     },
-    cache: "no-store",
+    next: { revalidate: REVALIDATE_PRODUCT_DETAIL_SECONDS, tags: ["products", `product-${id}`] },
   });
 
   if (!response.ok) {
@@ -67,7 +73,10 @@ export async function getProductVariantsService(productId: string): Promise<{
     headers: {
       ...JSON_HEADER,
     },
-    cache: "no-store",
+    next: {
+      revalidate: REVALIDATE_PRODUCT_VARIANTS_SECONDS,
+      tags: ["products", `product-${productId}`],
+    },
   });
 
   if (!response.ok) {
@@ -88,7 +97,7 @@ export async function getBestSellingProductsService(): Promise<ProductsResponse>
     headers: {
       ...JSON_HEADER,
     },
-    cache: "no-store",
+    next: { revalidate: REVALIDATE_BEST_SELLING_SECONDS, tags: ["products", "best-selling"] },
   });
 
   if (!response.ok) {

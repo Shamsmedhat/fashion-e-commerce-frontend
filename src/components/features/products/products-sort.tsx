@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/sheet";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { ListFilter } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -27,6 +28,9 @@ const sortOptions: { value: SortOption; label: string }[] = [
 ];
 
 export default function ProductsSort() {
+  // Translation
+  const t = useTranslations();
+
   // Navigation
   const router = useRouter();
   const pathname = usePathname();
@@ -55,7 +59,7 @@ export default function ProductsSort() {
     // Apply cleared sort immediately
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.delete("sort");
-    router.push(pathname + "?" + newParams.toString());
+    router.push(pathname + "?" + newParams.toString(), { scroll: false });
   };
 
   const applySort = () => {
@@ -65,7 +69,7 @@ export default function ProductsSort() {
     } else {
       newParams.delete("sort");
     }
-    router.push(pathname + "?" + newParams.toString());
+    router.push(pathname + "?" + newParams.toString(), { scroll: false });
     setIsOpen(false);
   };
 
@@ -74,17 +78,17 @@ export default function ProductsSort() {
       <SheetTrigger asChild>
         <Button variant="link" type="button">
           <ListFilter aria-hidden="true" />
-          <span>sort</span>
+          <span>{t("sort")}</span>
         </Button>
       </SheetTrigger>
       <SheetContent className="sm:max-w-[35rem]">
         <SheetHeader>
-          <SheetTitle>Sort Products</SheetTitle>
-          <SheetDescription>Choose how to sort the products.</SheetDescription>
+          <SheetTitle>{t("sort-products")}</SheetTitle>
+          <SheetDescription>{t("choose-how-to-sort-the-products")}</SheetDescription>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 px-4 py-4">
           <div>
-            <h3 className="text-lg font-semibold mb-4">Sort By</h3>
+            <h3 className="text-lg font-semibold mb-4">{t("sort-by")}</h3>
             <div className="space-y-2">
               {sortOptions.map((option) => (
                 <Button
@@ -100,16 +104,16 @@ export default function ProductsSort() {
               ))}
             </div>
             <Button variant="outline" onClick={clearSort} className="mt-4 w-full" type="button">
-              Clear Sort
+              {t("clear-sort")}
             </Button>
           </div>
         </div>
         <SheetFooter className="gap-2">
           <SheetClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">{t("cancel")}</Button>
           </SheetClose>
           <Button onClick={applySort} type="button">
-            Apply Sort
+            {t("apply-sort")}
           </Button>
         </SheetFooter>
       </SheetContent>

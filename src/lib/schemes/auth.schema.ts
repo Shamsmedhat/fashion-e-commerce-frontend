@@ -3,7 +3,13 @@ import { z } from "zod";
 
 type AuthTranslator = ReturnType<typeof NextIntl.useTranslations>;
 
-export const registerSchema = (t: AuthTranslator) => {
+type RegisterSchemaOptions = {
+  requireCheckoutAddress?: boolean;
+};
+
+export const registerSchema = (t: AuthTranslator, options?: RegisterSchemaOptions) => {
+  const requireAddr = Boolean(options?.requireCheckoutAddress);
+
   return z
     .object({
       name: z
@@ -19,6 +25,13 @@ export const registerSchema = (t: AuthTranslator) => {
       passwordConfirm: z.string({
         required_error: t("confirm-password-required") || "Password confirmation is required",
       }),
+      deliveryLabel: z.string().trim().optional(),
+      deliveryCity: requireAddr
+        ? z.string().trim().min(1, t("city-required"))
+        : z.string().trim().optional(),
+      deliveryStreet: requireAddr
+        ? z.string().trim().min(1, t("street-required"))
+        : z.string().trim().optional(),
     })
     .refine((data) => data.password === data.passwordConfirm, {
       message: t("password-mismatch"),

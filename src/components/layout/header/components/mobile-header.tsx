@@ -24,7 +24,7 @@ export default function MobileHeader({ mainCategories, closeMenu, bagLength }: M
 
   return (
     <div className="md:hidden bg-white border-t shadow-lg">
-      <nav className="container py-4 flex flex-col space-y-4">
+      <nav className="container py-4 flex flex-col space-y-4 px-5">
         {/* Categories */}
         <div className="flex flex-col space-y-3">
           <Link

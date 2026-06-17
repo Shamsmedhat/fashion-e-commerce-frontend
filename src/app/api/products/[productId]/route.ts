@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+
+import { REVALIDATE_PRODUCT_VARIANTS_SECONDS } from "@/lib/constants/data-cache.constant";
 import { getProductVariantsService } from "@/lib/services/product.service";
 
-export async function GET(request: NextRequest, { params }: { params: { productId: string } }) {
+export const revalidate = REVALIDATE_PRODUCT_VARIANTS_SECONDS;
+
+export async function GET(_request: NextRequest, { params }: { params: { productId: string } }) {
   const { productId } = params;
 
   try {

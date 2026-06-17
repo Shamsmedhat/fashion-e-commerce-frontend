@@ -238,7 +238,7 @@ const CarouselNextBestSelling = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button> & { font: NextFont }
 >(({ className, variant = "ghost", size = "default", ...props }, ref) => {
-  const { orientation, scrollNext, canScrollNext } = useCarousel();
+  const { scrollNext, canScrollNext } = useCarousel();
 
   // Translation
   const t = useTranslations();
@@ -248,13 +248,7 @@ const CarouselNextBestSelling = React.forwardRef<
       ref={ref}
       variant={variant}
       size={size}
-      className={cn(
-        "group absolute h-auto [&_svg]:size-auto",
-        orientation === "horizontal"
-          ? "-right-12 top-0 -translate-y-1/2"
-          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
-        className,
-      )}
+      className={cn("group  h-auto [&_svg]:size-auto", className)}
       disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}
@@ -277,7 +271,7 @@ const CarouselPreviousBestSelling = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button> & { font: NextFont }
 >(({ className, variant = "ghost", size = "default", ...props }, ref) => {
-  const { orientation, scrollPrev, canScrollPrev } = useCarousel();
+  const { scrollPrev, canScrollPrev } = useCarousel();
 
   // Translation
   const t = useTranslations();
@@ -287,13 +281,7 @@ const CarouselPreviousBestSelling = React.forwardRef<
       ref={ref}
       variant={variant}
       size={size}
-      className={cn(
-        "group absolute h-auto [&_svg]:size-auto",
-        orientation === "horizontal"
-          ? "right-4 top-0 -translate-y-1/2"
-          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
-        className,
-      )}
+      className={cn("group  h-auto [&_svg]:size-auto", className)}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}

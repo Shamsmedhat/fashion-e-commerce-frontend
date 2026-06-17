@@ -45,7 +45,7 @@ export default function TopBar() {
           announcements.map((ann, index) => (
             <CarouselItem
               key={`${groupIndex}-${index}`}
-              className="w-1/3 basis-auto italic text-white/80"
+              className="w-1/3 basis-1/2 italic text-white/80 md:basis-1/3"
             >
               <span className="uppercase whitespace-nowrap  me-2">{ann.text}</span>
               <span className="uppercase whitespace-nowrap">{ann.emoji}</span>

@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+
+import { REVALIDATE_PRODUCT_DETAIL_SECONDS } from "@/lib/constants/data-cache.constant";
 import { getProductByIdService } from "@/lib/services/product.service";
 import ProductDetail from "../../../../components/features/products/product-detail";
 
@@ -8,6 +10,8 @@ type ProductPageProps = {
     locale: string;
   };
 };
+
+export const revalidate = REVALIDATE_PRODUCT_DETAIL_SECONDS;
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = params;
