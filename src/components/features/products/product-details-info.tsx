@@ -79,10 +79,10 @@ export function ProductDetailsInfo({
             )}
           </div>
           <div className="flex flex-wrap gap-2">
-            {colorVariants.map((variant, i) => {
+            {colorVariants.map((variant) => {
               const colorName = variant.color?.toLowerCase() || "";
               const isSelected = colorName === selectedColor?.toLowerCase();
-              const variantImage = variant.images[i];
+              const variantImage = variant.images?.[0];
 
               return (
                 <button
@@ -90,7 +90,7 @@ export function ProductDetailsInfo({
                   type="button"
                   onClick={() => {
                     onColorChange(colorName);
-                    onImageChange(variantImage);
+                    onImageChange(variantImage ?? product.coverImage);
                   }}
                   className={cn(
                     "relative w-16 h-16 border-2 rounded transition-all overflow-hidden",
