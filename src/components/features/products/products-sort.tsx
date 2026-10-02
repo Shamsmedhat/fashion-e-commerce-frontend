@@ -18,13 +18,14 @@ import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-type SortOption = "discount" | "price-low-to-high" | "price-high-to-low" | "";
+import type { SortOption } from "@/lib/utils/product-listing";
 
-const sortOptions: { value: SortOption; label: string }[] = [
-  { value: "", label: "None" },
-  { value: "discount", label: "Highest Discount" },
-  { value: "price-low-to-high", label: "Price: Low to High" },
-  { value: "price-high-to-low", label: "Price: High to Low" },
+// Value -> translation key of its label
+const sortOptions: { value: SortOption; labelKey: string }[] = [
+  { value: "", labelKey: "sort-none" },
+  { value: "discount", labelKey: "sort-discount" },
+  { value: "price-low-to-high", labelKey: "sort-price-low-to-high" },
+  { value: "price-high-to-low", labelKey: "sort-price-high-to-low" },
 ];
 
 export default function ProductsSort() {
@@ -54,22 +55,26 @@ export default function ProductsSort() {
     setTempSort(sortValue);
   };
 
+  // A new order changes what is on each page, so the listing goes back to the first one.
+  const navigateWith = (sortValue: SortOption) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+
+    if (sortValue) newParams.set("sort", sortValue);
+    else newParams.delete("sort");
+    newParams.delete("page");
+
+    const query = newParams.toString();
+    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  };
+
   const clearSort = () => {
     setTempSort("");
     // Apply cleared sort immediately
-    const newParams = new URLSearchParams(searchParams.toString());
-    newParams.delete("sort");
-    router.push(pathname + "?" + newParams.toString(), { scroll: false });
+    navigateWith("");
   };
 
   const applySort = () => {
-    const newParams = new URLSearchParams(searchParams.toString());
-    if (tempSort) {
-      newParams.set("sort", tempSort);
-    } else {
-      newParams.delete("sort");
-    }
-    router.push(pathname + "?" + newParams.toString(), { scroll: false });
+    navigateWith(tempSort);
     setIsOpen(false);
   };
 
@@ -99,7 +104,7 @@ export default function ProductsSort() {
                   aria-pressed={tempSort === option.value}
                   onClick={() => handleSortChange(option.value)}
                 >
-                  {option.label}
+                  {t(option.labelKey)}
                 </Button>
               ))}
             </div>

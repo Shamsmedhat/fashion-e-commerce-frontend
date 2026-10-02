@@ -1,3 +1,5 @@
+import type { SortOption } from "./product-listing";
+
 /**
  * Calculates the discount percentage for a product
  */
@@ -30,7 +32,7 @@ function getProductHighestPrice(product: Product): number {
 /**
  * Sorts products based on the sort option
  */
-export function sortProducts(products: Product[], sortOption: string): Product[] {
+export function sortProducts(products: Product[], sortOption: SortOption): Product[] {
   if (!sortOption) {
     return products;
   }

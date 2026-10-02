@@ -6,12 +6,13 @@ import React from "react";
 // Type
 type SubCategoryListProps = {
   basePath: string;
-  currentSubcategory: string;
+  currentSubcategoryId?: string;
   allSubCategories: Category[];
 };
+
 export default function SubcategoryList({
   basePath,
-  currentSubcategory,
+  currentSubcategoryId,
   allSubCategories,
 }: SubCategoryListProps) {
   // Translations
@@ -24,9 +25,9 @@ export default function SubcategoryList({
         href={basePath}
         className={cn(
           "px-4 py-2 text-sm font-medium rounded-md transition-colors capitalize text-gray-700",
-          !currentSubcategory ? "font-bold" : "text-gray-400",
+          !currentSubcategoryId ? "font-bold" : "text-gray-400",
         )}
-        aria-current={!currentSubcategory ? "page" : undefined}
+        aria-current={!currentSubcategoryId ? "page" : undefined}
         scroll={false}
       >
         {t("total")}
@@ -34,7 +35,7 @@ export default function SubcategoryList({
 
       {/* Subcategory Links */}
       {allSubCategories.map((sc) => {
-        const isActive = currentSubcategory?.[1] === sc._id;
+        const isActive = currentSubcategoryId === sc._id;
 
         return (
           <Link

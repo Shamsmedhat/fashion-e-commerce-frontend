@@ -16,6 +16,7 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import { getTailwindColor } from "@/lib/utils/get-tailwind-color";
 import { cn } from "@/lib/utils/tailwind-merge";
 import { SlidersHorizontal } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -40,6 +41,9 @@ function toggleParamValue(params: URLSearchParams, key: string, value: string) {
 }
 
 export default function ProductsFilter({ products }: { products: Product[] }) {
+  // Translation
+  const t = useTranslations();
+
   // Navigation
   const router = useRouter();
   const pathname = usePathname();
@@ -65,15 +69,23 @@ export default function ProductsFilter({ products }: { products: Product[] }) {
     setTempParams(newParams);
   };
 
+  // A changed filter changes the number of pages, so the listing goes back to the first one.
+  const navigateWith = (params: URLSearchParams) => {
+    params.delete("page");
+    const query = params.toString();
+    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  };
+
+  // Clears the colour filter only; the chosen sort stays.
   const clearAllFilters = () => {
-    const newParams = new URLSearchParams();
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.delete("variants.color");
     setTempParams(newParams);
-    // Apply cleared filters immediately
-    router.push(pathname + "?" + newParams.toString(), { scroll: false });
+    navigateWith(newParams);
   };
 
   const applyFilters = () => {
-    router.push(pathname + "?" + tempParams.toString(), { scroll: false });
+    navigateWith(new URLSearchParams(tempParams.toString()));
     setIsOpen(false);
   };
 
@@ -107,13 +119,13 @@ export default function ProductsFilter({ products }: { products: Product[] }) {
           const count = productsColors[c] || 0;
           const isDisabled = count === 0;
           const cssColor = getTailwindColor(c) || c;
-          const capitalizedColor = c.charAt(0).toUpperCase() + c.slice(1);
+          const colorLabel = t.has(`color-${c}`) ? t(`color-${c}`) : c;
           const isActive = activeColors.includes(c);
 
           return (
             <div key={c} className="flex flex-col items-center">
               <Button
-                title={`${capitalizedColor} (${count})`}
+                title={`${colorLabel} (${count})`}
                 style={{ backgroundColor: cssColor }}
                 className={cn(
                   "w-24 h-24 rounded-none border-2 transition-all",
@@ -123,7 +135,7 @@ export default function ProductsFilter({ products }: { products: Product[] }) {
                 )}
                 disabled={isDisabled}
                 type="button"
-                aria-label={`Filter by ${capitalizedColor} (${count})`}
+                aria-label={`${colorLabel} (${count})`}
                 aria-pressed={isActive}
                 onClick={() => {
                   if (!isDisabled) {
@@ -134,11 +146,11 @@ export default function ProductsFilter({ products }: { products: Product[] }) {
 
               <p
                 className={cn(
-                  "mt-2 text-sm font-medium",
+                  "mt-2 text-sm font-medium capitalize",
                   isDisabled ? "text-gray-400" : "text-gray-900",
                 )}
               >
-                {capitalizedColor} ({count})
+                {colorLabel} ({count})
               </p>
             </div>
           );
@@ -152,29 +164,31 @@ export default function ProductsFilter({ products }: { products: Product[] }) {
       <SheetTrigger asChild>
         <Button variant="link" type="button">
           <SlidersHorizontal aria-hidden="true" />
-          <span>filters</span>
+          <span>{t("filters")}</span>
         </Button>
       </SheetTrigger>
       <SheetContent className="sm:max-w-[35rem]">
         <SheetHeader>
-          <SheetTitle>Filters</SheetTitle>
-          <SheetDescription>Select colors to filter products.</SheetDescription>
+          <SheetTitle className="capitalize">{t("filters")}</SheetTitle>
+          <SheetDescription>{t("filter-description")}</SheetDescription>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 px-4 py-4">
           <div>
-            <h3 className="text-lg font-semibold mb-4">Colors</h3>
+            <h3 className="text-lg font-semibold mb-4">{t("colors")}</h3>
             <Button variant="outline" onClick={clearAllFilters} type="button">
-              Clear
+              {t("clear-filters")}
             </Button>
           </div>
           {getColorToUI()}
         </div>
         <SheetFooter className="gap-2">
           <SheetClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" className="capitalize">
+              {t("cancel")}
+            </Button>
           </SheetClose>
           <Button onClick={applyFilters} type="button">
-            Show Results
+            {t("show-results")}
           </Button>
         </SheetFooter>
       </SheetContent>
