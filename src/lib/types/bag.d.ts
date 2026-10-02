@@ -14,7 +14,7 @@ declare type BagItem = {
   error?: string;
 };
 
-declare type Bag = DatabaseProperies & {
+declare type Bag = DatabaseProperties & {
   userId: string;
   items: BagItem[];
   updatedAt: string;
