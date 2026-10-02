@@ -23,6 +23,8 @@ declare module "next-auth" {
       __v: number;
     };
     token: string;
+    /** When the backend API token expires (ms since epoch). */
+    tokenExpiresAt?: number | null;
   }
 
   /**

@@ -1,125 +1,40 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
-import { JSON_HEADER } from "../constants/api.constant";
-import { AppError } from "../utils/app-errors";
-import { getAuthToken } from "../utils/get-token";
+import { type ActionResult, runAction } from "../utils/action-result";
+import { authedFetch } from "../utils/authed-fetch";
 
-export async function addToBagAction(data: AddToBagRequest): Promise<BagResponse> {
-  const token = await getAuthToken();
-
-  if (!token) {
-    throw new AppError("Unauthorized", 401, "authentication");
-  }
-
-  const response = await fetch(`${process.env.API_URL}/users/bag/add`, {
-    method: "POST",
-    headers: {
-      ...JSON_HEADER,
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errorData: ErrorResponse = await response.json().catch(() => ({
-      status: "error" as const,
-      message: `Request failed with status ${response.status}`,
-    }));
-    throw new AppError(errorData.message, response.status);
-  }
-
-  revalidateTag("bag");
-  return response.json();
-}
-
-export async function updateBagItemAction(
-  itemId: string,
-  data: UpdateBagItemRequest
-): Promise<{
+type UpdatedBagItemResponse = {
   status: string;
   message: string;
   data: {
     item: BagItem;
   };
-}> {
-  const token = await getAuthToken();
+};
 
-  if (!token) {
-    throw new AppError("Unauthorized", 401, "authentication");
-  }
-
-  const response = await fetch(`${process.env.API_URL}/bags/me/items/${itemId}`, {
-    method: "PATCH",
-    headers: {
-      ...JSON_HEADER,
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errorData: ErrorResponse = await response.json().catch(() => ({
-      status: "error" as const,
-      message: `Request failed with status ${response.status}`,
-    }));
-    throw new AppError(errorData.message, response.status);
-  }
-
-  revalidateTag("bag");
-  return response.json();
+export async function addToBagAction(data: AddToBagRequest): Promise<ActionResult<BagResponse>> {
+  return runAction(() =>
+    authedFetch<BagResponse>("/users/bag/add", { method: "POST", body: JSON.stringify(data) }),
+  );
 }
 
-export async function removeBagItemAction(itemId: string): Promise<BagResponse> {
-  const token = await getAuthToken();
-
-  if (!token) {
-    throw new AppError("Unauthorized", 401, "authentication");
-  }
-
-  const response = await fetch(`${process.env.API_URL}/bags/me/items/${itemId}`, {
-    method: "DELETE",
-    headers: {
-      ...JSON_HEADER,
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    const errorData: ErrorResponse = await response.json().catch(() => ({
-      status: "error" as const,
-      message: `Request failed with status ${response.status}`,
-    }));
-    throw new AppError(errorData.message, response.status);
-  }
-
-  revalidateTag("bag");
-  return response.json();
+export async function updateBagItemAction(
+  itemId: string,
+  data: UpdateBagItemRequest,
+): Promise<ActionResult<UpdatedBagItemResponse>> {
+  return runAction(() =>
+    authedFetch<UpdatedBagItemResponse>(`/bags/me/items/${itemId}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+  );
 }
 
-export async function clearBagAction(): Promise<BagResponse> {
-  const token = await getAuthToken();
+export async function removeBagItemAction(itemId: string): Promise<ActionResult<BagResponse>> {
+  return runAction(() =>
+    authedFetch<BagResponse>(`/bags/me/items/${itemId}`, { method: "DELETE" }),
+  );
+}
 
-  if (!token) {
-    throw new AppError("Unauthorized", 401, "authentication");
-  }
-
-  const response = await fetch(`${process.env.API_URL}/bags/me`, {
-    method: "DELETE",
-    headers: {
-      ...JSON_HEADER,
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    const errorData: ErrorResponse = await response.json().catch(() => ({
-      status: "error" as const,
-      message: `Request failed with status ${response.status}`,
-    }));
-    throw new AppError(errorData.message, response.status);
-  }
-
-  revalidateTag("bag");
-  return response.json();
+export async function clearBagAction(): Promise<ActionResult<BagResponse>> {
+  return runAction(() => authedFetch<BagResponse>("/bags/me", { method: "DELETE" }));
 }

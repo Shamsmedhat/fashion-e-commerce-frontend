@@ -1,32 +1,40 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
-
-export default function Error({
-  error,
+// Last-resort boundary: it replaces the root layout, so no provider (translations, theme,
+// fonts) is available here and the page must stand on its own.
+export default function GlobalError({
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  // Translations
-  const t = useTranslations();
-
   return (
-    <html>
+    <html lang="en">
       <body>
-        <main className="flex flex-col gap-8 min-h-screen items-center justify-center">
+        <main
+          style={{
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "1.5rem",
+            fontFamily: "system-ui, sans-serif",
+          }}
+        >
           {/* Headline */}
-          <h1 className="text-red-500 font-bold text-5xl">{t("something-went-wrong")}</h1>
-
-          {/* Description */}
-          <p role="alert">{error.message}</p>
+          <h1 role="alert" style={{ fontSize: "1.75rem", fontWeight: 700 }}>
+            Something went wrong
+          </h1>
 
           {/* Action */}
-          <Button variant="secondary" onClick={reset}>
-            {t("try-again")}
-          </Button>
+          <button
+            type="button"
+            onClick={reset}
+            style={{ padding: "0.5rem 1.25rem", border: "1px solid #111", cursor: "pointer" }}
+          >
+            Try again
+          </button>
         </main>
       </body>
     </html>

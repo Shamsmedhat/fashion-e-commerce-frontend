@@ -6,7 +6,7 @@ export default async function ProductSection() {
   // Translations
   const t = await getTranslations();
 
-  // Variables
+  // Fetch
   const response = await getProductsService({ limit: 8, sort: "-createdAt" });
   const products = response.data.products || [];
 

@@ -58,7 +58,10 @@ export function HeaderFallback() {
           <div className="hidden md:flex items-center justify-center gap-4">
             <Button variant="ghost" size="icon" asChild>
               <Link href="/bag" className="flex relative" aria-label={t("bag")}>
-                <ShoppingBag className="w-5 h-5 hover:text-gray-800 transition-all" aria-hidden="true" />
+                <ShoppingBag
+                  className="w-5 h-5 hover:text-gray-800 transition-all"
+                  aria-hidden="true"
+                />
               </Link>
             </Button>
           </div>
@@ -72,7 +75,12 @@ export function HeaderFallback() {
             {session ? (
               <>
                 <div className="text-sm py-2">{t("hello-user", { user: session.user.name })}</div>
-                <Button variant="ghost" className="justify-start" onClick={() => signOut()} type="button">
+                <Button
+                  variant="ghost"
+                  className="justify-start"
+                  onClick={() => signOut()}
+                  type="button"
+                >
                   <LogOut className="w-4 h-4 mr-2" aria-hidden="true" />
                   {t("logout")}
                 </Button>

@@ -1,7 +1,7 @@
 declare type SearchParams = string | string[] | undefined;
 
 declare type RouteProps = {
-  params: { locale: Locale };
+  params: { locale: import("next-intl").Locale };
   searchParams: SearchParams;
 };
 

@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +13,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useUpdateBagItem, useRemoveBagItem, useProductVariants } from "@/hooks/bag/use-bag";
-import { ChevronDown } from "lucide-react";
+
 import EditBagItemDialog from "./edit-bag-item-dialog";
-import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { cn } from "@/lib/utils/tailwind-merge";
+import { useFormatCurrency } from "@/lib/utils/format-currency";
 
 // Type
 type BagItemProps = {
@@ -23,6 +27,9 @@ type BagItemProps = {
 export default function BagItem({ item }: BagItemProps) {
   // Translations
   const t = useTranslations();
+
+  // Hooks
+  const { formatCurrency } = useFormatCurrency();
 
   // State
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -110,7 +117,12 @@ export default function BagItem({ item }: BagItemProps) {
 
           {/* Availability */}
           <div className="mb-2">
-            <p className="text-sm font-semibold text-green-600 mb-1 uppercase">
+            <p
+              className={cn(
+                "text-sm font-semibold mb-1 uppercase",
+                item.isAvailable !== false ? "text-green-600" : "text-red-600",
+              )}
+            >
               {item.isAvailable !== false ? t("available") : t("out-of-stock")}
             </p>
             <p className="text-sm text-gray-600">{t("user-msg")}</p>
@@ -149,10 +161,10 @@ export default function BagItem({ item }: BagItemProps) {
 
             {/* Price */}
             <div className="text-right">
-              <p className="font-semibold text-gray-900">${itemTotal.toFixed(0)}</p>
+              <p className="font-semibold text-gray-900">{formatCurrency(itemTotal)}</p>
               {item.quantity > 1 && (
                 <p className="text-sm text-gray-500">
-                  ${currentPrice.toFixed(0)} {t("each")}
+                  {formatCurrency(currentPrice)} {t("each")}
                 </p>
               )}
             </div>

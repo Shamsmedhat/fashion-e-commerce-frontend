@@ -303,22 +303,23 @@ export async function getProductsService(params?: QueryParams): Promise<Products
 
 ### Actions (mutations — Server Actions)
 
+Actions never throw to the client: Next.js replaces a thrown error's message with a generic one
+in production builds. They return an `ActionResult<T>` (`lib/utils/action-result.ts`), and the
+mutation hook turns a failure back into an `AppError` with `unwrapActionResult`.
+
 ```typescript
-// lib/actions/auth.action.ts
+// lib/actions/bag.action.ts
 "use server";
 
-export const registerAction = async (
-  fields: RegistrationFields,
-): Promise<APIResponse<RegisterResponse>> => {
-  const response = await fetch(`${process.env.API_URL}/auth/signup`, {
-    method: "POST",
-    body: JSON.stringify(fields),
-    headers: { ...JSON_HEADER },
-  });
-
-  return response.json();
-};
+export async function addToBagAction(data: AddToBagRequest): Promise<ActionResult<BagResponse>> {
+  return runAction(() =>
+    authedFetch<BagResponse>("/users/bag/add", { method: "POST", body: JSON.stringify(data) }),
+  );
+}
 ```
+
+`authedFetch` (`lib/utils/authed-fetch.ts`) is the one place that calls the API on behalf of the
+logged-in shopper; it throws `AppError` with the API's message and status.
 
 ---
 
@@ -362,7 +363,7 @@ export default function useRegister() {
 
 - Services throw `AppError(message, statusCode)` — never generic `Error`
 - Always parse the error response body to get the message
-- Actions let errors propagate — no swallowing in try/catch
+- Actions return failures as data (`ActionResult`) — a thrown error loses its message in production
 - Mutations handle errors in `onError` with `toast.error()`
 - `error.tsx` files reset via the `reset` prop — always include a retry button
 

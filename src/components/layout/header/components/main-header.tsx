@@ -11,6 +11,7 @@ import { signOut, useSession } from "next-auth/react";
 
 import { SwitchLocale } from "./switch-locale";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Type
 type MainHeaderProps = {
@@ -35,24 +36,17 @@ export default function MainHeader({
   const locale = useLocale();
 
   // Hooks
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
-  function translateCategoryName(category: string) {
-    switch (category) {
-      case "women":
-        return "نساء";
-      case "men":
-        return "رجال";
-      case "children":
-        return "اطفال";
-      default:
-        return category;
-    }
+  // Main categories are created in the CMS: the known ones have a translated label,
+  // any other shows the name it was given there.
+  function categoryLabel(category: Category): string {
+    return t.has(`category-${category.slug}`) ? t(`category-${category.slug}`) : category.name;
   }
 
   return (
     <div className={cn(isScrolled ? "bg-white" : "bg-transparent", "transition-all duration-300")}>
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-8">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2" onClick={closeMenu}>
@@ -79,7 +73,7 @@ export default function MainHeader({
                   "capitalize text-gray-700 hover:text-gray-900 transition-all bg-[linear-gradient(to_right,currentColor_0%,currentColor_100%)] bg-[length:0%_1px] bg-no-repeat bg-bottom hover:bg-[length:100%_1px] duration-300",
                 )}
               >
-                {locale === "ar" ? translateCategoryName(c.slug) : c.slug}
+                {categoryLabel(c)}
               </Link>
             ))}
           </nav>
@@ -115,7 +109,12 @@ export default function MainHeader({
           </div>
 
           <div className="hidden md:flex items-center gap-2">
-            {session ? (
+            {status === "loading" ? (
+              <>
+                <Skeleton className="h-5 w-32 rounded-md" />
+                <Skeleton className="h-9 w-20 rounded-md" />
+              </>
+            ) : session ? (
               <>
                 <div className="text-sm py-2">{t("hello-user", { user: session.user.name })}</div>
                 <Button

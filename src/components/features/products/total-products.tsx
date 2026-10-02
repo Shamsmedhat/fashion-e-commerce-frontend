@@ -1,69 +1,51 @@
-import { getProductsService } from "@/lib/services/product.service";
-import { filterProductsByVariants } from "@/lib/utils/filter-products-by-variants";
-import { sortProducts } from "@/lib/utils/sort-products";
-import ProductItem from "./product-item";
-import ProductsFilter from "./products-filter";
-import ProductsSort from "./products-sort";
+import { notFound } from "next/navigation";
+
 import { getSubCategoriesService } from "@/lib/services/category.service";
+import { getProductsService } from "@/lib/services/product.service";
+import { AppError } from "@/lib/utils/app-errors";
+import { type ListingSearchParams, PRODUCTS_FETCH_LIMIT } from "@/lib/utils/product-listing";
+
 import SubcategoryList from "../categories/subcategory-list";
+import ProductListing from "./product-listing";
+
+type TotalProductsProps = {
+  categoryId: string;
+  subCategoryId?: string;
+  basePath: string;
+  searchParams: ListingSearchParams;
+};
 
 export default async function TotalProducts({
   categoryId,
-  searchParams,
-  basePath,
-  currentSubcategory,
   subCategoryId,
-}: {
-  categoryId: string;
-  searchParams: Record<string, string | string[] | undefined>;
-  basePath: string;
-  currentSubcategory: string;
-  subCategoryId?: string;
-}) {
+  basePath,
+  searchParams,
+}: TotalProductsProps) {
   // Fetch
   const [productsResponse, subCategoriesResponse] = await Promise.all([
     getProductsService({
       mainCategory: categoryId,
       ...(subCategoryId && { categoryId: subCategoryId }),
-      ...searchParams,
+      limit: PRODUCTS_FETCH_LIMIT,
     }),
     getSubCategoriesService(categoryId),
-  ]);
-
-  // Variables
-  const allProducts = productsResponse.data.products || [];
-  const allSubCategories = subCategoriesResponse.data.categories || [];
-
-  // Filter variants within products based on searchParams
-  // This ensures only variants matching the selected colors/sizes are returned
-  const filteredProducts = filterProductsByVariants(allProducts, searchParams);
-
-  // Apply sorting if sort parameter is present
-  const sortOption = typeof searchParams.sort === "string" ? searchParams.sort : "";
-  const sortedAndFilteredProducts = sortProducts(filteredProducts, sortOption);
+  ]).catch((error: unknown) => {
+    // A malformed or unknown category id in the URL is a missing page, not a server error.
+    if (error instanceof AppError && [400, 404].includes(error.statusCode)) notFound();
+    throw error;
+  });
 
   return (
     <>
       {/* Subcategory Navigation */}
       <SubcategoryList
-        allSubCategories={allSubCategories}
+        allSubCategories={subCategoriesResponse.data.categories || []}
         basePath={basePath}
-        currentSubcategory={currentSubcategory}
+        currentSubcategoryId={subCategoryId}
       />
 
-      {/* Filter and Sort */}
-      <div className="flex gap-4 mb-6 justify-end">
-        {/* Pass allProducts to filter so it can show all available colors */}
-        <ProductsFilter products={allProducts} />
-        <ProductsSort />
-      </div>
-
-      {/* Products */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 ">
-        {sortedAndFilteredProducts.map((product: Product) => (
-          <ProductItem key={product._id} product={product} />
-        ))}
-      </div>
+      {/* Filter, sort, products and pagination */}
+      <ProductListing products={productsResponse.data.products || []} searchParams={searchParams} />
     </>
   );
 }

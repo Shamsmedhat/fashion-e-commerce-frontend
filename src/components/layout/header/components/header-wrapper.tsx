@@ -6,11 +6,13 @@ import { getServerSession } from "next-auth";
 import React from "react";
 
 export default async function HeaderWrapper() {
+  // Session
   const session = await getServerSession(authOptions);
 
-  // Separate the fetches based on what we need
-  const categoryPromise = getMainCategoriesService({ limit: 4 });
+  // Fetch
+  const categoryPromise = getMainCategoriesService();
 
+  // Variable
   let bagLength = 0;
 
   if (session?.user) {

@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import NewArrivalsCover from "@/components/features/products/new-arrivals-cover";
 import NewArrivalsList from "@/components/features/products/new-arrivals-list";
 import { NewArrivalsListSkeleton } from "@/components/skeletons/products/new-arrivals-list.skeleton";
+import { REVALIDATE_PRODUCT_LIST_SECONDS } from "@/lib/constants/data-cache.constant";
 
 type NewArrivalsPageProps = {
   searchParams: Record<string, string | string[] | undefined>;
@@ -16,6 +17,8 @@ export async function generateMetadata(): Promise<{ title: string }> {
     title: t("new-arrivals-title"),
   };
 }
+
+export const revalidate = REVALIDATE_PRODUCT_LIST_SECONDS;
 
 export default function NewArrivalsPage({ searchParams = {} }: NewArrivalsPageProps): JSX.Element {
   return (

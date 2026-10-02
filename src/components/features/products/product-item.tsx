@@ -1,15 +1,16 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-
 import { useTranslations } from "next-intl";
+
+import { displayProductRating } from "@/components/shared/product-rating";
+import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
+import { getTailwindColor } from "@/lib/utils/get-tailwind-color";
 import { cn } from "@/lib/utils/tailwind-merge";
 
-import { getTailwindColor } from "@/lib/utils/get-tailwind-color";
 import AddToBagButton from "../bag/add-to-bag-button";
-import { Button } from "@/components/ui/button";
-import { displayProductRating } from "@/components/shared/product-rating";
+import { useFormatCurrency } from "@/lib/utils/format-currency";
 
 // Type
 type ProductItemProps = {
@@ -22,6 +23,9 @@ type ProductItemProps = {
 export default function ProductItem({ product, discountOverride }: ProductItemProps) {
   // Translations
   const t = useTranslations();
+
+  // Hooks
+  const { formatCurrency } = useFormatCurrency();
 
   // Variables (unique colors)
   const allColors = Array.from(
@@ -47,6 +51,9 @@ export default function ProductItem({ product, discountOverride }: ProductItemPr
         ? Math.round(((originalPrice - priceDiscount) / originalPrice) * 100)
         : null;
 
+  // Quick add puts the first variant that is actually in stock into the bag
+  const quickAddVariant = product.variants?.find((variant) => variant.stock > 0);
+
   // Functions
   function displayProductColors(colorName: string) {
     const cssColor = getTailwindColor(colorName) || colorName;
@@ -62,16 +69,14 @@ export default function ProductItem({ product, discountOverride }: ProductItemPr
     );
   }
 
-  // UI
   return (
     <div className="group relative overflow-hidden transition-all duration-300">
       {/* Discount Badge */}
-      {/* TODO: Next init config */}
-      {discountPercentage && (
+      {discountPercentage ? (
         <div className="absolute top-2 left-2 z-10 bg-red-600 text-white text-xs font-semibold px-2.5 py-1 rounded">
           -{discountPercentage}%
         </div>
-      )}
+      ) : null}
 
       {/* Product Image*/}
       <div className="relative aspect-square overflow-hidden">
@@ -89,10 +94,11 @@ export default function ProductItem({ product, discountOverride }: ProductItemPr
 
         {/* Add to bag btn */}
         <div className="absolute bottom-0 left-0 right-0 flex items-end overflow-hidden">
-          {product.variants && product.variants.length > 0 ? (
+          {quickAddVariant ? (
             <AddToBagButton
               productId={product._id}
-              variantSku={product.variants[0].sku}
+              productName={product.name}
+              variantSku={quickAddVariant.sku}
               className="w-full rounded-none h-12 bg-primary-950 text-white font-semibold transition-transform duration-500 flex items-center justify-center hover:bg-gray-900 group-hover:translate-y-0 translate-y-full capitalize"
             >
               {t("add-to-bag")}
@@ -104,7 +110,7 @@ export default function ProductItem({ product, discountOverride }: ProductItemPr
                 "w-full h-12 bg-black text-white font-semibold capitalize transition-transform duration-500 flex items-center justify-center hover:bg-gray-900 group-hover:translate-y-0 translate-y-full opacity-50 cursor-not-allowed",
               )}
             >
-              {t("product-not-available")}
+              {product.variants?.length ? t("out-of-stock") : t("product-not-available")}
             </Button>
           )}
         </div>
@@ -121,10 +127,11 @@ export default function ProductItem({ product, discountOverride }: ProductItemPr
 
         <div className="flex items-center gap-2 mb-2">
           {/* Price */}
-          {/* TODO: Next init config */}
-          <span className="text-lg font-bold text-gray-900">${displayPrice.toFixed(0)}</span>
+          <span className="text-lg font-bold text-gray-900">{formatCurrency(displayPrice)}</span>
           {originalPrice && (
-            <span className="text-sm text-gray-500 line-through">${originalPrice.toFixed(0)}</span>
+            <span className="text-sm text-gray-500 line-through">
+              {formatCurrency(originalPrice)}
+            </span>
           )}
         </div>
 

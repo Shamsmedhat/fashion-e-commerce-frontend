@@ -1,8 +1,8 @@
-import Image from "next/image";
 import { Teko } from "next/font/google";
 
 import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/tailwind-merge";
+import { HeroImageMotion } from "@/components/features/home/hero-image-motion";
 
 // Fonts
 const teko = Teko({
@@ -16,13 +16,13 @@ export default function HeroSection() {
   const locale = useLocale();
 
   return (
-    <section className="relative w-full h-[600px] md:h-[700px] overflow-hidden">
+    <section className="relative h-[460px] w-full overflow-hidden sm:h-[540px] md:h-[700px]">
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative w-full h-full max-w-4xl">
           {/* Behind image style */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <h1
-              className="text-[120px] md:text-[140px] font-black text-gray-300/30 select-none uppercase"
+              className="select-none text-[72px] font-black text-gray-300/30 uppercase sm:text-[96px] md:text-[140px]"
               aria-hidden="true"
             >
               {t("shop-now")}
@@ -31,33 +31,25 @@ export default function HeroSection() {
 
           {/* Hero Image */}
           <div className="absolute inset-0 flex items-center justify-center z-10">
-            <div className="relative w-96 h-96 md:w-[600px] md:h-[600px]">
-              <Image
-                src="/assets/images/landing-black.png"
-                alt="Soleil store"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
+            <HeroImageMotion />
           </div>
 
           {/* Text Overlays */}
-          <div className="absolute top-20 left-10 md:left-20 z-20">
+          <div className="absolute left-4 top-10 z-20 sm:left-8 sm:top-14 md:left-20 md:top-20">
             <p
               className={cn(
                 locale === "en" && teko.className,
-                "text-2xl md:text-3xl font-bold text-primary-900 uppercase",
+                "text-xl font-bold text-primary-900 uppercase sm:text-2xl md:text-3xl",
               )}
             >
               {t("adjustable")}
             </p>
           </div>
-          <div className="absolute bottom-20 right-10 md:right-20 z-20">
+          <div className="absolute bottom-10 right-4 z-20 sm:bottom-14 sm:right-8 md:bottom-20 md:right-20">
             <p
               className={cn(
                 locale === "en" && teko.className,
-                "text-2xl md:text-3xl font-bold text-primary-900 uppercase",
+                "text-xl font-bold text-primary-900 uppercase sm:text-2xl md:text-3xl",
               )}
             >
               {t("elegant")}

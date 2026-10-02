@@ -5,8 +5,11 @@ import { RegistrationFields } from "@/lib/schemes/auth.schema";
 import { RegisterResponse } from "@/lib/types/auth";
 
 export const registerAction = async (
-  registrationFields: RegistrationFields
+  registrationFields: RegistrationFields,
 ): Promise<APIResponse<RegisterResponse>> => {
+  const city = registrationFields.deliveryCity?.trim();
+  const street = registrationFields.deliveryStreet?.trim();
+
   const response = await fetch(`${process.env.API_URL}/users/signup`, {
     method: "POST",
     body: JSON.stringify({
@@ -15,23 +18,35 @@ export const registerAction = async (
       phone: registrationFields.phone,
       password: registrationFields.password,
       passwordConfirm: registrationFields.passwordConfirm,
+      ...(city && street
+        ? {
+            address: {
+              label: registrationFields.deliveryLabel?.trim() || "Home",
+              city,
+              street,
+            },
+          }
+        : {}),
     }),
     headers: {
       ...JSON_HEADER,
     },
   });
 
-  const payload: RegisterResponse | ErrorResponse = await response.json();
+  // A rate-limited or failed request may not answer with the usual JSON shape.
+  const payload: (RegisterResponse & { message?: string }) | ErrorResponse | null = await response
+    .json()
+    .catch(() => null);
 
-  if ("status" in payload && (payload.status === "fail" || payload.status === "error")) {
+  if (!response.ok || !payload) {
     return {
-      status: payload.status,
-      message: payload.message,
+      status: response.status >= 500 ? "error" : "fail",
+      message: payload?.message ?? "Registration failed. Please try again.",
     };
   }
 
   return {
+    ...(payload as RegisterResponse),
     message: "success",
-    ...payload,
   };
 };

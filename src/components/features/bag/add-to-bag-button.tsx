@@ -13,6 +13,7 @@ import { useAddToBag } from "@/hooks/bag/use-bag";
 // Type
 type AddToBagButtonProps = {
   productId: string;
+  productName: string;
   variantSku: string;
   disabled?: boolean;
   className?: string;
@@ -24,6 +25,7 @@ type AddToBagButtonProps = {
 
 export default function AddToBagButton({
   productId,
+  productName,
   variantSku,
   disabled = false,
   className,
@@ -52,6 +54,7 @@ export default function AddToBagButton({
       return;
     }
 
+    // Failures are reported by the hook (the API's message, or a login redirect).
     addToBag(
       {
         productId,
@@ -59,12 +62,8 @@ export default function AddToBagButton({
         quantity: 1,
       },
       {
-        onSuccess: (data) => {
-          const productName = data.data.bag.items.at(-1)?.productName;
+        onSuccess: () => {
           toast.success(`${productName} ${t("added-to-bag")}!`);
-        },
-        onError: () => {
-          toast.error(t("some-thing-went-wrong"));
         },
       },
     );
@@ -82,7 +81,11 @@ export default function AddToBagButton({
     >
       {showIcon && <ShoppingBag className="w-5 h-5" aria-hidden="true" />}
       {isPending ? (
-        <span className="flex space-x-2 justify-center items-center" role="status" aria-live="polite">
+        <span
+          className="flex space-x-2 justify-center items-center"
+          role="status"
+          aria-live="polite"
+        >
           <span>{t("adding")}</span>
           <LoaderCircle className="animate-spin" aria-hidden="true" />
         </span>

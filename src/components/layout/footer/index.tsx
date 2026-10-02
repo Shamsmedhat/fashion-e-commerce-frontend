@@ -12,7 +12,7 @@ export function Footer() {
 
   return (
     <footer className="w-full bg-gray-800 text-white">
-      <div className="container py-12">
+      <div className="container px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Left Column - Logo and Contact */}
           <div className="space-y-4">
@@ -57,7 +57,9 @@ export function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()}. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()}. {t("all-rights-reserved")}
+          </p>
         </div>
       </div>
     </footer>

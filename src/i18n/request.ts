@@ -8,6 +8,23 @@ export const getFormats = (locale: (typeof routing.locales)[number]): Formats =>
       digit: {
         numberingSystem: locale === "ar" ? "arab" : "latn",
       },
+      currency: {
+        style: "currency",
+        currency: "EGP",
+      },
+      currencyInteger: {
+        style: "currency",
+        currency: "EGP",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      },
+    },
+    dateTime: {
+      deliveryEstimate: {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      },
     },
   };
 };
