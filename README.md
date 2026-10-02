@@ -41,6 +41,22 @@
 
 ---
 
+## 📸 Screenshots
+
+| Home                                    | Product listing (filter, sort, pagination)       |
+| --------------------------------------- | ------------------------------------------------ |
+| ![Home page](docs/screenshots/home.jpg) | ![Product listing](docs/screenshots/listing.jpg) |
+
+| Product page                                  | Bag                              |
+| --------------------------------------------- | -------------------------------- |
+| ![Product page](docs/screenshots/product.jpg) | ![Bag](docs/screenshots/bag.jpg) |
+
+| Checkout                                   | Arabic (right-to-left)                             |
+| ------------------------------------------ | -------------------------------------------------- |
+| ![Checkout](docs/screenshots/checkout.jpg) | ![Arabic listing](docs/screenshots/listing-ar.jpg) |
+
+---
+
 ## 🛠 Tech Stack
 
 | Category      | Technology                  | Purpose                                           |
@@ -69,7 +85,9 @@ fashion-ecommerce-frontend/
 ├─ .env.example                   # The environment variables the app needs (copy to .env.local)
 ├─ .eslintrc.json                 # ESLint configuration
 ├─ .github/workflows/ci.yml       # Lint, type-check, unit tests and end-to-end tests
+├─ docs/screenshots/              # Screenshots used in this README
 ├─ e2e/                           # Playwright end-to-end tests
+├─ scripts/check-own-types.mjs    # Type-checks the project's own .d.ts files (see `yarn typecheck`)
 ├─ .prettierrc                    # Prettier configuration
 ├─ next.config.mjs                # Next.js config (+ next-intl plugin, image remotePatterns)
 ├─ tailwind.config.ts             # Tailwind config (dark mode via class, shadcn tokens)
@@ -167,9 +185,25 @@ The project reads environment variables (server-side only) for the API and auth.
 | `yarn build`     | Build for production                                            |
 | `yarn start`     | Start production server                                         |
 | `yarn lint`      | Run ESLint                                                      |
-| `yarn typecheck` | Type-check the project                                          |
+| `yarn typecheck` | Type-check the project, including its own `.d.ts` files         |
 | `yarn test`      | Run the unit tests (Vitest)                                     |
 | `yarn test:e2e`  | Run the end-to-end tests (Playwright; see [Testing](#-testing)) |
+
+---
+
+## 🗄 Caching
+
+Catalogue data is fetched on the server and cached for a long time (30–75 days for products, a
+year for categories), tagged `products`, `product-{id}`, `categories`, … It is refreshed on
+demand rather than on a timer:
+
+- the admin dashboard calls `POST /api/revalidate` with the admin's token after every edit;
+- placing a cash order refreshes `products`, because it changes stock.
+
+Known limitation: a **card** payment is confirmed by Stripe's webhook to the API, which has no
+way to signal the storefront, so the stock number shown on a product page can lag behind until
+the next edit or cash order. Stock is always re-checked by the API when adding to the bag and
+when ordering, so nothing can be oversold.
 
 ---
 
@@ -180,7 +214,7 @@ pagination, filtering and sorting, Server Action results, session expiry and rou
 
 **End-to-end tests** (`e2e/`) drive a production build in a real browser: browsing, filtering and
 paging, the 404 page, the Arabic shop, logging in, registering, adding to the bag, saving an
-address and placing an order. They run against the real API on a seeded in-memory database, so
+address, placing an order, and a CMS edit reaching the shop through cache revalidation. They run against the real API on a seeded in-memory database, so
 they need the backend repo checked out next to this one:
 
 ```bash
