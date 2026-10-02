@@ -216,3 +216,78 @@ test.describe("buying", () => {
     for (const variant of data.product.variants) await setStock(variant._id, variant.stock);
   });
 });
+
+// The storefront caches catalogue data for weeks and relies on the admin dashboard to tell it
+// when something changed (POST /api/revalidate with the admin's token, from the dashboard's origin).
+test.describe("catalogue changes made in the CMS", () => {
+  const DASHBOARD_ORIGIN = "http://localhost:5173";
+
+  test("an edit appears on the storefront once the dashboard signals it", async ({
+    page,
+    request,
+  }) => {
+    const headers = await adminHeaders(request);
+    const { data } = await (await request.get(`${API}/products?limit=1&sort=name`)).json();
+    const product = data.products[0];
+    const renamed = `Renamed ${Date.now().toString().slice(-6)}`;
+
+    const title = (name: string) => page.getByRole("heading", { level: 1, name });
+    const rename = (name: string) =>
+      request.patch(`${API}/products/${product._id}`, { headers, data: { name } });
+    const revalidate = () =>
+      request.post("/api/revalidate", {
+        headers: { ...headers, Origin: DASHBOARD_ORIGIN },
+        data: { tags: ["products", `product-${product._id}`] },
+      });
+
+    await page.goto(`/en/products/${product._id}`);
+    await expect(title(product.name)).toBeVisible();
+
+    try {
+      // Without a signal, the cached page keeps showing the old name.
+      expect((await rename(renamed)).status()).toBe(200);
+      await page.reload();
+      await expect(title(product.name)).toBeVisible();
+
+      // Regression: the route only allowed localhost by default and answered without CORS
+      // headers, so the deployed dashboard's signal never got through.
+      const response = await revalidate();
+      expect(response.status()).toBe(200);
+      expect(response.headers()["access-control-allow-origin"]).toBe(DASHBOARD_ORIGIN);
+
+      await expect(async () => {
+        await page.reload();
+        await expect(title(renamed)).toBeVisible({ timeout: 2_000 });
+      }).toPass({ timeout: 20_000 });
+    } finally {
+      await rename(product.name);
+      await revalidate();
+    }
+  });
+
+  test("only an admin may trigger a revalidation", async ({ request }) => {
+    const body = { data: { tags: ["products"] } };
+
+    const anonymous = await request.post("/api/revalidate", body);
+
+    const shopperLogin = await request.post(`${API}/users/login`, { data: SHOPPER });
+    const shopper = { Authorization: `Bearer ${(await shopperLogin.json()).token}` };
+    const asShopper = await request.post("/api/revalidate", { ...body, headers: shopper });
+
+    const admin = await adminHeaders(request);
+    const unknownTag = await request.post("/api/revalidate", {
+      headers: admin,
+      data: { tags: ["users"] },
+    });
+    const foreignOrigin = await request.post("/api/revalidate", {
+      ...body,
+      headers: { ...admin, Origin: "https://evil.example.com" },
+    });
+
+    expect(anonymous.status()).toBe(401);
+    expect(asShopper.status()).toBe(403);
+    expect(unknownTag.status()).toBe(400);
+    // A browser on another site gets no CORS permission to read or send this request.
+    expect(foreignOrigin.headers()["access-control-allow-origin"]).toBeUndefined();
+  });
+});
