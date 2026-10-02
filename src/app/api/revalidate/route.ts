@@ -1,6 +1,8 @@
 import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
+import { resolveCorsOrigin } from "@/lib/utils/cms-origin";
+
 const VALID_TAGS = [
   "products",
   "categories",
@@ -11,14 +13,17 @@ const VALID_TAGS = [
 ] as const;
 type ValidTag = (typeof VALID_TAGS)[number];
 
-const CMS_ORIGIN = process.env.CMS_ORIGIN ?? "http://localhost:5173";
-
 // CORS headers for the dashboard SPA browser hop (dashboard → this route)
-const corsHeaders: Record<string, string> = {
-  "Access-Control-Allow-Origin": CMS_ORIGIN,
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Authorization, Content-Type",
-};
+function corsHeadersFor(request: NextRequest): Record<string, string> {
+  const origin = resolveCorsOrigin(request.headers.get("origin"));
+
+  return {
+    ...(origin ? { "Access-Control-Allow-Origin": origin } : {}),
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+    Vary: "Origin",
+  };
+}
 
 type MeResponse = {
   data?: {
@@ -31,6 +36,7 @@ type MeResponse = {
 // Verify the bearer token belongs to an admin by calling the backend /users/me.
 // Returns an error response on failure, or null when the caller is a valid admin.
 async function authorizeAdmin(request: NextRequest): Promise<NextResponse | null> {
+  const corsHeaders = corsHeadersFor(request);
   const authorization = request.headers.get("authorization");
 
   if (!authorization?.startsWith("Bearer ")) {
@@ -65,8 +71,8 @@ function isValidTag(tag: string): boolean {
   return isValidBulkTag || isValidPerItemTag;
 }
 
-export async function OPTIONS(): Promise<NextResponse> {
-  return new NextResponse(null, { status: 204, headers: corsHeaders });
+export async function OPTIONS(request: NextRequest): Promise<NextResponse> {
+  return new NextResponse(null, { status: 204, headers: corsHeadersFor(request) });
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -74,10 +80,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const authError = await authorizeAdmin(request);
   if (authError) return authError;
 
+  const corsHeaders = corsHeadersFor(request);
+
   // Body — accept both `{ tag: string }` and `{ tags: string[] }`
-  const body = (await request.json().catch(() => null)) as
-    | { tag?: unknown; tags?: unknown }
-    | null;
+  const body = (await request.json().catch(() => null)) as { tag?: unknown; tags?: unknown } | null;
 
   const rawTags = Array.isArray(body?.tags)
     ? body.tags
