@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -16,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { useUpdateBagItem, useRemoveBagItem, useProductVariants } from "@/hooks/bag/use-bag";
 
 import EditBagItemDialog from "./edit-bag-item-dialog";
+import { Link } from "@/i18n/navigation";
+import { cn } from "@/lib/utils/tailwind-merge";
 import { useFormatCurrency } from "@/lib/utils/format-currency";
 
 // Type
@@ -116,7 +117,12 @@ export default function BagItem({ item }: BagItemProps) {
 
           {/* Availability */}
           <div className="mb-2">
-            <p className="text-sm font-semibold text-green-600 mb-1 uppercase">
+            <p
+              className={cn(
+                "text-sm font-semibold mb-1 uppercase",
+                item.isAvailable !== false ? "text-green-600" : "text-red-600",
+              )}
+            >
               {item.isAvailable !== false ? t("available") : t("out-of-stock")}
             </p>
             <p className="text-sm text-gray-600">{t("user-msg")}</p>

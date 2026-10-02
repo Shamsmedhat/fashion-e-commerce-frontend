@@ -8,10 +8,9 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import type { ProductVariantSelectionState } from "@/hooks/features/products/use-product-variant-selection";
-import { Link } from "@/i18n/navigation";
-import { cn } from "@/lib/utils/tailwind-merge";
-import { MapPin, Phone, Plus, ShoppingBag, Star, Truck } from "lucide-react";
+import { Phone, Plus, ShoppingBag, Truck } from "lucide-react";
 
+import { displayProductRating } from "@/components/shared/product-rating";
 import AddToBagButton from "../bag/add-to-bag-button";
 import { useFormatter, useTranslations } from "next-intl";
 import { serviceHighlights } from "@/lib/constants/services.constant";
@@ -34,7 +33,7 @@ function DeliveryEstimate() {
   secondDate.setDate(today.getDate() + 2);
 
   return (
-    <p className="text-xs mt-1">
+    <p className="text-xs mt-1" suppressHydrationWarning>
       {format.dateTime(firstDate, "deliveryEstimate")} -{" "}
       {format.dateTime(secondDate, "deliveryEstimate")} ({t("estimated")})
     </p>
@@ -54,8 +53,8 @@ export function ProductDetailsPurchase({ product, variantSelection }: ProductDet
       {selectedVariant && isInStock ? (
         <AddToBagButton
           productId={product._id}
+          productName={product.name}
           variantSku={selectedVariant.sku}
-          disabled={!isInStock || !selectedVariant}
           size="lg"
           variant="default"
           className="w-full bg-black text-white hover:bg-gray-900 rounded-none h-12 text-sm font-bold uppercase tracking-wide"
@@ -69,11 +68,7 @@ export function ProductDetailsPurchase({ product, variantSelection }: ProductDet
           className="w-full bg-black text-white hover:bg-gray-900 rounded-none h-12 text-sm font-bold uppercase tracking-wide flex items-center justify-center gap-2"
         >
           <ShoppingBag className="w-5 h-5" aria-hidden="true" />
-          {!selectedSize || !selectedColor
-            ? "Select Size & Color"
-            : !isInStock
-              ? "Out of Stock"
-              : "Add to Bag"}
+          {!selectedSize || !selectedColor ? t("select-size-color") : t("out-of-stock")}
         </Button>
       )}
 
@@ -98,25 +93,18 @@ export function ProductDetailsPurchase({ product, variantSelection }: ProductDet
             <p className="font-medium text-gray-900">{t("estimated-delivery")}</p>
             <p>{t("complimentary-express-delivery-or-collect-in-store")}</p>
             {/* Delivery estimate: today +1 to +2 days */}
-            {DeliveryEstimate()}
+            <DeliveryEstimate />
           </div>
         </div>
 
         <div className="space-y-2 pt-2">
           <a
-            href="tel:+1234567890"
+            href="tel:+201111803604"
             className="flex items-center gap-2 text-sm underline hover:text-gray-900 transition-colors"
           >
             <Phone className="w-4 h-4" aria-hidden="true" />
             {t("order-by-phone")}
           </a>
-          <Link
-            href="/store-locator"
-            className="flex items-center gap-2 text-sm underline hover:text-gray-900 transition-colors"
-          >
-            <MapPin className="w-4 h-4" aria-hidden="true" />
-            {t("find-in-store")}
-          </Link>
         </div>
       </div>
 
@@ -142,29 +130,10 @@ export function ProductDetailsPurchase({ product, variantSelection }: ProductDet
       {/* Rating */}
       {product.ratingsAverage !== undefined && (
         <div className="flex items-center gap-2 pt-4 border-t border-gray-200">
-          <div className="flex items-center">
-            {[...Array(5)].map((starIndex) => {
-              const rating = product.ratingsAverage || 0;
-              const isFilled = starIndex < Math.floor(rating);
-              const isPartial = !isFilled && starIndex < Math.ceil(rating) && rating % 1 !== 0;
-
-              return (
-                <Star
-                  key={`product-rating-star-${starIndex}`}
-                  aria-hidden="true"
-                  className={cn(
-                    "w-4 h-4",
-                    isFilled
-                      ? "fill-yellow-500 text-yellow-500"
-                      : isPartial
-                        ? "fill-none text-yellow-500 stroke-yellow-500 stroke-1"
-                        : "fill-none text-gray-300 stroke-gray-300 stroke-1",
-                  )}
-                />
-              );
-            })}
-          </div>
-          <span className="text-xs text-gray-600">({product.reviewCount || 0} reviews)</span>
+          <div className="flex items-center">{displayProductRating(product.ratingsAverage)}</div>
+          <span className="text-xs text-gray-600">
+            {t("reviews-count", { count: product.reviewCount || 0 })}
+          </span>
         </div>
       )}
     </div>
