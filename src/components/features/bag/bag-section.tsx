@@ -5,7 +5,6 @@ import { authOptions } from "@/auth";
 import { redirect } from "@/i18n/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
-import { Button } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
@@ -17,7 +16,6 @@ import { ORDER_SUMMARY_NEXT_DAY_SHIPPING_EGP } from "@/lib/constants/currency.co
 import BagListSkeleton from "@/components/skeletons/bag/bag-list.skeleton";
 import BagSummary from "@/components/skeletons/bag/bag-summary.skeleton";
 import { getFormatCurrency } from "@/lib/utils/format-currency";
-import { Link } from "@/i18n/navigation";
 
 export default async function BagSection() {
   // Translations
@@ -46,7 +44,7 @@ export default async function BagSection() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-[65%_35%] gap-8 lg:gap-16">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,65fr)_minmax(0,35fr)] gap-8 lg:gap-16">
         {/* Left Column - Your Selections */}
         <div className="space-y-6">
           <div className="space-y-6">
@@ -71,19 +69,6 @@ export default async function BagSection() {
             <Suspense fallback={<BagSummary />}>
               <OrderSummary />
             </Suspense>
-
-            {/* Payment Timing Information */}
-            <p className="text-xs text-gray-600 leading-relaxed capitalize">
-              {t("payment-timing-info")}
-            </p>
-
-            {/* Checkout Button */}
-            <Button
-              asChild
-              className="w-full bg-black text-white hover:bg-gray-900 rounded-none h-12 text-sm font-bold uppercase tracking-wide"
-            >
-              <Link href="/checkout">{t("checkout")}</Link>
-            </Button>
 
             {/* May We Help Accordion */}
             <Accordion type="single" collapsible className="w-full">
@@ -123,9 +108,7 @@ export default async function BagSection() {
                     <span>•</span>
                     <span>American Express</span>
                     <span>•</span>
-                    <span>PayPal</span>
-                    <span>•</span>
-                    <span>Amazon Pay</span>
+                    <span>{t("cash-on-delivery")}</span>
                   </div>
                 </AccordionContent>
               </AccordionItem>

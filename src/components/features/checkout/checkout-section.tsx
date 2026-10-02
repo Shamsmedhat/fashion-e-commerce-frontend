@@ -7,16 +7,19 @@ import { Button } from "@/components/ui/button";
 import { useCardCheckout, useCashCheckout } from "@/hooks/checkout/use-checkout";
 import { Link } from "@/i18n/navigation";
 
+import { AddressForm } from "./address-form";
+
 type CheckoutSectionProps = {
   hasItems: boolean;
-  hasAddress: boolean | undefined | 0;
+  /** The address the order will be delivered to; undefined until the shopper saves one. */
+  address?: Pick<Address, "label" | "city" | "street">;
   totalItems: number;
   formattedTotal: string;
 };
 
 export function CheckoutSection({
   hasItems,
-  hasAddress,
+  address,
   totalItems,
   formattedTotal,
 }: CheckoutSectionProps) {
@@ -32,7 +35,7 @@ export function CheckoutSection({
   } = useCashCheckout();
 
   // Variables
-  const isCheckoutBlocked = !hasItems || !hasAddress;
+  const isCheckoutBlocked = !hasItems || !address;
   const isActionPending = isCardCheckoutPending || isCashCheckoutPending;
 
   // Functions
@@ -98,16 +101,27 @@ export function CheckoutSection({
         </div>
       </div>
 
-      {isCheckoutBlocked ? (
+      {/* Delivery address — required before an order can be placed */}
+      {!hasItems ? (
         <div className="border border-gray-300 bg-gray-50 p-4">
-          <p className="text-sm text-gray-700">
-            {!hasItems ? t("bag-empty-checkout-message") : t("missing-address-checkout-message")}
+          <p className="text-sm text-gray-700">{t("bag-empty-checkout-message")}</p>
+        </div>
+      ) : address ? (
+        <div className="border border-gray-200 p-4 text-sm text-gray-700">
+          <p className="text-xs font-bold uppercase tracking-wide text-gray-900">
+            {t("deliver-to")}
+          </p>
+          <p className="mt-1">
+            <span className="font-medium capitalize">{address.label}</span> — {address.street},{" "}
+            {address.city}
           </p>
         </div>
-      ) : null}
+      ) : (
+        <AddressForm />
+      )}
 
       {!isCheckoutBlocked ? (
-        <div className="border border-gray-200 bg-cyan-400 p-3 text-xs text-gray-700 leading-relaxed">
+        <div className="border border-cyan-200 bg-cyan-50 p-3 text-xs text-gray-700 leading-relaxed">
           {t("stripe-card-test-instructions")}
         </div>
       ) : null}

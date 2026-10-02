@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function BagSectionSkeleton() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-[65%_35%] gap-8 lg:gap-16">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,65fr)_minmax(0,35fr)] gap-8 lg:gap-16">
         {/* Left Column - Your Selections Skeleton */}
         <div className="space-y-6">
           <div className="space-y-6">

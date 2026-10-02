@@ -6,7 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ORDER_SUMMARY_ESTIMATED_TAX_EGP } from "@/lib/constants/currency.constant";
+import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { getBagItemsService } from "@/lib/services/bag.service";
 import { getFormatCurrency } from "@/lib/utils/format-currency";
@@ -21,22 +22,16 @@ export default async function OrderSummary() {
   // Fetch
   const bagData = await getBagItemsService();
 
-  const { items, totalAmount } = bagData.data;
+  const { items } = bagData.data;
 
-  // Calculate subtotal from items
+  // What the shopper pays: the API charges exactly the items, and delivery is free.
   const subtotal = items.reduce((sum, item) => {
     const price = item.currentPrice ?? item.priceAtPurchase;
     return sum + price * item.quantity;
   }, 0);
 
-  // Shipping is free (Premium Express)
-  const shipping = 0;
-  const shippingMethod = "Premium Express";
-
-  // Estimated tax (placeholder — display line uses configured EGP estimate when non-zero UI is needed)
-  const estimatedTax = ORDER_SUMMARY_ESTIMATED_TAX_EGP;
-
-  const estimatedTotal = parseFloat(totalAmount);
+  const shippingMethod = t("premium-express");
+  const hasItems = items.length > 0;
 
   return (
     <>
@@ -53,23 +48,13 @@ export default async function OrderSummary() {
           <span className="text-gray-600 ">
             {t("shipping")}: <span>{shippingMethod}</span>
           </span>
-          <span className="text-gray-900 font-medium">
-            {shipping === 0 ? t("free") : formatCurrency(Number(shipping))}
-          </span>
-        </div>
-
-        {/* Estimated Tax */}
-        <div className="flex justify-between items-center capitalize">
-          <span className="text-gray-600">{t("estimated-tax")}</span>
-          <span className="text-gray-900 font-medium">
-            {formatCurrency(ORDER_SUMMARY_ESTIMATED_TAX_EGP)}
-          </span>
+          <span className="text-gray-900 font-medium">{t("free")}</span>
         </div>
 
         {/* Estimated Total */}
         <div className="flex justify-between items-center pt-3 border-t border-gray-200">
           <span className="text-sm font-bold text-gray-900">{t("estimated-total")}</span>
-          <span className="text-lg font-bold text-gray-900">{formatCurrency(estimatedTotal)}</span>
+          <span className="text-lg font-bold text-gray-900">{formatCurrency(subtotal)}</span>
         </div>
       </div>
 
@@ -89,20 +74,35 @@ export default async function OrderSummary() {
                 <span className="font-medium">{t("subtotal")}:</span> {formatCurrency(subtotal)}
               </p>
               <p>
-                <span className="font-medium">{t("shipping")}:</span>
-                {shipping === 0 ? t("free") : formatCurrency(Number(shipping))} ({shippingMethod})
+                <span className="font-medium">{t("shipping")}:</span> {t("free")} ({shippingMethod})
               </p>
               <p>
-                <span className="font-medium">{t("tax")}:</span> {formatCurrency(estimatedTax)} (
-                {t("estimated")})
-              </p>
-              <p>
-                <span className="font-medium">{t("total")}:</span> {formatCurrency(estimatedTotal)}
+                <span className="font-medium">{t("total")}:</span> {formatCurrency(subtotal)}
               </p>
             </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
+
+      {/* Payment Timing Information */}
+      <p className="text-xs text-gray-600 leading-relaxed capitalize">{t("payment-timing-info")}</p>
+
+      {/* Checkout Button — an empty bag has nothing to check out */}
+      {hasItems ? (
+        <Button
+          asChild
+          className="w-full bg-black text-white hover:bg-gray-900 rounded-none h-12 text-sm font-bold uppercase tracking-wide"
+        >
+          <Link href="/checkout">{t("checkout")}</Link>
+        </Button>
+      ) : (
+        <Button
+          disabled
+          className="w-full bg-black text-white rounded-none h-12 text-sm font-bold uppercase tracking-wide"
+        >
+          {t("checkout")}
+        </Button>
+      )}
     </>
   );
 }

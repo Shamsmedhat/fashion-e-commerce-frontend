@@ -5,6 +5,7 @@ import { authOptions } from "@/auth";
 import { CheckoutSection } from "@/components/features/checkout/checkout-section";
 import { redirect } from "@/i18n/navigation";
 import { getBagItemsService } from "@/lib/services/bag.service";
+import { getMeService } from "@/lib/services/user.service";
 import { AppError } from "@/lib/utils/app-errors";
 import { getFormatCurrency } from "@/lib/utils/format-currency";
 
@@ -32,15 +33,19 @@ export default async function CheckoutPage() {
   }
 
   // Variables
-  const hasAddress = session?.user?.addresses?.length && session?.user?.addresses?.length > 0;
   let totalItems = 0;
   let totalAmount = 0;
+  let address: Address | undefined;
 
-  // Fetch
+  // Fetch — the bag and the saved addresses both come from the API: the session only knows
+  // the profile as it was at login, so an address added since would be missing from it.
   try {
-    const bagData = await getBagItemsService();
+    const [bagData, me] = await Promise.all([getBagItemsService(), getMeService()]);
+    const { addresses } = me.data.user;
+
     totalItems = bagData.data.totalItems;
     totalAmount = Number(bagData.data.totalAmount);
+    address = addresses.find((entry) => entry.isDefault) ?? addresses[0];
   } catch (error: unknown) {
     if (error instanceof AppError && error.isAuthentication) {
       redirect({
@@ -53,6 +58,8 @@ export default async function CheckoutPage() {
         locale,
       });
     }
+
+    throw error;
   }
 
   return (
@@ -65,7 +72,7 @@ export default async function CheckoutPage() {
           <p className="mt-3 text-sm text-gray-600">{t("checkout-hero-description")}</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-6 lg:gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,40fr)_minmax(0,60fr)] gap-6 lg:gap-10">
           <aside className="border border-gray-200 p-6 md:p-8 h-fit space-y-5">
             <h2 className="text-sm font-bold uppercase tracking-wide text-gray-900 underline">
               {t("order-summary")}
@@ -84,7 +91,7 @@ export default async function CheckoutPage() {
 
           <CheckoutSection
             hasItems={totalItems > 0}
-            hasAddress={hasAddress}
+            address={address}
             totalItems={totalItems}
             formattedTotal={formatCurrency(totalAmount)}
           />
