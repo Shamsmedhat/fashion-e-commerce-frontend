@@ -4,6 +4,7 @@ import Credentials from "next-auth/providers/credentials";
 import { JSON_HEADER } from "./lib/constants/api.constant";
 import { LoginResponse } from "./lib/types/auth";
 import { AppError } from "./lib/utils/app-errors";
+import { getJwtExpiry } from "./lib/utils/backend-token";
 import { handleRateLimitError } from "./lib/utils/rate-limit-error";
 
 export const authOptions: NextAuthOptions = {
@@ -52,7 +53,10 @@ export const authOptions: NextAuthOptions = {
 
         // Error handling
         if (!response.ok) {
-          const message = typeof data.status === "string" ? data.message : "Authentication failed";
+          const message =
+            "message" in data && typeof data.message === "string"
+              ? data.message
+              : "Authentication failed";
           throw new AppError(message, 401, "authentication");
         }
 
@@ -67,6 +71,7 @@ export const authOptions: NextAuthOptions = {
           id: payload.data.user._id,
           user: payload.data.user,
           token: payload.token,
+          tokenExpiresAt: getJwtExpiry(payload.token),
         };
       },
     }),
@@ -77,6 +82,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.user = user.user;
         token.token = user.token;
+        token.tokenExpiresAt = user.tokenExpiresAt;
       }
 
       return token;

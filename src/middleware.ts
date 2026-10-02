@@ -1,78 +1,36 @@
-import { type NextRequestWithAuth, withAuth } from "next-auth/middleware";
 import createMiddleware from "next-intl/middleware";
-import { NextRequest, NextResponse, type NextFetchEvent } from "next/server";
-import { routing } from "./i18n/routing";
 import { getToken } from "next-auth/jwt";
+import { NextRequest, NextResponse } from "next/server";
 
-const authPages = ["/auth/login", "/auth/register"];
-const publicPages = ["/", "/new", "/category", "/category/*", "/products", "/products/*", ...authPages];
+import { routing } from "./i18n/routing";
+import { isBackendTokenExpired } from "./lib/utils/backend-token";
+import { isAuthPath, isProtectedPath, splitLocale } from "./lib/utils/route-access";
 
 const handleI18nRouting = createMiddleware(routing);
 
-const authMiddleware = withAuth(
-  // Note that this callback is only invoked if
-  // the `authorized` callback has returned `true`
-  // and not for pages listed in `pages`.
-  function onSuccess(req) {
-    return handleI18nRouting(req);
-  },
-  {
-    callbacks: {
-      authorized: ({ token }) => token != null,
-    },
-    pages: {
-      signIn: "/auth/login",
-    },
-  },
-);
+export default async function middleware(req: NextRequest) {
+  const { pathname, search } = req.nextUrl;
 
-export default async function middleware(req: NextRequest, event: NextFetchEvent) {
-  // Variables
+  // The session only counts while the API token inside it is still valid.
   const token = await getToken({ req });
-  const publicPathnameRegex = RegExp(
-    `^(/(${routing.locales.join("|")}))?(${publicPages
-      .flatMap((p) => {
-        if (p === "/") {
-          return ["", "/"];
-        }
-        // Handle wildcard patterns
-        if (p.endsWith("/*")) {
-          // Remove /* and match the path and all its children
-          const basePath = p.slice(0, -2);
-          return `${basePath}(/.*)?`;
-        }
-        return p;
-      })
-      .join("|")})/?$`,
-    "i",
-  );
+  const isAuthenticated = token != null && !isBackendTokenExpired(token);
 
-  const authPathnameRegex = RegExp(
-    `^(/(${routing.locales.join("|")}))?(${authPages
-      .flatMap((p) => (p === "/" ? ["", "/"] : p))
-      .join("|")})/?$`,
-    "i",
-  );
-  const isPublicPage = publicPathnameRegex.test(req.nextUrl.pathname);
-  const isAuthPage = authPathnameRegex.test(req.nextUrl.pathname);
+  const locale = splitLocale(pathname, routing.locales).locale ?? routing.defaultLocale;
 
-  if (isPublicPage) {
-    // Redirect to homepage if user is authenticated and attempting to access an auth page
-    if (token && isAuthPage) {
-      const redirectUrl = new URL("/", req.nextUrl.origin);
-
-      // Include current search params
-      Object.entries(req.nextUrl.searchParams).map(([key, value]) =>
-        redirectUrl.searchParams.set(key, value),
-      );
-
-      return NextResponse.redirect(redirectUrl);
-    }
-
-    return handleI18nRouting(req);
-  } else {
-    return authMiddleware(req as NextRequestWithAuth, event);
+  // Logged-in shoppers have no use for the login and registration pages
+  if (isAuthenticated && isAuthPath(pathname, routing.locales)) {
+    return NextResponse.redirect(new URL(`/${locale}`, req.nextUrl.origin));
   }
+
+  // The bag and checkout need a session; the shopper returns to the same page after logging in
+  if (!isAuthenticated && isProtectedPath(pathname, routing.locales)) {
+    const loginUrl = new URL(`/${locale}/auth/login`, req.nextUrl.origin);
+    loginUrl.searchParams.set("callbackUrl", `${pathname}${search}`);
+
+    return NextResponse.redirect(loginUrl);
+  }
+
+  return handleI18nRouting(req);
 }
 
 export const config = {

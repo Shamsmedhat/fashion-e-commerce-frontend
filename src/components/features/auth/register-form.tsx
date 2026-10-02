@@ -193,7 +193,7 @@ function RegisterFormContent() {
                   </FormControl>
 
                   {/* Description */}
-                  <FormDescription>{t("password-min", { min: 8 })}</FormDescription>
+                  <FormDescription>{t("password-rule")}</FormDescription>
 
                   {/* Feedback */}
                   <FormMessage />
@@ -326,7 +326,9 @@ function RegisterFormContent() {
           {t.rich("already-have-account", {
             button: (v) => (
               <Button variant="link" className="p-0 h-auto" asChild>
-                <Link href={redirectQuery ? `/auth/login?${redirectQuery}` : "/auth/login"}>{v}</Link>
+                <Link href={redirectQuery ? `/auth/login?${redirectQuery}` : "/auth/login"}>
+                  {v}
+                </Link>
               </Button>
             ),
           })}

@@ -14,7 +14,7 @@ export type AuthUser = {
 };
 
 export type LoginResponse = {
-  status: number;
+  status: string;
   token: string;
   data: {
     user: AuthUser;
@@ -22,7 +22,7 @@ export type LoginResponse = {
 };
 
 export type RegisterResponse = {
-  status: number;
+  status: string;
   token: string;
   data: {
     user: AuthUser;
