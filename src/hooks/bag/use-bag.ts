@@ -11,6 +11,7 @@ import {
   updateBagItemAction,
 } from "@/lib/actions/bag.action";
 import { STALE_TIME_PRODUCT_VARIANTS_MS } from "@/lib/constants/data-cache.constant";
+import { QUERY_KEYS } from "@/lib/constants/query-keys.constant";
 import { unwrapActionResult } from "@/lib/utils/action-result";
 import { AppError } from "@/lib/utils/app-errors";
 
@@ -39,7 +40,7 @@ function useBagErrorHandler() {
 // Get product variants
 export function useProductVariants({ productId, enabled = true }: UseProductOptions) {
   return useQuery({
-    queryKey: ["product", productId],
+    queryKey: QUERY_KEYS.products.byId(productId ?? ""),
     queryFn: async () => {
       if (!productId) {
         throw new Error("Product ID is required");
