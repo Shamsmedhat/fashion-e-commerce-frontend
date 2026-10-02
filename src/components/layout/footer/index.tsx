@@ -57,7 +57,9 @@ export function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()}. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()}. {t("all-rights-reserved")}
+          </p>
         </div>
       </div>
     </footer>

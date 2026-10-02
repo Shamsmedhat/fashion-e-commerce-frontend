@@ -1,25 +1,17 @@
 import { Star } from "lucide-react";
-import { cn } from "../../lib/utils/tailwind-merge";
 
-export function displayProductRating(ratingAVG: number): React.ReactNode {
-  return [...Array(5)].map((_, i) => {
-    const rating = ratingAVG || 0;
-    const isFilled = i < Math.floor(rating);
-    const isPartial = !isFilled && i < Math.ceil(rating);
+import { getStarStates, type StarState } from "@/lib/utils/star-rating";
+import { cn } from "@/lib/utils/tailwind-merge";
 
-    return (
-      <Star
-        key={i}
-        aria-hidden="true"
-        className={cn(
-          "w-4 h-4",
-          isFilled
-            ? "fill-yellow-500 text-yellow-500"
-            : isPartial
-              ? "fill-none text-yellow-500 stroke-yellow-500 stroke-1"
-              : "fill-none text-gray-300 stroke-gray-300 stroke-1",
-        )}
-      />
-    );
-  });
+const STAR_CLASSES: Record<StarState, string> = {
+  full: "fill-yellow-500 text-yellow-500",
+  partial: "fill-none text-yellow-500 stroke-yellow-500 stroke-1",
+  empty: "fill-none text-gray-300 stroke-gray-300 stroke-1",
+};
+
+export function displayProductRating(ratingAVG: number | undefined): React.ReactNode {
+  return getStarStates(ratingAVG).map((state, position) => (
+    // Stars are a fixed row that never reorders, so the position is a stable key.
+    <Star key={position} aria-hidden="true" className={cn("w-4 h-4", STAR_CLASSES[state])} />
+  ));
 }
