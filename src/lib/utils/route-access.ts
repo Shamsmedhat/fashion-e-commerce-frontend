@@ -27,3 +27,13 @@ export function isProtectedPath(pathname: string, locales: readonly string[]): b
 export function isAuthPath(pathname: string, locales: readonly string[]): boolean {
   return matches(splitLocale(pathname, locales).path.toLowerCase(), AUTH_PAGES);
 }
+
+// Where to send a shopper back to after logging in. Only a path on this site is accepted:
+// a full or protocol-relative URL could send them to someone else's site.
+export function safeCallbackPath(value: string | null | undefined): string | null {
+  if (!value || !value.startsWith("/") || value.startsWith("//") || value.includes("\\")) {
+    return null;
+  }
+
+  return value;
+}

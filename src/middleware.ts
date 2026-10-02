@@ -4,7 +4,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { routing } from "./i18n/routing";
 import { isBackendTokenExpired } from "./lib/utils/backend-token";
-import { isAuthPath, isProtectedPath, splitLocale } from "./lib/utils/route-access";
+import {
+  isAuthPath,
+  isProtectedPath,
+  safeCallbackPath,
+  splitLocale,
+} from "./lib/utils/route-access";
 
 const handleI18nRouting = createMiddleware(routing);
 
@@ -17,9 +22,13 @@ export default async function middleware(req: NextRequest) {
 
   const locale = splitLocale(pathname, routing.locales).locale ?? routing.defaultLocale;
 
-  // Logged-in shoppers have no use for the login and registration pages
+  // Logged-in shoppers have no use for the login and registration pages:
+  // they go on to where they were heading, or to the home page
   if (isAuthenticated && isAuthPath(pathname, routing.locales)) {
-    return NextResponse.redirect(new URL(`/${locale}`, req.nextUrl.origin));
+    const destination =
+      safeCallbackPath(req.nextUrl.searchParams.get("callbackUrl")) ?? `/${locale}`;
+
+    return NextResponse.redirect(new URL(destination, req.nextUrl.origin));
   }
 
   // The bag and checkout need a session; the shopper returns to the same page after logging in

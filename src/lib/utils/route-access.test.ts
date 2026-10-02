@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { isAuthPath, isProtectedPath, splitLocale } from "./route-access";
+import { isAuthPath, isProtectedPath, safeCallbackPath, splitLocale } from "./route-access";
 
 const locales = ["en", "ar"] as const;
 
@@ -47,5 +47,26 @@ describe("isAuthPath", () => {
     expect(isAuthPath("/auth/register/", locales)).toBe(true);
     expect(isAuthPath("/en/auth", locales)).toBe(false);
     expect(isAuthPath("/en/new", locales)).toBe(false);
+  });
+});
+
+describe("safeCallbackPath", () => {
+  it("accepts a path on this site, query string included", () => {
+    expect(safeCallbackPath("/en/bag")).toBe("/en/bag");
+    expect(safeCallbackPath("/en/new?page=2")).toBe("/en/new?page=2");
+  });
+
+  it("rejects anything that could leave the site", () => {
+    for (const value of [
+      "https://evil.example.com",
+      "//evil.example.com",
+      "/\\evil.example.com",
+      "bag",
+      "",
+      null,
+      undefined,
+    ]) {
+      expect(safeCallbackPath(value), String(value)).toBeNull();
+    }
   });
 });
