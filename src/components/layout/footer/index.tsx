@@ -12,7 +12,7 @@ export function Footer() {
 
   return (
     <footer className="w-full bg-gray-800 text-white">
-      <div className="container py-12">
+      <div className="container px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Left Column - Logo and Contact */}
           <div className="space-y-4">

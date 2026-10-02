@@ -41,7 +41,7 @@ export default function MobileHeader({ mainCategories, closeMenu, bagLength }: M
               className="text-base capitalize font-medium text-gray-700 hover:text-gray-900 transition-colors py-2"
               onClick={closeMenu}
             >
-              {c.slug}
+              {t.has(`category-${c.slug}`) ? t(`category-${c.slug}`) : c.name}
             </Link>
           ))}
         </div>
